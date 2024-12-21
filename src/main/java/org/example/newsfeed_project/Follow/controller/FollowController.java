@@ -6,10 +6,7 @@ import org.example.newsfeed_project.Follow.dto.FollowDto;
 import org.example.newsfeed_project.Follow.service.FollowService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/users/follow")
@@ -22,5 +19,12 @@ public class FollowController {
     public ResponseEntity<FollowDto> follow(@PathVariable Long user_id){
         Long loginUserId = 1L; // 로그인 기능 구현 후 수정 필요
         return new ResponseEntity<>(followService.follow(user_id, loginUserId), HttpStatus.OK);
+    }
+
+    // 팔로우 취소
+    @DeleteMapping("/{user_id}")
+    public ResponseEntity<FollowDto> unFollow(@PathVariable Long user_id){
+        Long loginUserId = 1L; // 로그인 기능 구현 후 수정 필요
+        return new ResponseEntity<>(followService.unFollow(user_id, loginUserId), HttpStatus.OK);
     }
 }

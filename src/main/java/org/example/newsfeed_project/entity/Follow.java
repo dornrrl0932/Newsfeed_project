@@ -20,7 +20,7 @@ public class Follow {
     @JoinColumn(name = "follower_id")
     private User follower; // 팔로우 한 유저 (본인)
 
-    public Follow(User follower, User following){
+    public Follow(User following, User follower){
         this.following = following;
         this.follower = follower;
     }

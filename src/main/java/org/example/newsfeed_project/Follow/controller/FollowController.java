@@ -1,5 +1,6 @@
 package org.example.newsfeed_project.Follow.controller;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.newsfeed_project.Follow.dto.FollowDto;
 import org.example.newsfeed_project.Follow.service.FollowService;
@@ -19,6 +20,7 @@ public class FollowController {
     //팔로우하기
     @PostMapping("/{user_id}")
     public ResponseEntity<FollowDto> follow(@PathVariable Long user_id){
-        return new ResponseEntity<>(followService.follow(user_id), HttpStatus.OK);
+        Long loginUserId = 1L; // 로그인 기능 구현 후 수정 필요
+        return new ResponseEntity<>(followService.follow(user_id, loginUserId), HttpStatus.OK);
     }
 }

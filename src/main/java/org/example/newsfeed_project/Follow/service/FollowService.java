@@ -1,7 +1,7 @@
 package org.example.newsfeed_project.Follow.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.newsfeed_project.Follow.dto.FollowDto;
+import org.example.newsfeed_project.Follow.dto.MessageDto;
 import org.example.newsfeed_project.Follow.repository.FollowRepository;
 import org.example.newsfeed_project.User.repository.UserRepository;
 import org.example.newsfeed_project.entity.Follow;
@@ -17,7 +17,7 @@ public class FollowService {
     private final UserRepository userRepository;
 
     // 팔로우하기
-    public FollowDto follow(Long user_id, Long loginUserId){
+    public MessageDto follow(Long user_id, Long loginUserId){
         // 팔로우 한 유저 조회, 없을 시 404 Not found 반환
         User loginUser = userRepository.findById(loginUserId)
                 .orElseThrow(() -> new ValidateException("존재하지 않은 회원입니다.", HttpStatus.NOT_FOUND));
@@ -28,11 +28,11 @@ public class FollowService {
         Follow follow = new Follow(followingUser, loginUser);
         followRepository.save(follow);
 
-        return new FollowDto(followingUser.getUserName() + "님을 팔로우 했습니다.");
+        return new MessageDto(followingUser.getUserName() + "님을 팔로우 했습니다.");
     }
 
     // 언팔로우(팔로우 취소)
-    public FollowDto unFollow(Long user_id, Long loginUserId){
+    public MessageDto unFollow(Long user_id, Long loginUserId){
         // 팔로우 한 유저 조회, 없을 시 404 Not found 반환
         User loginUser = userRepository.findById(loginUserId)
                 .orElseThrow(() -> new ValidateException("존재하지 않은 회원입니다.", HttpStatus.NOT_FOUND));
@@ -47,6 +47,6 @@ public class FollowService {
         // 팔로우 관계 삭제
         followRepository.delete(follow);
 
-        return new FollowDto(followingUser.getUserName() + "님을 팔로우 취소했습니다.");
+        return new MessageDto(followingUser.getUserName() + "님을 팔로우 취소했습니다.");
     }
 }

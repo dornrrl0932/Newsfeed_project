@@ -2,6 +2,7 @@ package org.example.newsfeed_project.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Entity
@@ -18,7 +19,9 @@ public class User {
     private String userName;
     @Column(length = 20)
     private String introduction;
-    private Boolean status;
+    // 소프트 삭제(기본값 ture)
+    @Setter
+    private Boolean status = true;
 
     public User() {
 

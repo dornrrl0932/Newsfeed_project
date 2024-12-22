@@ -29,7 +29,7 @@ public class ProfileService {
                 .orElseThrow(() -> new ValidateException("존재하지 않은 회원입니다.", HttpStatus.NOT_FOUND));
 
         // 게시물 페이지로 갖고오고 List<PostPageDto>로 변환
-        List<PostPageDto> posts = PostPageDto.convertFromPosts(postRepository.findByUserOrderByUpdatedDateDesc(user, pageable));
+        List<PostPageDto> posts = PostPageDto.convertFrom(postRepository.findByUserOrderByUpdatedDateDesc(user, pageable));
 
         // (user_id를) 팔로잉 한 유저의 수 -> 팔로우 한 유저를 알아야 함
         Long followingNum = followRepository.countByFollower(user);

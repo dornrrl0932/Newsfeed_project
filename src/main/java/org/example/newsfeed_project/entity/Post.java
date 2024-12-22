@@ -22,13 +22,21 @@ public class Post {
     private String contents;
     @CreatedDate
     @Column(updatable = false) // 수정 불가
-    private LocalDateTime createdDate;
+    private LocalDateTime createdAt;
     @CreatedDate
     @LastModifiedDate // 수정 날짜 반영
-    private LocalDateTime updatedDate;
+    private LocalDateTime updatedAt;
 
     @ManyToOne // post : user -> N:1
     @JoinColumn(name = "user_id") // user 테이블의 기본키 참조(user_id)
     private User user;
 
+    public Post() {}
+
+    public Post(String title, String contents) {
+        this.title = title;
+        this.contents = contents;
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
 }

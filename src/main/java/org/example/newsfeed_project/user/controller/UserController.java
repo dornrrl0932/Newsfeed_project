@@ -49,4 +49,17 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.OK).body("로그인 되었습니다.");
 	}
 
+	//로그아웃
+	@PostMapping("/logout")
+	public ResponseEntity<String> logout(HttpServletRequest request) {
+
+		//세션 조회
+		HttpSession session = request.getSession(false);
+
+		if (session != null) {
+			session.invalidate(); //남은 세션 모두 삭제
+		}
+
+		return ResponseEntity.status(HttpStatus.OK).body("로그아웃 되었습니다.");
+	}
 }

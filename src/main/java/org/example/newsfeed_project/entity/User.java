@@ -1,7 +1,9 @@
 package org.example.newsfeed_project.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Entity
@@ -15,8 +17,10 @@ public class User {
 	@Column(length = 50, unique = true)
 	private String email;
 
+	@Setter
 	private String password;
 
+	@Setter
 	@Column(length = 10)
 	private String userName;
 

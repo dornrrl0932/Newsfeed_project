@@ -24,9 +24,8 @@ public class UserService {
 	//회원 가입
 	public void signupUser(SignUpRequestDto signUpRequestDto) {
 
-		String encodedPassword = passwordEncoder.encode(signUpRequestDto.getPassword());
 		//회원 생성
-		User user = new User(signUpRequestDto.getEmail(), encodedPassword,
+		User user = new User(signUpRequestDto.getEmail(), signUpRequestDto.getPassword(),
 			signUpRequestDto.getUserName());
 
 		//DB에 저장

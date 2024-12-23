@@ -28,6 +28,11 @@ public class FollowService {
 		User followingUser = userRepository.findById(user_id)
 			.orElseThrow(() -> new ValidateException("존재하지 않은 회원입니다.", HttpStatus.NOT_FOUND));
 
+		// 본인이 본인 팔로우 하는지 확인 (userId 일치한지 확인)
+		if (loginUser.getUserId().equals(followingUser.getUserId())) {
+			throw new ValidateException("본인을 팔로우 할 수 없습니다.", HttpStatus.CONFLICT);
+		}
+
 		// 이미 팔로우 중인지 확인
 		if (followRepository.existsByFollowerAndFollowing(loginUser, followingUser)) {
 			throw new ValidateException((followingUser.getUserName() + "님은 이미 팔로우 중입니다."), HttpStatus.CONFLICT);

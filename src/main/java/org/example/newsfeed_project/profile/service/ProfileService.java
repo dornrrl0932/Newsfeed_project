@@ -1,8 +1,8 @@
 package org.example.newsfeed_project.profile.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.newsfeed_project.Follow.repository.FollowRepository;
-import org.example.newsfeed_project.User.repository.UserRepository;
+import org.example.newsfeed_project.follow.repository.FollowRepository;
+import org.example.newsfeed_project.user.repository.UserRepository;
 import org.example.newsfeed_project.entity.User;
 import org.example.newsfeed_project.exception.ValidateException;
 import org.example.newsfeed_project.post.dto.PostPageDto;

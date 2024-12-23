@@ -34,9 +34,9 @@ public class LoginCheckFilter implements Filter {
 				//세션 확인
 				HttpSession session = httpRequest.getSession(false);
 				//인증되지 않은 상태
-				if (session == null || session.getAttribute(SessionConst.LOGIN_USER) == null) {
+				if (session == null || session.getAttribute(SessionConst.LOGIN_USER_ID) == null) {
 					httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED); //로그인하지 않은 사용자에게 401 status 반환
-					httpResponse.getWriter().write("Unauthorized access. Please Login first.");
+					httpResponse.getWriter().write("로그인하지 않았습니다. 로그인 먼저 진행해주세요.");
 					return;
 				}
 			}

@@ -1,14 +1,14 @@
-package org.example.newsfeed_project.controller;
+package org.example.newsfeed_project.user.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
-import org.example.newsfeed_project.dto.LoginRequestDto;
-import org.example.newsfeed_project.dto.SignUpRequestDto;
+import org.example.newsfeed_project.user.dto.LoginRequestDto;
+import org.example.newsfeed_project.user.dto.SignUpRequestDto;
 import org.example.newsfeed_project.entity.User;
-import org.example.newsfeed_project.service.UserService;
-import org.example.newsfeed_project.session.SessionConst;
+import org.example.newsfeed_project.user.service.UserService;
+import org.example.newsfeed_project.user.session.SessionConst;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;

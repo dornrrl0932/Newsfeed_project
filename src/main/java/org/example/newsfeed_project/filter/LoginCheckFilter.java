@@ -51,8 +51,7 @@ public class LoginCheckFilter implements Filter {
 	public boolean isSessionExists(HttpServletRequest httpRequest){
 		HttpSession session = httpRequest.getSession(false);
 		return session != null && session.getAttribute(SessionConst.LOGIN_USER_ID) != null
-			&& session.getAttribute(SessionConst.LOGIN_USER_NAME) != null
-			&& session.getAttribute(SessionConst.USER_STATUS) != null;
+			&& session.getAttribute(SessionConst.LOGIN_USER_NAME) != null;
 	}
 
 	/*인증 체크를 해야하는 URI인지 확인하는 메서드*/

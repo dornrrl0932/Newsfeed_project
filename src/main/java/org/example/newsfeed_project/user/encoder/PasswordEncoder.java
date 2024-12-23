@@ -1,4 +1,4 @@
-package org.example.newsfeed_project.encoder;
+package org.example.newsfeed_project.user.encoder;
 
 import org.springframework.stereotype.Component;
 

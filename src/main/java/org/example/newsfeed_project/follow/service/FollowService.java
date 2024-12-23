@@ -25,7 +25,11 @@ public class FollowService {
         User followingUser = userRepository.findById(user_id)
                 .orElseThrow(() -> new ValidateException("존재하지 않은 회원입니다.", HttpStatus.NOT_FOUND));
 
-        Follow follow = new Follow(followingUser, loginUser);
+        Follow follow = Follow.builder()
+                .follower(loginUser)
+                .following(followingUser)
+                .build();
+
         followRepository.save(follow);
 
         return new MessageDto(followingUser.getUserName() + "님을 팔로우 했습니다.");

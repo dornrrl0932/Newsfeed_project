@@ -1,6 +1,6 @@
 package org.example.newsfeed_project.exception;
 
-import org.example.newsfeed_project.Follow.dto.MessageDto;
+import org.example.newsfeed_project.follow.dto.MessageDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

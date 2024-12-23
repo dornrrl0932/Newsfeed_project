@@ -1,8 +1,8 @@
-package org.example.newsfeed_project.Follow.controller;
+package org.example.newsfeed_project.follow.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.newsfeed_project.Follow.dto.MessageDto;
-import org.example.newsfeed_project.Follow.service.FollowService;
+import org.example.newsfeed_project.follow.dto.MessageDto;
+import org.example.newsfeed_project.follow.service.FollowService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

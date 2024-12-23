@@ -1,4 +1,4 @@
-package org.example.newsfeed_project.Follow.repository;
+package org.example.newsfeed_project.follow.repository;
 
 import org.example.newsfeed_project.entity.Follow;
 import org.example.newsfeed_project.entity.User;

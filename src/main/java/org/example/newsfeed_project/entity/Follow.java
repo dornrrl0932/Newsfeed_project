@@ -24,4 +24,6 @@ public class Follow {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "follower_id")
     private User follower; // 팔로우 한 유저 (본인)
+
+    private Boolean isApprove; // 승인: true, 미승인 false
 }

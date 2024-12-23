@@ -28,8 +28,8 @@ public class FollowService {
         Follow follow = Follow.builder()
                 .follower(loginUser)
                 .following(followingUser)
+                .isApprove(false) // 처음엔 요청만 넣은 상태
                 .build();
-
         followRepository.save(follow);
 
         return new MessageDto(followingUser.getUserName() + "님을 팔로우 했습니다.");

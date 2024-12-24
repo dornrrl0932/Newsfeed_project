@@ -1,6 +1,7 @@
 package org.example.newsfeed_project.entity;
 
 import jakarta.persistence.*;
+import jakarta.persistence.criteria.Fetch;
 import lombok.Getter;
 
 @Getter
@@ -11,11 +12,12 @@ public class Follow {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long followId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "following_id")
     private User following;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "follower_id")
     private User follower;
+
 }

@@ -1,6 +1,7 @@
 package org.example.newsfeed_project.follow.controller;
 
 import org.example.newsfeed_project.follow.dto.FollowersDto;
+import org.example.newsfeed_project.follow.dto.FollowingsDto;
 import org.example.newsfeed_project.follow.dto.MessageDto;
 import org.example.newsfeed_project.follow.service.FollowService;
 import org.springframework.http.HttpStatus;
@@ -38,5 +39,10 @@ public class FollowController {
 	@GetMapping("/{user_id}/followers")
 	public ResponseEntity<FollowersDto> getFollowers(@PathVariable Long user_id) {
 		return ResponseEntity.ok(followService.getFollowers(user_id));
+	}
+
+	@GetMapping("/{user_id}/followers")
+	public ResponseEntity<FollowingsDto> getFollowing(@PathVariable Long user_id) {
+		return ResponseEntity.ok(followService.getFollowings(user_id));
 	}
 }

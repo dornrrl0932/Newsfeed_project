@@ -1,4 +1,4 @@
-package org.example.newsfeed_project.dto;
+package org.example.newsfeed_project.post.dto;
 
 
 import lombok.Getter;
@@ -7,14 +7,14 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 
 @Getter
-public class NewFeedResponseDto {
-    public final Long id;
+public class PostFindByPageResponseDto {
     private final String title;
     private final String contents;
+    public final String userName;
     private final LocalDateTime updateTime;
 
-    public NewFeedResponseDto(Long id, String title, String contents, LocalDateTime updateTime) {
-        this.id = id;
+    public PostFindByPageResponseDto(String title, String contents, String userName, LocalDateTime updateTime) {
+        this.userName = userName;
         this.title = title;
         this.contents = contents;
         this.updateTime = updateTime;

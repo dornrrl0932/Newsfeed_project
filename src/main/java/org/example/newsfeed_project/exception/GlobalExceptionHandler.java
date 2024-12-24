@@ -21,16 +21,22 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<String> handleInvalidUrlException(InvalidUrlException e) {
 
 		//404 Not_Found와 메세지를 반환
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("잘못 된 URL입니다. 다시 입력해주세요.");
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 	}
 
 	//확인 비밀번호 불일치 예외처리
-	@ExceptionHandler(Passwordauthenticationexception.class)
-	public ResponseEntity<String> HandlePasswordauthenticationexception(Passwordauthenticationexception e) {
+	@ExceptionHandler(PasswordAuthenticationException.class)
+	public ResponseEntity<String> HandlePasswordAuthenticationException(PasswordAuthenticationException e) {
 
-		// 401 UNAUTHORIZED 메세지를 반환
+		// 401 UNAUTHORIZED와 메세지를 반환
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
 	}
 
+	//이미 존재하는 이메일, 탈퇴한 회원의 이메일 예외처리
+	public ResponseEntity<String> HandleEmailAlreadyExistsException(EmailAlreadyExistsException e) {
+
+		// 400 BADREQUEST와 메세지 반환
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+	}
 }
 

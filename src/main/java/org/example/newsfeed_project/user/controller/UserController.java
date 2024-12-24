@@ -32,7 +32,7 @@ public class UserController {
 	private final UserService userService;
 
 	//회원가입
-	@PostMapping("signup")
+	@PostMapping("/signup")
 	public ResponseEntity<String> signupUser(@Valid @RequestBody SignUpRequestDto signUpRequestDto) {
 
 		userService.signupUser(signUpRequestDto);

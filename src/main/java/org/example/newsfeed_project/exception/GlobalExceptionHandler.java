@@ -1,5 +1,6 @@
 package org.example.newsfeed_project.exception;
 
+import org.example.newsfeed_project.follow.dto.MessageDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -38,5 +39,11 @@ public class GlobalExceptionHandler {
 		// 400 BADREQUEST와 메세지 반환
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 	}
+
+    // ValidateException 처리
+    @ExceptionHandler(ValidateException.class)
+    public ResponseEntity<MessageDto> handleValidateException(ValidateException exception) {
+        return new ResponseEntity<>(new MessageDto(exception.getMessage()), exception.getHttpStatus());
+    }
 }
 

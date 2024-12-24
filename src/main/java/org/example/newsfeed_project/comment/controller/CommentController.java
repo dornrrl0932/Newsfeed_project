@@ -10,4 +10,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CommentController {
 
+	// 댓글 작성
+
+	// 댓글 조회
+
+	// 댓글 수정
+
+	// 댓글 삭제
+
+	// 댓글 좋아요 상태 변경
+
 }

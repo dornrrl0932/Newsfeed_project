@@ -34,16 +34,17 @@ public class GlobalExceptionHandler {
 	}
 
 	//이미 존재하는 이메일, 탈퇴한 회원의 이메일 예외처리
+	@ExceptionHandler(EmailAlreadyExistsException.class)
 	public ResponseEntity<String> HandleEmailAlreadyExistsException(EmailAlreadyExistsException e) {
 
 		// 400 BADREQUEST와 메세지 반환
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 	}
 
-    // ValidateException 처리
-    @ExceptionHandler(ValidateException.class)
-    public ResponseEntity<MessageDto> handleValidateException(ValidateException exception) {
-        return new ResponseEntity<>(new MessageDto(exception.getMessage()), exception.getHttpStatus());
-    }
+	// ValidateException 처리
+	@ExceptionHandler(ValidateException.class)
+	public ResponseEntity<MessageDto> handleValidateException(ValidateException exception) {
+		return new ResponseEntity<>(new MessageDto(exception.getMessage()), exception.getHttpStatus());
+	}
 }
 

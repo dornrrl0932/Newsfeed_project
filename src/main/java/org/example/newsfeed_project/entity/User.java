@@ -1,7 +1,11 @@
 package org.example.newsfeed_project.entity;
 
-import jakarta.persistence.*;
-import lombok.Builder;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -27,8 +31,11 @@ public class User {
 	@Column(length = 20)
 	private String introduction; //회원 소개글
 
-	private Boolean status; //회원 상태 (false: 탈퇴한 회원 의미)
-
+	//회원 상태 (false: 탈퇴한 회원 의미)
+	// 소프트 삭제(기본값 ture)
+	@Setter
+	private Boolean status = true;
+	
 	public User() {
 
 	}

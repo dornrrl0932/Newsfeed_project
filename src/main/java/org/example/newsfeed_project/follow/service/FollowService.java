@@ -7,6 +7,7 @@ import org.example.newsfeed_project.entity.User;
 import org.example.newsfeed_project.exception.ValidateException;
 import org.example.newsfeed_project.follow.dto.FollowUserInfoDto;
 import org.example.newsfeed_project.follow.dto.FollowersDto;
+import org.example.newsfeed_project.follow.dto.FollowingsDto;
 import org.example.newsfeed_project.follow.dto.MessageDto;
 import org.example.newsfeed_project.follow.repository.FollowRepository;
 import org.example.newsfeed_project.user.repository.UserRepository;
@@ -99,5 +100,17 @@ public class FollowService {
 		List<FollowUserInfoDto> followers = followRepository.findFollowersInfoByUser(user);
 
 		return new FollowersDto(user.getUserName(), followers);
+	}
+
+	// user_id의 팔로잉 목록 조회
+	public FollowingsDto getFollowings(Long user_id) {
+		// 유저 조회
+		User user = userRepository.findById(user_id)
+			.orElseThrow(() -> new ValidateException("존재하지 않은 회원입니다.", HttpStatus.NOT_FOUND));
+
+		// 유저의 팔로워 목록 -> 팔로잉Id가 유저인 것들 select
+		List<FollowUserInfoDto> followings = followRepository.findFollowingsInfoByUser(user);
+
+		return new FollowingsDto(user.getUserName(), followings);
 	}
 }

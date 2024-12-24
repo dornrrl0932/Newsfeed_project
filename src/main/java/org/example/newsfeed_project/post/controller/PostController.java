@@ -1,13 +1,13 @@
-package org.example.newsfeed_project.controller;
+package org.example.newsfeed_project.post.controller;
 
+import jakarta.servlet.http.HttpServlet;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.newsfeed_project.dto.CreatedPostRequestDto;
-import org.example.newsfeed_project.dto.CreatedPostResponseDto;
-import org.example.newsfeed_project.dto.UpdatedPostRequestDto;
-import org.example.newsfeed_project.dto.UpdatedPostResponseDto;
-import org.example.newsfeed_project.repository.PostRepository;
-import org.example.newsfeed_project.service.PostService;
+import org.example.newsfeed_project.post.dto.CreatedPostRequestDto;
+import org.example.newsfeed_project.post.dto.CreatedPostResponseDto;
+import org.example.newsfeed_project.post.dto.UpdatedPostRequestDto;
+import org.example.newsfeed_project.post.dto.UpdatedPostResponseDto;
+import org.example.newsfeed_project.post.service.PostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,11 +34,11 @@ public class PostController {
         return new ResponseEntity<>(updatedPostResponse, HttpStatus.OK);
     }
     //게시물 삭제
-//    @DeleteMapping("/{post_id}")
-//    public ResponseEntity<String> deletedPost(@PathVariable Long post_id) {
-//        postRepository.deleteById(post_id);
-//        return ResponseEntity.ok("게시글이 삭제 되었습니다.");
-//    }
+    @DeleteMapping("/{post_id}")
+    public ResponseEntity<String> deletedPost(@PathVariable Long post_id) {
+        postService.deletePost(post_id);
+        return ResponseEntity.ok("게시글이 삭제 되었습니다.");
+    }
 }
 
 

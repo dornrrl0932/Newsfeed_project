@@ -41,7 +41,8 @@ public class FollowController {
 		return ResponseEntity.ok(followService.getFollowers(user_id));
 	}
 
-	@GetMapping("/{user_id}/followers")
+	// 팔로잉 목록
+	@GetMapping("/{user_id}/followings")
 	public ResponseEntity<FollowingsDto> getFollowing(@PathVariable Long user_id) {
 		return ResponseEntity.ok(followService.getFollowings(user_id));
 	}

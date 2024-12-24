@@ -2,6 +2,7 @@ package org.example.newsfeed_project.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -33,10 +34,18 @@ public class Post {
 
     public Post() {}
 
+
     public Post(String title, String contents) {
+
         this.title = title;
         this.contents = contents;
         this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public void updatedPost(String title, String contents) {
+        this.title = title;
+        this.contents = contents;
         this.updatedAt = LocalDateTime.now();
     }
 }

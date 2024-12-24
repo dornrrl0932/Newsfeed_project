@@ -1,10 +1,11 @@
 package org.example.newsfeed_project.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.newsfeed_project.dto.PostRequestDto;
-import org.example.newsfeed_project.dto.PostResponseDto;
+import org.example.newsfeed_project.dto.CreatedPostRequestDto;
+import org.example.newsfeed_project.dto.CreatedPostResponseDto;
+import org.example.newsfeed_project.dto.UpdatedPostRequestDto;
+import org.example.newsfeed_project.dto.UpdatedPostResponseDto;
 import org.example.newsfeed_project.service.PostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,12 +19,22 @@ public class PostController {
 
     private final PostService postService;
 
-    //게시글 생성
+    //게시물 생성
     @PostMapping
-    public ResponseEntity<PostResponseDto> createdPost(@RequestBody PostRequestDto createdPostRequest) {
-        PostResponseDto createdPostResponse = postService.createdPost(createdPostRequest);
+    public ResponseEntity<CreatedPostResponseDto> createdPost(@RequestBody CreatedPostRequestDto createdPostRequest) {
+        CreatedPostResponseDto createdPostResponse = postService.createdPost(createdPostRequest);
         return new ResponseEntity<>(createdPostResponse, HttpStatus.OK);
     }
+    //게시물 수정
+    @PatchMapping("/{post_id}")
+    public ResponseEntity<UpdatedPostResponseDto> updatedPost(@PathVariable("post_id") Long post_id,
+                            @RequestBody UpdatedPostRequestDto updatedPostRequest) {
+        UpdatedPostResponseDto updatedPostResponse = postService.updatePost(post_id, updatedPostRequest);
+        return new ResponseEntity<>(updatedPostResponse, HttpStatus.OK);
+    }
+
+    //게시물 삭제
+
 }
 
 

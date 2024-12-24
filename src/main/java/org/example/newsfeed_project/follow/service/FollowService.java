@@ -1,8 +1,12 @@
 package org.example.newsfeed_project.follow.service;
 
+import java.util.List;
+
 import org.example.newsfeed_project.entity.Follow;
 import org.example.newsfeed_project.entity.User;
 import org.example.newsfeed_project.exception.ValidateException;
+import org.example.newsfeed_project.follow.dto.FollowUserInfoDto;
+import org.example.newsfeed_project.follow.dto.FollowersDto;
 import org.example.newsfeed_project.follow.dto.MessageDto;
 import org.example.newsfeed_project.follow.repository.FollowRepository;
 import org.example.newsfeed_project.user.repository.UserRepository;
@@ -83,5 +87,17 @@ public class FollowService {
 		// 팔로우 되어 있는지 확인
 		return followRepository.findByFollowerAndFollowing(loginUser, followingUser)
 			.orElseThrow(() -> new ValidateException("팔로잉 되어 있지 않은 회원입니다.", HttpStatus.BAD_REQUEST));
+	}
+
+	// user_id의 팔로워 목록 조회
+	public FollowersDto getFollowers(Long user_id) {
+		// 유저 조회
+		User user = userRepository.findById(user_id)
+			.orElseThrow(() -> new ValidateException("존재하지 않은 회원입니다.", HttpStatus.NOT_FOUND));
+
+		// 유저의 팔로워 목록 -> 팔로잉Id가 유저인 것들 select
+		List<FollowUserInfoDto> followers = followRepository.findFollowersInfoByUser(user);
+
+		return new FollowersDto(user.getUserName(), followers);
 	}
 }

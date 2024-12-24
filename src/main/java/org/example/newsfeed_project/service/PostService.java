@@ -51,7 +51,7 @@ public class PostService {
         List<NewFeedResponseDto> newFeedResponseDtoArrayList = new ArrayList<>();
         Long pageCount = 0L;
         Long count = 0L;
-        findPostList.sort(Comparator.comparing(Post::getLiked).reversed());
+        findPostList.sort(Comparator.comparing(Post::getLike).reversed());
 
         for (Post post : findPostList) {
             if (count == pageSize) {
@@ -65,7 +65,7 @@ public class PostService {
             if(pageCount > requestPage){
                 break;
             }
-            result.get(pageCount).add(new NewFeedResponseDto(post.getPostId(), post.getTitle(), post.getContents(), post.getUpdatedDate()));
+            result.get(pageCount).add(new NewFeedResponseDto(post.getPostId(), post.getTitle(), post.getContents(), post.getUpdatedAt()));
             count++;
         }
         return result;
@@ -76,7 +76,7 @@ public class PostService {
         List<NewFeedResponseDto> newFeedResponseDtoArrayList = new ArrayList<>();
         Long pageCount = 0L;
         Long count = 0L;
-        findPostList.sort(Comparator.comparing(Post::getUpdatedDate).reversed());
+        findPostList.sort(Comparator.comparing(Post::getUpdatedAt).reversed());
 
         for (Post post : findPostList) {
             if (count == pageSize) {
@@ -90,7 +90,7 @@ public class PostService {
             if(pageCount > requestPage){
                 break;
             }
-            result.get(pageCount).add(new NewFeedResponseDto(post.getPostId(), post.getTitle(), post.getContents(), post.getUpdatedDate()));
+            result.get(pageCount).add(new NewFeedResponseDto(post.getPostId(), post.getTitle(), post.getContents(), post.getUpdatedAt()));
             count++;
         }
         return result;

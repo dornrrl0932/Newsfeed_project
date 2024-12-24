@@ -11,5 +11,5 @@ public class SignUpRequestDto {
     private final String password;
     private final String renterPassword;
     private final String userName;
-
+    private final String introduction;
 }

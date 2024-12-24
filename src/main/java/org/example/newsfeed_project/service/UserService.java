@@ -4,6 +4,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.newsfeed_project.dto.*;
 import org.example.newsfeed_project.entity.User;
+import org.example.newsfeed_project.profile.dto.ProfileUpdateRequestDto;
+import org.example.newsfeed_project.profile.dto.ProfileUpdateResponseDto;
 import org.example.newsfeed_project.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -18,7 +20,7 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional
-    public UserProfilePutResponseDto userProfilePutService(Long id, UserProfilePutRequestDto requestDto) {
+    public ProfileUpdateResponseDto userProfilePutService(Long id, ProfileUpdateRequestDto requestDto) {
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -26,11 +28,11 @@ public class UserService {
         User findUser = optionalUser.get();
 
         findUser.updateIntroduction(requestDto.getIntroduction());
-        return new UserProfilePutResponseDto(findUser.getIntroduction());
+        return new ProfileUpdateResponseDto(findUser.getIntroduction());
     }
 
     public MessageResponseDto SignUp(SignUpRequestDto request){
-        userRepository.save(new User(request.getEmail(),request.getPassword(), request.getUserName(), request.getIntroduction() ,true));
+        userRepository.save(new User(request.getEmail(),request.getPassword(), request.getUserName(), request.getIntroduction()));
     return new MessageResponseDto("생성 완료 되었습니다.");
     }
 

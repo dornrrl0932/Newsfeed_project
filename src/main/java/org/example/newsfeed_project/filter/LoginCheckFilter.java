@@ -48,7 +48,7 @@ public class LoginCheckFilter implements Filter {
 	}
 
 	/*세션이 존재하는지 확인*/
-	public boolean isSessionExists(HttpServletRequest httpRequest){
+	public boolean isSessionExists(HttpServletRequest httpRequest) {
 		HttpSession session = httpRequest.getSession(false);
 		return session != null && session.getAttribute(SessionConst.LOGIN_USER_ID) != null
 			&& session.getAttribute(SessionConst.LOGIN_USER_NAME) != null;

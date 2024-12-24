@@ -18,13 +18,15 @@ public class URICheckFilter implements Filter {
 	//허용되는 URL 패턴 목록
 	private static final List<Pattern> ALLOWED_PATTERNS = new ArrayList<>();
 
-	static{
+	static {
 		ALLOWED_PATTERNS.add(Pattern.compile("^/users/signup$"));
 		ALLOWED_PATTERNS.add(Pattern.compile("^/users/\\d+$"));
 		ALLOWED_PATTERNS.add(Pattern.compile("^/users/login$"));
 		ALLOWED_PATTERNS.add(Pattern.compile("^/users/logout$"));
 		ALLOWED_PATTERNS.add(Pattern.compile("^/users/profile/\\d+$"));
 		ALLOWED_PATTERNS.add(Pattern.compile("^/users/follow/\\d+$"));
+		ALLOWED_PATTERNS.add(Pattern.compile("^/users/follow/\\d+/followers$"));
+		ALLOWED_PATTERNS.add(Pattern.compile("^/users/follow/\\d+/followings$"));
 		ALLOWED_PATTERNS.add(Pattern.compile("^/posts$"));
 		ALLOWED_PATTERNS.add(Pattern.compile("^/posts/\\d+$"));
 		ALLOWED_PATTERNS.add(Pattern.compile("^/posts/page/\\d+$"));
@@ -39,16 +41,16 @@ public class URICheckFilter implements Filter {
 		IOException,
 		ServletException {
 
-		HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
-		HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
+		HttpServletRequest httpRequest = (HttpServletRequest)servletRequest;
+		HttpServletResponse httpResponse = (HttpServletResponse)servletResponse;
 		String requestURI = httpRequest.getRequestURI();
 
 		//허용되는 URL이 아닌 경우
-		if(!isAllowedURL(requestURI)){
+		if (!isAllowedURL(requestURI)) {
 			httpResponse.setContentType("text/html; charset=UTF-8");
 			httpResponse.setCharacterEncoding("UTF-8");
 			httpResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			httpResponse.getWriter().write("사이트에 연결할 수 없음. "+requestURI+"에 오타가 있는지 확인해주세요.");
+			httpResponse.getWriter().write("사이트에 연결할 수 없음. " + requestURI + "에 오타가 있는지 확인해주세요.");
 			return;
 		}
 

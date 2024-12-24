@@ -15,30 +15,30 @@ import java.time.LocalDateTime;
 public class Post {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private  Long postId;
+    private Long postId;
     @Column(length = 20)
     private String title;
     @Column(columnDefinition = "longtext")
     private String contents;
     @CreatedDate
     @Column(updatable = false) // 수정 불가
-    private LocalDateTime createdDate;
+    private LocalDateTime createdAt;
     @CreatedDate
     @LastModifiedDate // 수정 날짜 반영
-    private LocalDateTime updatedDate;
+    private LocalDateTime updatedAt;
     @Column(updatable = false)
-    private Long liked;
+    private Long like;
     @ManyToOne // post : user -> N:1
     @JoinColumn(name = "user_id") // user 테이블의 기본키 참조(user_id)
     private User user;
 
 
-    public Post(String title, String contents, LocalDateTime createdDate, LocalDateTime updatedDate, Long liked, User user){
+    public Post(String title, String contents, LocalDateTime createdDate, LocalDateTime updatedAt, Long like, User user){
         this.title = title;
         this.contents = contents;
-        this.createdDate = createdDate;
-        this.updatedDate = updatedDate;
-        this.liked = liked;
+        this.createdAt = createdDate;
+        this.updatedAt = updatedAt;
+        this.like = like;
         this.user = user;
     }
 

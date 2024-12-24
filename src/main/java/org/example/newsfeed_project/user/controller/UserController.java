@@ -1,6 +1,8 @@
 package org.example.newsfeed_project.user.controller;
 
+import jakarta.servlet.ServletRequest;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
@@ -8,6 +10,7 @@ import org.example.newsfeed_project.user.dto.LoginRequestDto;
 import org.example.newsfeed_project.user.dto.SignUpRequestDto;
 import org.example.newsfeed_project.entity.User;
 import org.example.newsfeed_project.user.dto.UpdateUserInfoRequestDto;
+import org.example.newsfeed_project.user.jwt.JWTUtil;
 import org.example.newsfeed_project.user.service.UserService;
 import org.example.newsfeed_project.user.session.SessionConst;
 import org.springframework.http.HttpStatus;
@@ -26,6 +29,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
 	private final UserService userService;
+	private final JWTUtil jwtUtil;
+	private final HttpServletResponse response;
 
 	//회원가입
 	@PostMapping("signup")
@@ -53,6 +58,11 @@ public class UserController {
 		HttpServletRequest request) {
 
 		User loginUser = userService.login(loginRequestDto);
+
+		String token = jwtUtil.creatJWT(loginUser.getUserName(), loginUser.getUserId(),
+			loginUser.getStatus(), 60 * 60 * 10L);
+
+		response.addHeader("Authorization", "Bearer " + token);
 
 		//로그인 성공 처리
 		HttpSession session = request.getSession();

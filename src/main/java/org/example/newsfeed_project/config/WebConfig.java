@@ -1,4 +1,4 @@
-package org.example.newsfeed_project;
+package org.example.newsfeed_project.config;
 
 import org.example.newsfeed_project.filter.LoginCheckFilter;
 import org.example.newsfeed_project.filter.URICheckFilter;

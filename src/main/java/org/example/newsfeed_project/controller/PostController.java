@@ -6,6 +6,7 @@ import org.example.newsfeed_project.dto.CreatedPostRequestDto;
 import org.example.newsfeed_project.dto.CreatedPostResponseDto;
 import org.example.newsfeed_project.dto.UpdatedPostRequestDto;
 import org.example.newsfeed_project.dto.UpdatedPostResponseDto;
+import org.example.newsfeed_project.repository.PostRepository;
 import org.example.newsfeed_project.service.PostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,9 +33,12 @@ public class PostController {
         UpdatedPostResponseDto updatedPostResponse = postService.updatePost(post_id, updatedPostRequest);
         return new ResponseEntity<>(updatedPostResponse, HttpStatus.OK);
     }
-
     //게시물 삭제
-
+//    @DeleteMapping("/{post_id}")
+//    public ResponseEntity<String> deletedPost(@PathVariable Long post_id) {
+//        postRepository.deleteById(post_id);
+//        return ResponseEntity.ok("게시글이 삭제 되었습니다.");
+//    }
 }
 
 

@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -35,7 +36,7 @@ public class User {
 	// 소프트 삭제(기본값 ture)
 	@Setter
 	private Boolean status = true;
-	
+
 	public User() {
 
 	}
@@ -45,6 +46,10 @@ public class User {
 		this.password = password;
 		this.userName = userName;
 		this.introduction = introduction;
+	}
+
+	public User(String email, String password, String userName) {
+		this(email, password, userName, null);
 	}
 
 	public void updateIntroduction(String introduction) {

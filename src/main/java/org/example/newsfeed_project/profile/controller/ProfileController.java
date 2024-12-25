@@ -31,11 +31,11 @@ public class ProfileController {
 
 	// 프로필 조회
 	@GetMapping("/{user_id}")
-	public ResponseEntity<ProfileDto> getProfile(@PathVariable Long user_id,
+	public ResponseEntity<ProfileDto> getProfile(@PathVariable(name = "user_id") Long userId,
 		@RequestParam(defaultValue = "1") int pageNum) {
 		// 기본 1페이지(인덱스와 같은 개념이라 요청 들어온 페이지 숫자에 -1 처리), 게시글 10개 씩
 		Pageable pageable = PageRequest.of(pageNum - 1, 10);
-		return ResponseEntity.ok(profileService.getProfile(user_id, pageable));
+		return ResponseEntity.ok(profileService.getProfile(userId, pageable));
 	}
 
 	@PutMapping("/{id}")

@@ -26,31 +26,33 @@ public class FollowController {
 
 	//팔로우하기
 	@PostMapping("/{user_id}")
-	public ResponseEntity<MessageDto> follow(@PathVariable Long user_id, HttpServletRequest servletRequest) {
+	public ResponseEntity<MessageDto> follow(@PathVariable(name = "user_id") Long userId,
+		HttpServletRequest servletRequest) {
 		// 세션 get. 새로 생성은 안 함.
 		HttpSession httpSession = servletRequest.getSession(false);
 		Long loginUserId = (Long)httpSession.getAttribute(SessionConst.LOGIN_USER_ID);
-		return new ResponseEntity<>(followService.follow(user_id, loginUserId), HttpStatus.OK);
+		return new ResponseEntity<>(followService.follow(userId, loginUserId), HttpStatus.OK);
 	}
 
 	// 팔로우 취소
 	@DeleteMapping("/{user_id}")
-	public ResponseEntity<MessageDto> unFollow(@PathVariable Long user_id, HttpServletRequest servletRequest) {
+	public ResponseEntity<MessageDto> unFollow(@PathVariable(name = "user_id") Long userId,
+		HttpServletRequest servletRequest) {
 		// 세션 get. 새로 생성은 안 함.
 		HttpSession httpSession = servletRequest.getSession(false);
 		Long loginUserId = (Long)httpSession.getAttribute(SessionConst.LOGIN_USER_ID);
 
-		return new ResponseEntity<>(followService.unFollow(user_id, loginUserId), HttpStatus.OK);
+		return new ResponseEntity<>(followService.unFollow(userId, loginUserId), HttpStatus.OK);
 	}
 
 	// 팔로워 목록
 	@GetMapping("/{user_id}/followers")
-	public ResponseEntity<FollowersDto> getFollowers(@PathVariable Long user_id) {
-		return ResponseEntity.ok(followService.getFollowers(user_id));
+	public ResponseEntity<FollowersDto> getFollowers(@PathVariable(name = "user_id") Long userId) {
+		return ResponseEntity.ok(followService.getFollowers(userId));
 	}
 
 	@GetMapping("/{user_id}/followings")
-	public ResponseEntity<FollowingsDto> getFollowing(@PathVariable Long user_id) {
-		return ResponseEntity.ok(followService.getFollowings(user_id));
+	public ResponseEntity<FollowingsDto> getFollowing(@PathVariable(name = "user_id") Long userId) {
+		return ResponseEntity.ok(followService.getFollowings(userId));
 	}
 }

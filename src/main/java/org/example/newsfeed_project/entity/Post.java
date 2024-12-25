@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -36,9 +37,11 @@ public class Post {
     @LastModifiedDate // 수정 날짜 반영
     private LocalDateTime updatedAt;
 
+    @Setter
     @Column
     private Long likeCount = 0L; //좋아요 개수
 
+    @Setter
     @Column
     private Long commentCount = 0L; //댓글 개수
 

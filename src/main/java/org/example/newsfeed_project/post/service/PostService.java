@@ -1,6 +1,7 @@
 package org.example.newsfeed_project.post.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.newsfeed_project.post.dto.PostFindByDateRangeRequestDto;
 import org.example.newsfeed_project.post.dto.PostFindByPageRequestDto;
 import org.example.newsfeed_project.post.dto.PostFindByPageResponseDto;
 import org.example.newsfeed_project.entity.Post;
@@ -9,10 +10,12 @@ import org.example.newsfeed_project.post.repository.PostRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -20,12 +23,21 @@ import java.util.*;
 public class PostService {
     public final PostRepository postRepository;
 
+    public List<PostPageDto> findPostByDateRange(int requestPage, int pageSize, PostFindByDateRangeRequestDto requestDto) {
+
+        Pageable pageable = PageRequest.of(requestPage, pageSize, Sort.by(Sort.Direction.DESC, "updatedAt"));
+
+        Page<Post> postPage = postRepository.findByUpdatedAtBetween(requestDto.startDate, requestDto.endDate, pageable);
+
+        return PostPageDto.convertFrom(postPage);
+    }
+
     public Map<Long, List<PostFindByPageResponseDto>> findPostByPage(Long requestPage, Long pageSize, PostFindByPageRequestDto requestDto) {
         List<Post> findPostList = postRepository.findAll();
        return findPostByUpdateOrLikeDesc(findPostList,pageSize,requestPage,requestDto);
     }
     public List<PostPageDto> findPostByPage2(int requestPage, int pageSize, PostFindByPageRequestDto requestDto){
-        Pageable pageable = PageRequest.of(requestPage, pageSize);
+        Pageable pageable = PageRequest.of(requestPage, pageSize, Sort.by(Sort.Direction.DESC, "updatedAt"));
         List<PostPageDto> posts = PostPageDto.convertFrom(
                 postRepository.findAll(pageable));
         switch (requestDto.getOrder()) {

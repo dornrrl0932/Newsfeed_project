@@ -12,4 +12,9 @@ public class CommentDto {
 	private Long like;
 	private String userName;
 	private LocalDateTime updatedAt;
+
+	public static CommentDto convertDto(Comment comment) {
+		return new CommentDto(comment.getComments(), comment.getLike_count(), comment.getUser().getUserName(),
+			comment.getUpdatedAt());
+	}
 }

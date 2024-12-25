@@ -26,14 +26,13 @@ public class CommentController {
         Long userId = (Long) request.getSession().getAttribute("loginUserId");
 		CommentDto commentDto = commentService.saveComment(postId, userId, requestDto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(commentDto).getBody();
-
     }
     // 댓글 조회
 
-    // 댓글 수정
+	// 댓글 수정
 
-    // 댓글 삭제
+	// 댓글 삭제
 
-    // 댓글 좋아요 상태 변경
+	// 댓글 좋아요 상태 변경
 
 }

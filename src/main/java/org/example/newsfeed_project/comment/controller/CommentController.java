@@ -1,5 +1,6 @@
 package org.example.newsfeed_project.comment.controller;
 
+import org.example.newsfeed_project.comment.service.CommentService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -9,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/posts/{post_id}/comments")
 @RequiredArgsConstructor
 public class CommentController {
+
+	private final CommentService commentService;
 
 	// 댓글 작성
 

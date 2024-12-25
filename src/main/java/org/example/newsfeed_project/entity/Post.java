@@ -26,9 +26,24 @@ public class Post {
     @CreatedDate
     @LastModifiedDate // 수정 날짜 반영
     private LocalDateTime updatedAt;
-
+    @Column(updatable = false)
+    private Long like;
     @ManyToOne // post : user -> N:1
     @JoinColumn(name = "user_id") // user 테이블의 기본키 참조(user_id)
     private User user;
 
+
+    public Post(String title, String contents, LocalDateTime createdDate, LocalDateTime updatedAt, Long like, User user){
+        this.title = title;
+        this.contents = contents;
+        this.createdAt = createdDate;
+        this.updatedAt = updatedAt;
+        this.like = like;
+        this.user = user;
+    }
+
+
+    public Post() {
+
+    }
 }

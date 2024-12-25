@@ -1,6 +1,7 @@
 package org.example.newsfeed_project.comment.controller;
 
 import org.example.newsfeed_project.comment.dto.CommentDto;
+import org.example.newsfeed_project.comment.dto.CommentRequestDto;
 import org.example.newsfeed_project.comment.service.CommentService;
 import org.example.newsfeed_project.user.session.SessionConst;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,7 @@ public class CommentController {
 		@RequestBody CommentRequestDto dto, HttpServletRequest servletRequest) {
 
 		HttpSession httpSession = servletRequest.getSession(false);
-		Long loginUserId = (Long)servletRequest.getAttribute(SessionConst.LOGIN_USER_ID);
+		Long loginUserId = (Long)httpSession.getAttribute(SessionConst.LOGIN_USER_ID);
 
 		return ResponseEntity.ok(commentService.modifyComment(loginUserId, postId, commentId, dto));
 	}

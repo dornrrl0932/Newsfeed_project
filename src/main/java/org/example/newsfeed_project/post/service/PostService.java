@@ -4,7 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.example.newsfeed_project.post.dto.PostFindByPageRequestDto;
 import org.example.newsfeed_project.post.dto.PostFindByPageResponseDto;
 import org.example.newsfeed_project.entity.Post;
+import org.example.newsfeed_project.post.dto.PostPageDto;
 import org.example.newsfeed_project.post.repository.PostRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -19,6 +23,22 @@ public class PostService {
     public Map<Long, List<PostFindByPageResponseDto>> findPostByPage(Long requestPage, Long pageSize, PostFindByPageRequestDto requestDto) {
         List<Post> findPostList = postRepository.findAll();
        return findPostByUpdateOrLikeDesc(findPostList,pageSize,requestPage,requestDto);
+    }
+    public List<PostPageDto> findPostByPage2(int requestPage, int pageSize, PostFindByPageRequestDto requestDto){
+        Pageable pageable = PageRequest.of(requestPage, pageSize);
+        List<PostPageDto> posts = PostPageDto.convertFrom(
+                postRepository.findAll(pageable));
+        switch (requestDto.getOrder()) {
+            case "like":
+                posts.sort(Comparator.comparing(PostPageDto::getLike_Count).reversed());
+                break;
+            case "update":
+                posts.sort(Comparator.comparing(PostPageDto::getUpdateAt).reversed());
+                break;
+            default:
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+        return posts;
     }
 
     public PostFindByPageResponseDto findPostById(Long id){

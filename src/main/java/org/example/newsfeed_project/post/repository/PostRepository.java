@@ -17,4 +17,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 	 *     )
 	 */
 	Page<Post> findByUserOrderByUpdatedAtDesc(User user, Pageable pageable);
+	Page<Post> findAll(Pageable pageable);
 }

@@ -10,13 +10,13 @@ import java.time.LocalDateTime;
 public class PostFindByPageResponseDto {
     private final String title;
     private final String contents;
-    public final String userName;
-    private final LocalDateTime updateTime;
+    private final String userName;
+    private final LocalDateTime updateAt;
 
-    public PostFindByPageResponseDto(String title, String contents, String userName, LocalDateTime updateTime) {
+    public PostFindByPageResponseDto(String title, String contents, String userName, LocalDateTime updateAt) {
         this.userName = userName;
         this.title = title;
         this.contents = contents;
-        this.updateTime = updateTime;
+        this.updateAt = updateAt;
     }
 }

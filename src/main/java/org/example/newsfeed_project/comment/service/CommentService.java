@@ -37,7 +37,7 @@ public class CommentService {
         User findUser = optionalUser.get();
 
 
-        Comment comment = new Comment(findPost, findUser,requestDto.getComment(), 0L, LocalDateTime.now());
+        Comment comment = new Comment(findPost, findUser,requestDto.getComment(), 0L);
 		comment =  commentRepository.save(comment);
 		return new CommentDto(comment.getComments(), comment.getLike_count(), comment.getUser().getUserName(), comment.getUpdatedAt());
     }

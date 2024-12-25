@@ -2,6 +2,8 @@ package org.example.newsfeed_project.comment.dto;
 
 import java.time.LocalDateTime;
 
+import org.example.newsfeed_project.entity.Comment;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

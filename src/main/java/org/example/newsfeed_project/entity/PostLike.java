@@ -9,6 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,7 +18,7 @@ import lombok.Setter;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="post_like")
+@Table(name = "post_like")
 public class PostLike {
 
 	@Id
@@ -25,7 +26,7 @@ public class PostLike {
 	private Long postLikeId;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="post_id")
+	@JoinColumn(name = "post_id")
 	private Post post;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -33,5 +34,11 @@ public class PostLike {
 	private User user;
 
 	@Setter
-	private Boolean likeStatus=false; //true: 좋아요 누른 상태, false(기본값): 좋아요 누르지 않은 상태
+	private Boolean likeStatus = true; //true: 좋아요 누른 상태, false: 좋아요 누르지 않은 상태
+
+	@Builder
+	public PostLike(Post post, User user){
+		this.post=post;
+		this.user=user;
+	}
 }

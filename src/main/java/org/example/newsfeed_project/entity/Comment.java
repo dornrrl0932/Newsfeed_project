@@ -17,6 +17,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Entity
@@ -35,10 +36,12 @@ public class Comment {
 	@JoinColumn(name = "user_id")
 	private User user;
 
+	@Setter
 	@Column(length = 250)
 	private String comments;
 
-	private Long like_count;
+	// 기본값 0
+	private Long like_count = 0L;
 
 	@CreatedDate
 	@LastModifiedDate

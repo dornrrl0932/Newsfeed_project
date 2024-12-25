@@ -40,11 +40,10 @@ public class User {
 
 	}
 
-	public User(String email, String password, String userName, String introduction) {
+	public User(String email, String password, String userName) {
 		this.email = email;
 		this.password = password;
 		this.userName = userName;
-		this.introduction = introduction;
 	}
 
 	public void updateIntroduction(String introduction) {

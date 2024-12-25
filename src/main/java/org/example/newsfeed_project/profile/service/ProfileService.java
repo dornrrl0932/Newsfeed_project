@@ -1,7 +1,11 @@
 package org.example.newsfeed_project.profile.service;
 
 import java.util.List;
+import java.util.Optional;
 
+import jakarta.transaction.Transactional;
+import org.example.newsfeed_project.profile.dto.ProfileUpdateRequestDto;
+import org.example.newsfeed_project.profile.dto.ProfileUpdateResponseDto;
 import org.example.newsfeed_project.entity.User;
 import org.example.newsfeed_project.exception.ValidateException;
 import org.example.newsfeed_project.follow.repository.FollowRepository;
@@ -14,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -38,5 +43,17 @@ public class ProfileService {
 		Long followerNum = followRepository.countByFollowing(user);
 
 		return ProfileDto.convertFrom(user, followingNum, followerNum, posts);
+	}
+
+	@Transactional
+	public ProfileUpdateResponseDto updateProfile(Long id, ProfileUpdateRequestDto requestDto) {
+		Optional<User> optionalUser = userRepository.findById(id);
+		if (optionalUser.isEmpty()) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+		}
+		User findUser = optionalUser.get();
+
+		findUser.updateIntroduction(requestDto.getIntroduction());
+		return new ProfileUpdateResponseDto(findUser.getIntroduction());
 	}
 }

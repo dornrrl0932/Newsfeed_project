@@ -6,5 +6,5 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class CommentRequestDto {
-	private String comment;
+	private String comments;
 }

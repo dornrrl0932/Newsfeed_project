@@ -26,7 +26,7 @@ public class Post {
     @CreatedDate
     @LastModifiedDate // 수정 날짜 반영
     private LocalDateTime updatedAt;
-    @Column(updatable = false)
+    @Column(name = "`like`")
     private Long like;
     @ManyToOne // post : user -> N:1
     @JoinColumn(name = "user_id") // user 테이블의 기본키 참조(user_id)

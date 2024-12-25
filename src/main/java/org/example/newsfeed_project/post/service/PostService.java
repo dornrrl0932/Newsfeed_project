@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.newsfeed_project.post.dto.PostFindByPageRequestDto;
 import org.example.newsfeed_project.post.dto.PostFindByPageResponseDto;
 import org.example.newsfeed_project.entity.Post;
-import org.example.newsfeed_project.repository.PostRepository;
+import org.example.newsfeed_project.post.repository.PostRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -38,7 +38,7 @@ public class PostService {
 
         switch (requestDto.getOrder()) {
             case "like":
-                findPostList.sort(Comparator.comparing(Post::getUpdatedAt).reversed());
+                findPostList.sort(Comparator.comparing(Post::getLike).reversed());
                 break;
             case "update":
                 findPostList.sort(Comparator.comparing(Post::getUpdatedAt).reversed());

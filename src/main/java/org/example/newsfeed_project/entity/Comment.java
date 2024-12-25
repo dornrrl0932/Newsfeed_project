@@ -44,4 +44,15 @@ public class Comment {
 	@LastModifiedDate
 	private LocalDateTime updatedAt;
 
+	public Comment(Post post, User user, String comments, Long like_count, LocalDateTime updatedAt){
+		this.post = post;
+		this.user = user;
+		this.comments = comments;
+		this.like_count = like_count;
+		this.updatedAt = updatedAt;
+	}
+
+	public Comment() {
+
+	}
 }

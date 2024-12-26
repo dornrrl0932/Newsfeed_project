@@ -1,5 +1,7 @@
 package org.example.newsfeed_project.post.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.newsfeed_project.post.dto.PostFindByPageRequestDto;
 import org.example.newsfeed_project.post.dto.PostFindByPageResponseDto;
@@ -40,7 +42,7 @@ public class PostController {
     }
 
     @GetMapping("/{post_id}")
-    public PostFindDetailByIdResponseDto findPostById(@PathVariable Long post_id){
+    public PostFindDetailByIdResponseDto findPostById(@PathVariable Long post_id) {
         return findPostById(post_id);
     }
 

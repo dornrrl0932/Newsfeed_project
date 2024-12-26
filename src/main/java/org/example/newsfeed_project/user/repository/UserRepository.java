@@ -1,12 +1,10 @@
 package org.example.newsfeed_project.user.repository;
 
-import java.util.List;
 import java.util.Optional;
 
+import org.example.newsfeed_project.common.exception.ResponseCode;
 import org.example.newsfeed_project.entity.User;
-import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -16,7 +14,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	default User findUserByEmailOrElseThrow(String email) {
 		return findUserByEmail(email)
 			.orElseThrow(() -> new ResponseStatusException(
-				HttpStatus.NOT_FOUND, "Dose not exist email: " + email));
+				ResponseCode.EMAIL_NOT_FOUND.getStatus(), ResponseCode.EMAIL_NOT_FOUND.getMessage()));
 	}
 
 	Optional<User> findUserByUserId(Long id);
@@ -24,6 +22,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	default User findUserByUserIdOrElseThrow(Long id) {
 		return findUserByUserId(id)
 			.orElseThrow(() -> new ResponseStatusException(
-				HttpStatus.NOT_FOUND, "Dose not exist userId: " + id));
+				ResponseCode.USER_NOT_FOUND.getStatus(), ResponseCode.USER_NOT_FOUND.getMessage()));
 	}
 }

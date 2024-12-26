@@ -2,10 +2,12 @@ package org.example.newsfeed_project.comment.service;
 
 import java.util.Optional;
 
-import org.example.newsfeed_project.common.exception.ValidateException;
 import org.example.newsfeed_project.comment.dto.CommentDto;
 import org.example.newsfeed_project.comment.dto.CommentRequestDto;
-import org.example.newsfeed_project.comment.repository.*;
+import org.example.newsfeed_project.comment.repository.CommentRepository;
+import org.example.newsfeed_project.comment.repository.CommetLikeRepository;
+import org.example.newsfeed_project.common.exception.ResponseCode;
+import org.example.newsfeed_project.common.exception.ValidateException;
 import org.example.newsfeed_project.entity.Comment;
 import org.example.newsfeed_project.entity.CommentLike;
 import org.example.newsfeed_project.entity.Post;
@@ -35,37 +37,26 @@ public class CommentService {
 
 	// 댓글 작성
 	public CommentDto saveComment(Long postId, Long userId, CommentRequestDto requestDto) {
-		Optional<Post> optionalPost = postRepository.findById(postId);
-		Optional<User> optionalUser = userRepository.findById(userId);
-		if (optionalPost.isEmpty()) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 포스트입니다.");
-		}
-		Post findPost = optionalPost.get();
-		User findUser = optionalUser.get();
+		Post findPost = postRepository.findPostByPostIdOrElseThrow(postId);
+		User findUser = userRepository.findUserByUserIdOrElseThrow(userId);
 
 		Comment comment = new Comment(findPost, findUser, requestDto.getComments(), 0L);
 		comment = commentRepository.save(comment);
-		return new CommentDto(comment.getComments(), comment.getLikeCount(), comment.getUser().getUserName(),
-			comment.getUpdatedAt());
+		return CommentDto.convertDto(comment);
 	}
 
 	// 댓글 조회
 	public Page<CommentDto> findcomment(Long postId, int pageNum) {
 
 		//postId로 해당 포스트 조회
-		Post findPost = postRepository.findById(postId)
-			.orElseThrow(() -> new ValidateException("Post가 존재하지 않습니다.", HttpStatus.NOT_FOUND));
+		Post findPost = postRepository.findPostByPostIdOrElseThrow(postId);
 
 		//페이징, 정렬조건
-		PageRequest pageRequest = PageRequest.of(pageNum - 1, 10, Sort.by(Sort.Direction.DESC, "like_count"));
+		PageRequest pageRequest = PageRequest.of(pageNum - 1, 10, Sort.by(Sort.Direction.DESC, "likeCount"));
 
 		return commentRepository.findByPost_PostId(postId, pageRequest)
 			//조회 된 엔티티를 DTO로 변환
-			.map(comment ->
-				new CommentDto(comment.getComments(),
-					comment.getLikeCount(),
-					comment.getUser().getUserName(),
-					comment.getUpdatedAt()));
+			.map(CommentDto::convertDto);
 	}
 
 	// 댓글 수정
@@ -73,11 +64,12 @@ public class CommentService {
 
 		// 해당 게시물에 댓글이 존재하는지 확인
 		Comment comment = commentRepository.findByCommentIdAndPostId(commetId, postId)
-			.orElseThrow(() -> new ValidateException("존재하지 않은 댓글입니다.", HttpStatus.NOT_FOUND));
+			.orElseThrow(() -> new ValidateException(ResponseCode.COMMENT_NOT_FOUND.getMessage(),
+				ResponseCode.COMMENT_NOT_FOUND.getStatus()));
 
 		// 본인 확인 (댓글 작성자 = 로그인 유저?)
 		if (!comment.getUser().getUserId().equals(loginUserId)) {
-			throw new ValidateException("본인만 수정 가능합니다.", HttpStatus.UNAUTHORIZED);
+			throw new ValidateException(ResponseCode.ID_MISMATCH.getMessage(), ResponseCode.ID_MISMATCH.getStatus());
 		}
 
 		// 수정
@@ -93,8 +85,7 @@ public class CommentService {
 		log.info("::: 게시물 조회 서비스가 동작하였습니다.");
 		Post post = postRepository.findPostByPostIdOrElseThrow(postId);
 		log.info("::: 댓글 조회 서비스가 동작하였습니다.");
-		Comment comment = commentRepository.findById(commentId)
-			.orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다."));
+		Comment comment = commentRepository.findByCommentIdOrElseThrow(commentId);
 		if (userId != comment.getUser().getUserId()) {
 			throw new ValidateException("댓글 작성자가 아닙니다.", HttpStatus.UNAUTHORIZED);
 		}
@@ -109,7 +100,8 @@ public class CommentService {
 
 		// 좋아요를 누르려는 사람=댓글 작성자 본인인 경우
 		if (findComment.getUser().getUserId().equals(userId)) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "본인의 댓글에는 좋아요를 누를 수 없습니다.");
+			throw new ResponseStatusException(ResponseCode.CANNOT_LIKE_SELF_COMMENT.getStatus(),
+				ResponseCode.CANNOT_LIKE_SELF_COMMENT.getMessage());
 		}
 
 		// 좋아요 이력 조회
@@ -118,9 +110,9 @@ public class CommentService {
 		//좋아요를 누른 기록이 없는 경우, 새로운 PostLike 객체 생성 및 DB에 저장
 		if (optionalCommentLike.isEmpty()) {
 			CommentLike newCommentLike = CommentLike.builder()
-													.comment(findComment)
-													.user(findUser)
-													.build();
+				.comment(findComment)
+				.user(findUser)
+				.build();
 			commetLikeRepository.save(newCommentLike);
 			findComment.setLikeCount(findComment.getLikeCount() + 1);
 		} else {

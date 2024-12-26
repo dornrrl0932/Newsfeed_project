@@ -2,17 +2,17 @@ package org.example.newsfeed_project.user.service;
 
 import java.util.Optional;
 
-import org.example.newsfeed_project.entity.User;
 import org.example.newsfeed_project.common.exception.EmailAlreadyExistsException;
 import org.example.newsfeed_project.common.exception.PasswordAuthenticationException;
+import org.example.newsfeed_project.common.exception.ResponseCode;
 import org.example.newsfeed_project.common.exception.UserDeletedException;
+import org.example.newsfeed_project.entity.User;
 import org.example.newsfeed_project.user.dto.CancelRequestDto;
 import org.example.newsfeed_project.user.dto.LoginRequestDto;
 import org.example.newsfeed_project.user.dto.SignUpRequestDto;
 import org.example.newsfeed_project.user.dto.UpdateUserInfoRequestDto;
 import org.example.newsfeed_project.user.encoder.PasswordEncoder;
 import org.example.newsfeed_project.user.repository.UserRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -30,12 +30,13 @@ public class UserService {
 
 		//비밀번호 확인 : 입력한 비밀번호와 확인 비밀번호가 일치하는지 확인
 		if (!signUpRequestDto.getPassword().equals(signUpRequestDto.getRenterPassword())) {
-			throw new PasswordAuthenticationException("비밀번호와 확인 비밀번호가 일치하지 않습니다.");
+			throw new PasswordAuthenticationException(ResponseCode.PASSWORD_MISMATCH.getStatus(),
+				ResponseCode.PASSWORD_MISMATCH.getMessage());
 		}
 
 		//이메일 중복 확인
 		if (userRepository.findUserByEmail(signUpRequestDto.getEmail()).isPresent()) {
-			throw new EmailAlreadyExistsException("이미 사용중인 이메일입니다.");
+			throw new EmailAlreadyExistsException(ResponseCode.EMAIL_ALREADY_EXISTS.getMessage());
 		}
 
 		//비밀번호 암호화
@@ -53,16 +54,18 @@ public class UserService {
 
 		//userId로 회원 검색, 일치하는 회원이 없는 경우 NOT_FOUND 반환
 		User user = userRepository.findById(userId)
-			.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "ID가 존재하지 않습니다. = " + userId));
+			.orElseThrow(() -> new ResponseStatusException(ResponseCode.USER_NOT_FOUND.getStatus(),
+				ResponseCode.USER_NOT_FOUND.getMessage()));
 
 		//비밀번호 확인 : 입력한 비밀번호와 확인 비밀번호가 일치하는지 확인
 		if (!cancelRequestDto.getPassword().equals(cancelRequestDto.getRenterPassword())) {
-			throw new PasswordAuthenticationException("비밀번호와 확인 비밀번호가 일치하지 않습니다.");
+			throw new PasswordAuthenticationException(ResponseCode.PASSWORD_MISMATCH.getStatus(),
+				ResponseCode.PASSWORD_MISMATCH.getMessage());
 		}
 
 		//탈퇴처리된 회원 예외처리 -> status가 false인 경우 에러 반환
 		if (!user.getStatus()) {
-			throw new UserDeletedException("이미 탈퇴 처리 된 회원입니다.");
+			throw new UserDeletedException(ResponseCode.USER_ALREADY_DELETE.getMessage());
 		}
 
 		//탈퇴처리 -> 회원 상태 false로 변경
@@ -79,7 +82,8 @@ public class UserService {
 
 		//비밀번호 검증
 		if (!passwordEncoder.matches(loginRequestDto.getPassword(), user.getPassword())) {
-			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Wrong password.");
+			throw new ResponseStatusException(ResponseCode.PASSWORD_MISMATCH.getStatus(),
+				ResponseCode.PASSWORD_MISMATCH.getMessage());
 		}
 		return user;
 	}
@@ -94,8 +98,8 @@ public class UserService {
 			if (isValidPassword(dto, password, findUser)) {
 				findUser.setPassword(passwordEncoder.encode(password));
 			} else {
-				throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-					"바꾸려는 비밀번호가 이전과 동일하거나, 입력한 비밀번호가 서로 다릅니다.");
+				throw new ResponseStatusException(ResponseCode.PASSWORD_SAME_AS_BEFORE.getStatus(),
+					ResponseCode.PASSWORD_SAME_AS_BEFORE.getMessage());
 			}
 		});
 

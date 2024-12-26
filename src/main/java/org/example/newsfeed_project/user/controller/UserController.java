@@ -1,14 +1,14 @@
 package org.example.newsfeed_project.user.controller;
 
-import org.example.newsfeed_project.entity.User;
 import org.example.newsfeed_project.common.exception.InvalidUrlException;
+import org.example.newsfeed_project.common.exception.ResponseCode;
+import org.example.newsfeed_project.common.session.SessionConst;
+import org.example.newsfeed_project.entity.User;
 import org.example.newsfeed_project.user.dto.CancelRequestDto;
 import org.example.newsfeed_project.user.dto.LoginRequestDto;
 import org.example.newsfeed_project.user.dto.SignUpRequestDto;
 import org.example.newsfeed_project.user.dto.UpdateUserInfoRequestDto;
 import org.example.newsfeed_project.user.service.UserService;
-import org.example.newsfeed_project.common.session.SessionConst;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -38,14 +38,15 @@ public class UserController {
 		userService.signupUser(signUpRequestDto);
 
 		//회원가입 완료 시 CREATED 상태코드와 메세지 반환
-		return ResponseEntity.status(HttpStatus.CREATED).body("회원가입이 완료되었습니다.");
+		return ResponseEntity.status(ResponseCode.SUCCESS_SIGNUP.getStatus())
+			.body(ResponseCode.SUCCESS_SIGNUP.getMessage());
 	}
 
 	//잘못 된 경로 예외처리
 	@RequestMapping("*")
 	public void handleInvalidUrl() {
 		//InvalidUrlException를 통해 예외처리
-		throw new InvalidUrlException("잘못 된 URL입니다. 다시 입력해주세요.");
+		throw new InvalidUrlException(ResponseCode.URL_NOT_FOUND.getMessage());
 	}
 
 	//회원탈퇴
@@ -56,7 +57,8 @@ public class UserController {
 		userService.CancelUser(userId, cancelRequestDto);
 
 		//탈퇴 성공 시 OK 상태코드와 메세지 반환
-		return ResponseEntity.status(HttpStatus.OK).body("정상적으로 탈퇴 되었습니다. 감사합니다.");
+		return ResponseEntity.status(ResponseCode.SUCCESS_DELETE_USER.getStatus())
+			.body(ResponseCode.SUCCESS_DELETE_USER.getMessage());
 	}
 
 	//회원 정보 수정
@@ -67,7 +69,8 @@ public class UserController {
 
 		userService.updateUserInfo(userId, dto);
 
-		return ResponseEntity.status(HttpStatus.OK).body("회원 정보가 수정되었습니다.");
+		return ResponseEntity.status(ResponseCode.SUCCESS_UPDATE.getStatus())
+			.body(ResponseCode.SUCCESS_UPDATE.getMessage());
 	}
 
 	//로그인
@@ -83,7 +86,8 @@ public class UserController {
 		session.setAttribute(SessionConst.LOGIN_USER_ID, loginUser.getUserId());
 		session.setAttribute(SessionConst.USER_STATUS, loginUser.getStatus());
 
-		return ResponseEntity.status(HttpStatus.OK).body("로그인 되었습니다.");
+		return ResponseEntity.status(ResponseCode.SUCCESS_LOGIN.getStatus())
+			.body(ResponseCode.SUCCESS_LOGIN.getMessage());
 	}
 
 	//로그아웃
@@ -97,6 +101,7 @@ public class UserController {
 			session.invalidate(); //남은 세션 모두 삭제
 		}
 
-		return ResponseEntity.status(HttpStatus.OK).body("로그아웃 되었습니다.");
+		return ResponseEntity.status(ResponseCode.SUCCESS_LOGOUT.getStatus())
+			.body(ResponseCode.SUCCESS_LOGOUT.getMessage());
 	}
 }

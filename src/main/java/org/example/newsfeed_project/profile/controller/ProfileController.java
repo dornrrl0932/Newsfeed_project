@@ -2,13 +2,13 @@ package org.example.newsfeed_project.profile.controller;
 
 import java.util.Objects;
 
+import org.example.newsfeed_project.common.exception.ResponseCode;
 import org.example.newsfeed_project.profile.dto.ProfileDto;
 import org.example.newsfeed_project.profile.dto.ProfileUpdateRequestDto;
 import org.example.newsfeed_project.profile.dto.ProfileUpdateResponseDto;
 import org.example.newsfeed_project.profile.service.ProfileService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,14 +38,14 @@ public class ProfileController {
 		return ResponseEntity.ok(profileService.getProfile(userId, pageable));
 	}
 
-	@PutMapping("/{id}")
-	public ProfileUpdateResponseDto updateProfile(@PathVariable Long id,
+	@PutMapping("/{user_id}")
+	public ProfileUpdateResponseDto updateProfile(@PathVariable(name = "user_id") Long userId,
 		@RequestBody ProfileUpdateRequestDto requestDtd, HttpServletRequest request) {
 		Long sessionId = (Long)request.getSession().getAttribute("loginUserId");
-		if (!Objects.equals(sessionId, id)) {
-			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+		if (!Objects.equals(sessionId, userId)) {
+			throw new ResponseStatusException(ResponseCode.ID_MISMATCH.getStatus());
 		}
-		return profileService.updateProfile(id, requestDtd);
+		return profileService.updateProfile(userId, requestDtd);
 	}
 
 }

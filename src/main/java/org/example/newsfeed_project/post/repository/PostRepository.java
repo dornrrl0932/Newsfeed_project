@@ -1,15 +1,15 @@
 package org.example.newsfeed_project.post.repository;
 
+import java.time.LocalDateTime;
+import java.util.Optional;
+
+import org.example.newsfeed_project.common.exception.ResponseCode;
 import org.example.newsfeed_project.entity.Post;
 import org.example.newsfeed_project.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import java.time.LocalDateTime;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
 	/**
@@ -22,15 +22,16 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 	 *     )
 	 */
 	Page<Post> findByUserOrderByUpdatedAtDesc(User user, Pageable pageable);
+
 	Page<Post> findAll(Pageable pageable);
+
 	Page<Post> findByUpdatedAtBetween(LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
 
+	Optional<Post> findPostByPostId(Long id);
 
-	Optional<Post> findPostByPostId (Long id);
-
-	default Post findPostByPostIdOrElseThrow (Long id) {
+	default Post findPostByPostIdOrElseThrow(Long id) {
 		return findPostByPostId(id)
-				.orElseThrow(() -> new ResponseStatusException(
-						HttpStatus.NOT_FOUND, "Dose not exist postId:" + id));
+			.orElseThrow(() -> new ResponseStatusException(
+				ResponseCode.POST_NOT_FOUND.getStatus(), ResponseCode.POST_NOT_FOUND.getMessage()));
 	}
 }

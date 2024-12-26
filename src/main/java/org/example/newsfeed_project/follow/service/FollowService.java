@@ -2,16 +2,16 @@ package org.example.newsfeed_project.follow.service;
 
 import java.util.List;
 
+import org.example.newsfeed_project.common.exception.ResponseCode;
+import org.example.newsfeed_project.common.exception.ValidateException;
 import org.example.newsfeed_project.entity.Follow;
 import org.example.newsfeed_project.entity.User;
-import org.example.newsfeed_project.common.exception.ValidateException;
 import org.example.newsfeed_project.follow.dto.FollowUserInfoDto;
 import org.example.newsfeed_project.follow.dto.FollowersDto;
 import org.example.newsfeed_project.follow.dto.FollowingsDto;
 import org.example.newsfeed_project.follow.dto.MessageDto;
 import org.example.newsfeed_project.follow.repository.FollowRepository;
 import org.example.newsfeed_project.user.repository.UserRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,21 +57,22 @@ public class FollowService {
 	private boolean verifyFollowRequst(User followingUser, User loginUser) {
 		// 본인이 본인 팔로우 하는지 확인 (userId 일치한지 확인)
 		if (loginUser.getUserId().equals(followingUser.getUserId())) {
-			throw new ValidateException("본인을 팔로우 할 수 없습니다.", HttpStatus.CONFLICT);
+			throw new ValidateException(ResponseCode.CANNOT_SELF_FOLLOW.getMessage(),
+				ResponseCode.CANNOT_SELF_FOLLOW.getStatus());
 		}
 
 		// 이미 팔로우 중인지 확인
 		if (followRepository.existsByFollowerAndFollowing(loginUser, followingUser)) {
-			throw new ValidateException((followingUser.getUserName() + "님은 이미 팔로우 중입니다."), HttpStatus.CONFLICT);
+			throw new ValidateException(ResponseCode.USER_ALREADY_FOLLOW.getMessage(),
+				ResponseCode.USER_ALREADY_FOLLOW.getStatus());
 		}
-
 		return followRepository.existsByFollowerAndFollowing(followingUser, loginUser);
 	}
 
 	// 언팔로우(팔로우 취소)
 	public MessageDto unFollow(Long userId, Long loginUserId) {
 		// 팔로우 한 유저 조회, 없을 시 404 Not found 반환
-		User loginUser = userRepository.findUserByUserIdOrElseThrow(loginUserId)
+		User loginUser = userRepository.findUserByUserIdOrElseThrow(loginUserId);
 		// 팔로우 당한 유저 조회, 없을 시 404 Not found 반환
 		User followingUser = userRepository.findUserByUserIdOrElseThrow(userId);
 		// 팔로우 되어 있는지 확인
@@ -87,7 +88,8 @@ public class FollowService {
 	public Follow findByFollowRelation(User loginUser, User followingUser) {
 		// 팔로우 되어 있는지 확인
 		return followRepository.findByFollowerAndFollowing(loginUser, followingUser)
-			.orElseThrow(() -> new ValidateException("팔로잉 되어 있지 않은 회원입니다.", HttpStatus.BAD_REQUEST));
+			.orElseThrow(() -> new ValidateException(ResponseCode.NOT_FOLLOW_RELATION.getMessage(),
+				ResponseCode.NOT_FOLLOW_RELATION.getStatus()));
 	}
 
 	// user_id의 팔로워 목록 조회

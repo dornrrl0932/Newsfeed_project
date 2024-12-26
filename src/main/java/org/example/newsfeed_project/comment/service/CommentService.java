@@ -2,17 +2,15 @@ package org.example.newsfeed_project.comment.service;
 
 import java.util.Optional;
 
-import org.example.newsfeed_project.common.exception.ValidateException;
 import org.example.newsfeed_project.comment.dto.CommentDto;
 import org.example.newsfeed_project.comment.dto.CommentRequestDto;
 import org.example.newsfeed_project.comment.repository.CommentRepository;
 import org.example.newsfeed_project.comment.repository.CommetLikeRepository;
-import org.example.newsfeed_project.comment.repository.*;
+import org.example.newsfeed_project.common.exception.ValidateException;
 import org.example.newsfeed_project.entity.Comment;
 import org.example.newsfeed_project.entity.CommentLike;
 import org.example.newsfeed_project.entity.Post;
 import org.example.newsfeed_project.entity.User;
-import org.example.newsfeed_project.exception.ValidateException;
 import org.example.newsfeed_project.post.repository.PostRepository;
 import org.example.newsfeed_project.user.repository.UserRepository;
 import org.springframework.data.domain.Page;
@@ -53,7 +51,7 @@ public class CommentService {
 	}
 
 	// 댓글 조회
-	public Page<CommentDto> findComment(Long postId, int pageNum) {
+	public Page<CommentDto> findcomment(Long postId, int pageNum) {
 
 		//postId로 해당 포스트 조회
 		Post findPost = postRepository.findById(postId)
@@ -121,9 +119,9 @@ public class CommentService {
 		//좋아요를 누른 기록이 없는 경우, 새로운 PostLike 객체 생성 및 DB에 저장
 		if (optionalCommentLike.isEmpty()) {
 			CommentLike newCommentLike = CommentLike.builder()
-													.comment(findComment)
-													.user(findUser)
-													.build();
+				.comment(findComment)
+				.user(findUser)
+				.build();
 			commetLikeRepository.save(newCommentLike);
 			findComment.setLikeCount(findComment.getLikeCount() + 1);
 		} else {
@@ -133,7 +131,7 @@ public class CommentService {
 				findComment.setLikeCount(findComment.getLikeCount() - 1);
 			} else {
 				commentLike.setLikeStatus(true);
-				findComment.setLikeCount(findComment.getLikeCount()+1);
+				findComment.setLikeCount(findComment.getLikeCount() + 1);
 			}
 			commetLikeRepository.save(commentLike);
 		}

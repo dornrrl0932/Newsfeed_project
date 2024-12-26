@@ -1,7 +1,10 @@
 package org.example.newsfeed_project.post.dto;
 
+import lombok.Getter;
+
 import java.time.LocalDateTime;
 
+@Getter
 public class PostFindDetailByIdResponseDto {
 
     private final String title;

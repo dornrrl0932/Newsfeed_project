@@ -37,15 +37,16 @@ public class ProfileController {
 		Pageable pageable = PageRequest.of(pageNum - 1, 10);
 		return ResponseEntity.ok(profileService.getProfile(userId, pageable));
 	}
-
+	//프로필 업데이트
 	@PutMapping("/{id}")
 	public ProfileUpdateResponseDto updateProfile(@PathVariable Long id,
 		@RequestBody ProfileUpdateRequestDto requestDtd, HttpServletRequest request) {
 		Long sessionId = (Long)request.getSession().getAttribute("loginUserId");
 		if (!Objects.equals(sessionId, id)) {
-			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"회원 정보가 일치하지 않습니다.");
 		}
 		return profileService.updateProfile(id, requestDtd);
 	}
+
 
 }

@@ -31,6 +31,7 @@ public class CommentController {
 
 		Long userId = (Long)request.getSession().getAttribute("loginUserId");
 		CommentDto commentDto = commentService.saveComment(postId, userId, requestDto);
+
 		return ResponseEntity.status(HttpStatus.CREATED).body(commentDto).getBody();
 	}
 

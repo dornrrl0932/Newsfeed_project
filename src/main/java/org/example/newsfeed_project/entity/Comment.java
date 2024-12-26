@@ -17,12 +17,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Entity
 @Table(name = "comment")
 @EntityListeners(AuditingEntityListener.class)
+@NoArgsConstructor
 public class Comment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,7 +58,4 @@ public class Comment {
 		this.updatedAt = updatedAt;
 	}
 
-	public Comment() {
-
-	}
 }

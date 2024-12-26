@@ -32,14 +32,19 @@ public class PostController {
     }
 
     @GetMapping("/dateRange/{page}")
-    public List<PostPageDto> findPostsByDateRange(@RequestParam(defaultValue = "1") int page, @RequestBody PostFindByDateRangeRequestDto requestDto) {
+    public List<PostPageDto> findPostsByDateRange(@PathVariable int page, @RequestBody PostFindByDateRangeRequestDto requestDto) {
         int pageSize = 10;
       return postService.findPostByDateRange(page, pageSize, requestDto);
     }
 
     @GetMapping("/page/{page}")
-    public List<PostPageDto> findPostByPage(@RequestParam(defaultValue = "1") int page, @RequestBody PostFindByPageRequestDto requestDto) {
+    public List<PostPageDto> findPostByPage(@PathVariable int page, @RequestBody PostFindByPageRequestDto requestDto) {
         int pageSize = 10;
+        List<PostPageDto> test =  postService.findPostByPage(page, pageSize, requestDto);
+        System.out.println("실행");
+        for(PostPageDto postPageDto : test){
+            System.out.println(postPageDto.getUpdateAt());
+        }
         return postService.findPostByPage(page, pageSize, requestDto);
     }
 

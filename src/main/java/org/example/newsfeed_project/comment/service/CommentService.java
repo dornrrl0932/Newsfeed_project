@@ -6,6 +6,7 @@ import org.example.newsfeed_project.common.exception.ValidateException;
 import org.example.newsfeed_project.comment.dto.CommentDto;
 import org.example.newsfeed_project.comment.dto.CommentRequestDto;
 import org.example.newsfeed_project.comment.repository.*;
+import org.example.newsfeed_project.common.exception.ValidateException;
 import org.example.newsfeed_project.entity.Comment;
 import org.example.newsfeed_project.entity.CommentLike;
 import org.example.newsfeed_project.entity.Post;

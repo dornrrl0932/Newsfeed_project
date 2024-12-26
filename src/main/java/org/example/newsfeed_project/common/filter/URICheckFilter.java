@@ -36,7 +36,7 @@ public class URICheckFilter implements Filter {
 		ALLOWED_PATTERNS.add(Pattern.compile("^/posts/\\d+/comments/\\d+$"));
 		ALLOWED_PATTERNS.add(Pattern.compile("^/posts/\\d+/comments/\\d+/\\d+/like$"));
 		ALLOWED_PATTERNS.add(Pattern.compile("^/posts/\\d+/like$"));
-		ALLOWED_PATTERNS.add(Pattern.compile("^post/\\d+/\\d+/like$"));
+		ALLOWED_PATTERNS.add(Pattern.compile("^posts/\\d+/\\d+/like$"));
 
 	}
 

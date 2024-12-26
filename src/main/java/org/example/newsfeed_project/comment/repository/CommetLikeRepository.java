@@ -1,4 +1,4 @@
-package org.example.newsfeed_project.user.repository;
+package org.example.newsfeed_project.comment.repository;
 
 import java.util.Optional;
 

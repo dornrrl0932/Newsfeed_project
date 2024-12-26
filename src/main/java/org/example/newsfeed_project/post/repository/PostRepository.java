@@ -5,6 +5,7 @@ import org.example.newsfeed_project.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import java.time.LocalDateTime;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -21,6 +22,9 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 	 *     )
 	 */
 	Page<Post> findByUserOrderByUpdatedAtDesc(User user, Pageable pageable);
+	Page<Post> findAll(Pageable pageable);
+	Page<Post> findByUpdatedAtBetween(LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
+
 
 	Optional<Post> findPostByPostId (Long id);
 

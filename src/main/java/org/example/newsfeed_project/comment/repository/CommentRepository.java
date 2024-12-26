@@ -33,7 +33,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 	)
 	int updateComment(@Param("commentId") Long commentId, @Param("comments") String comments);
 
-	default Comment findByCommentIdOrElseThrow(Long commentId){
+	default Comment findByCommentIdOrElseThrow(Long commentId) {
 		return findById(commentId)
 			.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "댓글을 찾을 수 없습니다."));
 	}

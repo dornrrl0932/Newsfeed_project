@@ -8,7 +8,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -37,7 +36,7 @@ public class User {
 	@Column(length = 20)
 	private String introduction; //회원 소개글
 
-	//회원 상태 (false: 탈퇴한 회원 의미)
+	// 회원 상태 (false: 탈퇴한 회원 의미)
 	// 소프트 삭제(기본값 ture)
 	@Setter
 	private Boolean status = true;

@@ -17,7 +17,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
 	// 설정한 페이징 조건으로 댓글 조회
 	Page<Comment> findByPost_PostId(long postId, Pageable pageable);
-}
+
 	@Query("SELECT c " +
 		"FROM Comment c " +
 		"WHERE c.commentId = :commentId " +
@@ -33,7 +33,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 	)
 	int updateComment(@Param("commentId") Long commentId, @Param("comments") String comments);
 
-	default Comment findByCommentIdOrElseThrow(Long commentId){
+	default Comment findByCommentIdOrElseThrow(Long commentId) {
 		return findById(commentId)
 			.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "댓글을 찾을 수 없습니다."));
 	}

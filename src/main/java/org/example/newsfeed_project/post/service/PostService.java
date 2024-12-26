@@ -13,12 +13,8 @@ import org.example.newsfeed_project.post.dto.UpdatedPostResponseDto;
 import org.example.newsfeed_project.entity.Post;
 import org.example.newsfeed_project.post.repository.PostRepository;
 import org.example.newsfeed_project.user.repository.UserRepository;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -41,9 +37,9 @@ public class PostService {
     }
     //update
     @Transactional
-    public UpdatedPostResponseDto updatePost(Long userId, Long post_id, UpdatedPostRequestDto updatePostRequest) {
+    public UpdatedPostResponseDto updatePost(Long userId, Long postId, UpdatedPostRequestDto updatePostRequest) {
        User user = userRepository.findUserByUserIdOrElseThrow(userId);
-       Post post = postRepository.findById(post_id)
+       Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 존재하지 않습니다."));
        if(userId != post.getUser().getUserId()) {
            throw new ValidateException("게시글 작성자가 아닙니다.", HttpStatus.UNAUTHORIZED);
@@ -53,13 +49,13 @@ public class PostService {
     }
 
     @Transactional
-    public void deletePost(Long userId, Long post_id) {
+    public void deletePost(Long userId, Long postId) {
         User user = userRepository.findUserByUserIdOrElseThrow(userId);
-        Post post = postRepository.findById(post_id)
+        Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 존재하지 않습니다."));
         if(userId != post.getUser().getUserId()) {
             throw new ValidateException("게시글 작성자가 아닙니다", HttpStatus.UNAUTHORIZED);
         }
-        postRepository.deleteById(post_id);
+        postRepository.deleteById(postId);
     }
 }

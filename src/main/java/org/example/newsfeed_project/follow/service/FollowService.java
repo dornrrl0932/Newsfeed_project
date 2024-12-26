@@ -71,7 +71,7 @@ public class FollowService {
 	// 언팔로우(팔로우 취소)
 	public MessageDto unFollow(Long userId, Long loginUserId) {
 		// 팔로우 한 유저 조회, 없을 시 404 Not found 반환
-		User loginUser = userRepository.findUserByUserIdOrElseThrow(loginUserId)
+		User loginUser = userRepository.findUserByUserIdOrElseThrow(loginUserId);
 		// 팔로우 당한 유저 조회, 없을 시 404 Not found 반환
 		User followingUser = userRepository.findUserByUserIdOrElseThrow(userId);
 		// 팔로우 되어 있는지 확인

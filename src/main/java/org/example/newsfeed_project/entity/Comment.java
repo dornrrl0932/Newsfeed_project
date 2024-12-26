@@ -41,17 +41,18 @@ public class Comment {
 	private String comments;
 
 	// 기본값 0
-	private Long like_count = 0L;
+	@Setter
+	private Long likeCount = 0L;
 
 	@CreatedDate
 	@LastModifiedDate
 	private LocalDateTime updatedAt;
 
-	public Comment(Post post, User user, String comments, Long like_count, LocalDateTime updatedAt){
+	public Comment(Post post, User user, String comments, Long likeCount, LocalDateTime updatedAt){
 		this.post = post;
 		this.user = user;
 		this.comments = comments;
-		this.like_count = like_count;
+		this.likeCount = likeCount;
 		this.updatedAt = updatedAt;
 	}
 

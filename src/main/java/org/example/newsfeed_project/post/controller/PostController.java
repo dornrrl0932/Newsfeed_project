@@ -3,6 +3,9 @@ package org.example.newsfeed_project.post.controller;
 import org.example.newsfeed_project.common.session.SessionConst;
 import org.example.newsfeed_project.entity.Post;
 import org.example.newsfeed_project.post.service.PostService;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.newsfeed_project.post.dto.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -31,10 +35,42 @@ public class PostController {
         return ResponseEntity.ok(createdPostResponse);
     }
 
+    //친구 게시물 보기
+    @GetMapping("/pageFriend/{page}")
+    public List<PostPageDto> getPostsBySessionUser(@PathVariable int page, HttpServletRequest request, @RequestBody PostFindByPageRequestDto requestDto) {
+        HttpSession session = request.getSession();
+        Long userId = (Long) session.getAttribute(SessionConst.LOGIN_USER_ID);
+        Pageable pageable;
+        if (userId == null) {
+            throw new IllegalStateException("User is not logged in");
+        }
+        switch (requestDto.getOrder()){
+            case "update" : pageable  = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "updatedAt"));
+            break;
+            case "like" :  pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "likeCount"));
+            break;
+            default: throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "잘못된 요청입니다.");
+        }
+
+
+        return postService.getPostsByFriend(userId,pageable);
+    }
+
+
     @GetMapping("/dateRange/{page}")
     public List<PostPageDto> findPostsByDateRange(@PathVariable int page, @RequestBody PostFindByDateRangeRequestDto requestDto) {
         int pageSize = 10;
-      return postService.findPostByDateRange(page, pageSize, requestDto);
+        Pageable pageable;
+        switch (requestDto.getOrder()) {
+            case "like":
+                pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "likeCount"));
+                break;
+            case "update":
+                pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "updatedAt"));
+                break;
+            default: throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+      return postService.findPostByDateRange(pageable, requestDto);
     }
 
     @GetMapping("/page/{page}")

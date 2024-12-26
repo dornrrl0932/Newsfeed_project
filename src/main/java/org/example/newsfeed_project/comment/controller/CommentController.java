@@ -39,7 +39,7 @@ public class CommentController {
 	public ResponseEntity<Page<CommentDto>> findComment(@PathVariable("post_id") Long postId,
 		@RequestParam(defaultValue = "1") int pageNum) {
 
-		Page<CommentDto> commentPage = commentService.findComment(postId, pageNum);
+		Page<CommentDto> commentPage = commentService.findcomment(postId, pageNum);
 
 		return ResponseEntity.ok(commentPage);
 	}

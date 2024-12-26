@@ -6,9 +6,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.time.LocalDateTime;
+
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
@@ -33,4 +37,11 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 				.orElseThrow(() -> new ResponseStatusException(
 						HttpStatus.NOT_FOUND, "Dose not exist postId:" + id));
 	}
+
+	@Query("SELECT p FROM Post p " +
+			"JOIN Follow f ON p.user.userId = f.following.userId " +
+			"WHERE f.follower.userId = :userId ")
+	Page<Post> findPostsBySessionUser(@Param("userId") Long userId, Pageable pageable);
+
+
 }

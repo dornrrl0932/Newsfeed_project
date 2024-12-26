@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.example.newsfeed_project.entity.User;
-import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
@@ -26,4 +25,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 			.orElseThrow(() -> new ResponseStatusException(
 				HttpStatus.NOT_FOUND, "Dose not exist userId: " + id));
 	}
+
+	List<User> userId(Long userId);
 }

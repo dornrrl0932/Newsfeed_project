@@ -8,7 +8,7 @@ import org.example.newsfeed_project.entity.User;
 import org.example.newsfeed_project.post.dto.PostFindByDateRangeRequestDto;
 import org.example.newsfeed_project.post.dto.PostFindByPageRequestDto;
 import lombok.extern.slf4j.Slf4j;
-import org.example.newsfeed_project.exception.ValidateException;
+import org.example.newsfeed_project.common.exception.ValidateException;
 import org.example.newsfeed_project.post.dto.CreatedPostRequestDto;
 import org.example.newsfeed_project.post.dto.CreatedPostResponseDto;
 import org.example.newsfeed_project.post.dto.UpdatedPostRequestDto;

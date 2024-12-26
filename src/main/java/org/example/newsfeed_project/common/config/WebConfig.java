@@ -1,7 +1,7 @@
-package org.example.newsfeed_project;
+package org.example.newsfeed_project.common.config;
 
-import org.example.newsfeed_project.filter.LoginCheckFilter;
-import org.example.newsfeed_project.filter.URICheckFilter;
+import org.example.newsfeed_project.common.filter.LoginCheckFilter;
+import org.example.newsfeed_project.common.filter.URICheckFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,20 +1,15 @@
 package org.example.newsfeed_project.post.controller;
 
+import org.example.newsfeed_project.common.session.SessionConst;
 import org.example.newsfeed_project.entity.Post;
-import org.example.newsfeed_project.post.dto.LikeNumResponseDto;
 import org.example.newsfeed_project.post.service.PostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.newsfeed_project.post.dto.PostFindByPageRequestDto;
-import org.example.newsfeed_project.post.dto.PostFindDetailByIdResponseDto;
 import org.example.newsfeed_project.post.dto.*;
-import org.example.newsfeed_project.user.session.SessionConst;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

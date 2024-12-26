@@ -1,4 +1,4 @@
-package org.example.newsfeed_project.user.session;
+package org.example.newsfeed_project.common.session;
 
 /*세션 테이블 식별자(Key)*/
 public class SessionConst {

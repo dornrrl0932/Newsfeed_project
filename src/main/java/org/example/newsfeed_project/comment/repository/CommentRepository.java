@@ -31,7 +31,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 		"SET c.comments = :comments " +
 		"WHERE c.commentId = :commentId"
 	)
-	int updateComment(@Param("commentId") Long commentId, @Param("comments") String comments);
+	void updateComment(@Param("commentId") Long commentId, @Param("comments") String comments);
 
 	default Comment findByCommentIdOrElseThrow(Long commentId) {
 		return findById(commentId)

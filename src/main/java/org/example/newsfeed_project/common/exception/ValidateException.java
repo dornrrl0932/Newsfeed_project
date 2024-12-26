@@ -1,4 +1,4 @@
-package org.example.newsfeed_project.exception;
+package org.example.newsfeed_project.common.exception;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

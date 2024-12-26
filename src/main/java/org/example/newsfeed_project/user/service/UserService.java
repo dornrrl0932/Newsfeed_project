@@ -3,9 +3,9 @@ package org.example.newsfeed_project.user.service;
 import java.util.Optional;
 
 import org.example.newsfeed_project.entity.User;
-import org.example.newsfeed_project.exception.EmailAlreadyExistsException;
-import org.example.newsfeed_project.exception.PasswordAuthenticationException;
-import org.example.newsfeed_project.exception.UserDeletedException;
+import org.example.newsfeed_project.common.exception.EmailAlreadyExistsException;
+import org.example.newsfeed_project.common.exception.PasswordAuthenticationException;
+import org.example.newsfeed_project.common.exception.UserDeletedException;
 import org.example.newsfeed_project.user.dto.CancelRequestDto;
 import org.example.newsfeed_project.user.dto.LoginRequestDto;
 import org.example.newsfeed_project.user.dto.SignUpRequestDto;

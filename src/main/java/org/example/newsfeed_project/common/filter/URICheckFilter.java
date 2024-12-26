@@ -1,4 +1,4 @@
-package org.example.newsfeed_project.filter;
+package org.example.newsfeed_project.common.filter;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,13 +27,17 @@ public class URICheckFilter implements Filter {
 		ALLOWED_PATTERNS.add(Pattern.compile("^/users/follow/\\d+$"));
 		ALLOWED_PATTERNS.add(Pattern.compile("^/users/follow/\\d+/followers$"));
 		ALLOWED_PATTERNS.add(Pattern.compile("^/users/follow/\\d+/followings$"));
+		ALLOWED_PATTERNS.add(Pattern.compile("^/users/profile/\\d+$"));
 		ALLOWED_PATTERNS.add(Pattern.compile("^/posts$"));
 		ALLOWED_PATTERNS.add(Pattern.compile("^/posts/\\d+$"));
 		ALLOWED_PATTERNS.add(Pattern.compile("^/posts/page/\\d+$"));
+		ALLOWED_PATTERNS.add(Pattern.compile("^/posts/dateRange/\\d+$"));
 		ALLOWED_PATTERNS.add(Pattern.compile("^/posts/\\d+/comments$"));
 		ALLOWED_PATTERNS.add(Pattern.compile("^/posts/\\d+/comments/\\d+$"));
-		ALLOWED_PATTERNS.add(Pattern.compile("^/posts/\\d+/comments/\\d+/like$"));
+		ALLOWED_PATTERNS.add(Pattern.compile("^/posts/\\d+/comments/\\d+/\\d+/like$"));
 		ALLOWED_PATTERNS.add(Pattern.compile("^/posts/\\d+/like$"));
+		ALLOWED_PATTERNS.add(Pattern.compile("^post/\\d+/\\d+/like$"));
+
 	}
 
 	@Override

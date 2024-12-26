@@ -1,13 +1,13 @@
 package org.example.newsfeed_project.user.controller;
 
 import org.example.newsfeed_project.entity.User;
-import org.example.newsfeed_project.exception.InvalidUrlException;
+import org.example.newsfeed_project.common.exception.InvalidUrlException;
 import org.example.newsfeed_project.user.dto.CancelRequestDto;
 import org.example.newsfeed_project.user.dto.LoginRequestDto;
 import org.example.newsfeed_project.user.dto.SignUpRequestDto;
 import org.example.newsfeed_project.user.dto.UpdateUserInfoRequestDto;
 import org.example.newsfeed_project.user.service.UserService;
-import org.example.newsfeed_project.user.session.SessionConst;
+import org.example.newsfeed_project.common.session.SessionConst;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;

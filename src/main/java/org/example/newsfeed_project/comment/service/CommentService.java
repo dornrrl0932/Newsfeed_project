@@ -1,8 +1,10 @@
 package org.example.newsfeed_project.comment.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.example.newsfeed_project.comment.dto.CommentDto;
+import org.example.newsfeed_project.comment.dto.CommentListDto;
 import org.example.newsfeed_project.comment.dto.CommentRequestDto;
 import org.example.newsfeed_project.comment.repository.CommentRepository;
 import org.example.newsfeed_project.comment.repository.CommetLikeRepository;
@@ -14,10 +16,7 @@ import org.example.newsfeed_project.entity.Post;
 import org.example.newsfeed_project.entity.User;
 import org.example.newsfeed_project.post.repository.PostRepository;
 import org.example.newsfeed_project.user.repository.UserRepository;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -46,30 +45,29 @@ public class CommentService {
 	}
 
 	// 댓글 조회
-	public Page<CommentDto> findcomment(Long postId, int pageNum) {
+	public CommentListDto findcomment(Long postId, PageRequest pageRequest) {
 
 		//postId로 해당 포스트 조회
 		Post findPost = postRepository.findPostByPostIdOrElseThrow(postId);
 
-		//페이징, 정렬조건
-		PageRequest pageRequest = PageRequest.of(pageNum - 1, 10, Sort.by(Sort.Direction.DESC, "likeCount"));
-
-		return commentRepository.findByPost_PostId(postId, pageRequest)
+		List<CommentDto> commentDtos = commentRepository.findByPost_PostId(postId, pageRequest)
 			//조회 된 엔티티를 DTO로 변환
-			.map(CommentDto::convertDto);
+			.map(CommentDto::convertDto)
+			.getContent();
+
+		return new CommentListDto(commentDtos);
 	}
 
 	// 댓글 수정
 	public CommentDto modifyComment(Long loginUserId, Long postId, Long commetId, CommentRequestDto requestDto) {
-
+		// 게시물이 존재하는지 확인
+		Post post = postRepository.findPostByPostIdOrElseThrow(postId);
 		// 해당 게시물에 댓글이 존재하는지 확인
-		Comment comment = commentRepository.findByCommentIdAndPostId(commetId, postId)
-			.orElseThrow(() -> new ValidateException(ResponseCode.COMMENT_NOT_FOUND.getMessage(),
-				ResponseCode.COMMENT_NOT_FOUND.getStatus()));
+		Comment comment = commentRepository.findByCommentIdAndPostIdOrElseThrwo(commetId, postId);
 
 		// 본인 확인 (댓글 작성자 = 로그인 유저?)
 		if (!comment.getUser().getUserId().equals(loginUserId)) {
-			throw new ValidateException(ResponseCode.ID_MISMATCH.getMessage(), ResponseCode.ID_MISMATCH.getStatus());
+			throw new ValidateException(ResponseCode.ID_MISMATCH);
 		}
 
 		// 수정
@@ -87,7 +85,7 @@ public class CommentService {
 		log.info("::: 댓글 조회 서비스가 동작하였습니다.");
 		Comment comment = commentRepository.findByCommentIdOrElseThrow(commentId);
 		if (userId != comment.getUser().getUserId()) {
-			throw new ValidateException("댓글 작성자가 아닙니다.", HttpStatus.UNAUTHORIZED);
+			throw new ValidateException(ResponseCode.ID_MISMATCH);
 		}
 		commentRepository.deleteById(commentId);
 	}

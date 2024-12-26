@@ -3,6 +3,7 @@ package org.example.newsfeed_project.comment.repository;
 import java.util.Optional;
 
 import org.example.newsfeed_project.common.exception.ResponseCode;
+import org.example.newsfeed_project.common.exception.ValidateException;
 import org.example.newsfeed_project.entity.Comment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +25,11 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 		"AND c.post.postId = :postId"
 	)
 	Optional<Comment> findByCommentIdAndPostId(@Param("commentId") Long commentId, @Param("postId") Long postId);
+
+	default Comment findByCommentIdAndPostIdOrElseThrwo(Long commentId, Long postId) {
+		return findByCommentIdAndPostId(commentId, postId)
+			.orElseThrow(() -> new ValidateException(ResponseCode.COMMENT_NOT_FOUND));
+	}
 
 	@Modifying
 	@Transactional(rollbackFor = Exception.class)

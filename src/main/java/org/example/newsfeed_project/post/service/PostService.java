@@ -3,7 +3,6 @@ package org.example.newsfeed_project.post.service;
 import lombok.RequiredArgsConstructor;
 import org.example.newsfeed_project.post.dto.PostFindByDateRangeRequestDto;
 import org.example.newsfeed_project.post.dto.PostFindByPageRequestDto;
-import org.example.newsfeed_project.post.dto.PostFindByPageResponseDto;
 import org.example.newsfeed_project.entity.Post;
 import org.example.newsfeed_project.post.dto.PostPageDto;
 import org.example.newsfeed_project.post.repository.PostRepository;
@@ -32,68 +31,22 @@ public class PostService {
         return PostPageDto.convertFrom(postPage);
     }
 
-    public Map<Long, List<PostFindByPageResponseDto>> findPostByPage(Long requestPage, Long pageSize, PostFindByPageRequestDto requestDto) {
-        List<Post> findPostList = postRepository.findAll();
-       return findPostByUpdateOrLikeDesc(findPostList,pageSize,requestPage,requestDto);
-    }
-    public List<PostPageDto> findPostByPage2(int requestPage, int pageSize, PostFindByPageRequestDto requestDto){
-        Pageable pageable = PageRequest.of(requestPage, pageSize, Sort.by(Sort.Direction.DESC, "updatedAt"));
-        List<PostPageDto> posts = PostPageDto.convertFrom(
-                postRepository.findAll(pageable));
+    public List<PostPageDto> findPostByPage(int requestPage, int pageSize, PostFindByPageRequestDto requestDto){
+        Pageable pageable;
         switch (requestDto.getOrder()) {
             case "like":
-                posts.sort(Comparator.comparing(PostPageDto::getLike_Count).reversed());
+                 pageable = PageRequest.of(requestPage, pageSize, Sort.by(Sort.Direction.DESC, "like_count"));
                 break;
             case "update":
-                posts.sort(Comparator.comparing(PostPageDto::getUpdateAt).reversed());
+                 pageable = PageRequest.of(requestPage, pageSize, Sort.by(Sort.Direction.DESC, "updatedAt"));
                 break;
             default:
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
+        List<PostPageDto> posts = PostPageDto.convertFrom(
+                postRepository.findAll(pageable));
         return posts;
     }
 
-    public PostFindByPageResponseDto findPostById(Long id){
-       Optional<Post> optionalPost = postRepository.findById(id);
-       if(optionalPost.isEmpty()){
-           throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-       }
-       Post post = optionalPost.get();
-       return new PostFindByPageResponseDto(post.getTitle(),post.getContents(),post.getUser().getUserName(), post.getUpdatedAt());
-    }
 
-    private Map<Long, List<PostFindByPageResponseDto>> findPostByUpdateOrLikeDesc(List<Post> findPostList, Long pageSize, Long requestPage, PostFindByPageRequestDto requestDto) {
-        Map<Long, List<PostFindByPageResponseDto>> result = new HashMap<>();
-        List<PostFindByPageResponseDto> postFindByPageResponseDtoArrayList = new ArrayList<>();
-        Long pageCount = 0L;
-        Long count = 0L;
-
-        switch (requestDto.getOrder()) {
-            case "like":
-                findPostList.sort(Comparator.comparing(Post::getLike).reversed());
-                break;
-            case "update":
-                findPostList.sort(Comparator.comparing(Post::getUpdatedAt).reversed());
-                break;
-            default:
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-        }
-
-        for(Post post : findPostList) {
-            if (count == pageSize) {
-                postFindByPageResponseDtoArrayList.clear();
-                count = 0L;
-                pageCount++;
-            }
-            if (count == 0) {
-                result.put(pageCount, new ArrayList<>(postFindByPageResponseDtoArrayList));
-            }
-            if (pageCount > requestPage) {
-                break;
-            }
-            result.get(pageCount).add(new PostFindByPageResponseDto(post.getTitle(), post.getContents(),post.getUser().getUserName(), post.getUpdatedAt()));
-            count++;
-        }
-        return result;
-    }
 }

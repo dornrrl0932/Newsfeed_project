@@ -17,7 +17,6 @@ public class PostPageDto {
     private String title;
     private String contents;
     private LocalDateTime updateAt;
-    private Long like_Count;
 
     // Page<Post> -> List<PostPageDto> 로 변환 (엔티티 -> Dto)
     public static List<PostPageDto> convertFrom(Page<Post> postPage) {
@@ -26,8 +25,7 @@ public class PostPageDto {
                         post.getUser().getUserName(),
                         post.getTitle(),
                         post.getContents(),
-                        post.getUpdatedAt(),
-                        post.getLike()
+                        post.getUpdatedAt()
                 ))
                 .collect(Collectors.toList());
     }

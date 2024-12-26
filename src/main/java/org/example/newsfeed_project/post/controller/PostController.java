@@ -21,15 +21,9 @@ public class PostController {
     }
 
     @GetMapping("/page/{page}")
-    public List<PostFindByPageResponseDto> findPostByPage(@RequestParam(defaultValue = "1") Long page, @RequestBody PostFindByPageRequestDto requestDto) {
-        Long pageSize = 10L;
-        return postService.findPostByPage(page, pageSize, requestDto).get(page);
-    }
-
-    @GetMapping("/page/{page}")
-    public List<PostPageDto> findPostByPage2(@RequestParam(defaultValue = "1") int page, @RequestBody PostFindByPageRequestDto requestDto) {
+    public List<PostPageDto> findPostByPage(@RequestParam(defaultValue = "1") int page, @RequestBody PostFindByPageRequestDto requestDto) {
         int pageSize = 10;
-        return postService.findPostByPage2(page, pageSize, requestDto);
+        return postService.findPostByPage(page, pageSize, requestDto);
     }
 
     @GetMapping("/{post_id}")

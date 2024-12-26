@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.example.newsfeed_project.entity.Follow;
 import org.example.newsfeed_project.entity.User;
-import org.example.newsfeed_project.exception.ValidateException;
+import org.example.newsfeed_project.commen.exception.ValidateException;
 import org.example.newsfeed_project.follow.dto.FollowUserInfoDto;
 import org.example.newsfeed_project.follow.dto.FollowersDto;
 import org.example.newsfeed_project.follow.dto.FollowingsDto;

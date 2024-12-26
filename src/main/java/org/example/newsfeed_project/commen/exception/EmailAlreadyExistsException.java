@@ -1,4 +1,4 @@
-package org.example.newsfeed_project.exception;
+package org.example.newsfeed_project.commen.exception;
 
 public class EmailAlreadyExistsException extends RuntimeException {
 

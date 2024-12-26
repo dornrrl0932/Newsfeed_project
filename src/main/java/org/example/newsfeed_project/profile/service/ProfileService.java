@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.example.newsfeed_project.entity.User;
-import org.example.newsfeed_project.exception.ValidateException;
+import org.example.newsfeed_project.commen.exception.ValidateException;
 import org.example.newsfeed_project.follow.repository.FollowRepository;
 import org.example.newsfeed_project.post.dto.PostPageDto;
 import org.example.newsfeed_project.post.repository.PostRepository;

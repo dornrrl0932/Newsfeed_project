@@ -42,4 +42,6 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
 		"WHERE f.follower = :user" // 팔로잉 유저 파라미터 user와 같은 것들만
 	)
 	List<FollowUserInfoDto> findFollowingsInfoByUser(@Param("user") User user);
+
+    Optional<Object> findByFollowerUserId(Long userId);
 }

@@ -1,9 +1,12 @@
 package org.example.newsfeed_project.post.dto;
 
+import lombok.Getter;
+
 import java.time.LocalDateTime;
 
 import org.example.newsfeed_project.entity.Post;
 
+@Getter
 public class PostFindDetailByIdResponseDto {
 
 	private final String title;

@@ -3,35 +3,19 @@ package org.example.newsfeed_project.post.controller;
 import org.example.newsfeed_project.common.session.SessionConst;
 import org.example.newsfeed_project.dto.ApiResponse;
 import org.example.newsfeed_project.entity.Post;
-import org.example.newsfeed_project.post.dto.CreatedPostRequestDto;
-import org.example.newsfeed_project.post.dto.CreatedPostResponseDto;
-import org.example.newsfeed_project.post.dto.LikeNumResponseDto;
-import org.example.newsfeed_project.post.dto.PostFindByDateRangeRequestDto;
-import org.example.newsfeed_project.post.dto.PostFindByPageRequestDto;
-import org.example.newsfeed_project.post.dto.PostFindDetailByIdResponseDto;
-import org.example.newsfeed_project.post.dto.PostListDto;
-import org.example.newsfeed_project.post.dto.UpdatedPostRequestDto;
-import org.example.newsfeed_project.post.dto.UpdatedPostResponseDto;
 import org.example.newsfeed_project.post.service.PostService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.newsfeed_project.post.dto.*;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -61,6 +45,44 @@ public class PostController {
 		return ResponseEntity.ok(
 			ApiResponse.success(200, "게시물 기간 별 작성 성공", postService.findPostByDateRange(pageable, requestDto)));
 	}
+
+	//친구 게시물 보기
+	@GetMapping("/pageFriend/{page}")
+	public List<PostPageDto> getPostsBySessionUser(@PathVariable int page, HttpServletRequest request, @RequestBody PostFindByPageRequestDto requestDto) {
+		HttpSession session = request.getSession();
+		Long userId = (Long) session.getAttribute(SessionConst.LOGIN_USER_ID);
+		Pageable pageable;
+		if (userId == null) {
+			throw new IllegalStateException("User is not logged in");
+		}
+		switch (requestDto.getOrder()){
+			case "update" : pageable  = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "updatedAt"));
+				break;
+			case "like" :  pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "likeCount"));
+				break;
+			default: throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "잘못된 요청입니다.");
+		}
+
+
+		return postService.getPostsByFriend(userId,pageable);
+	}
+
+	// 게시물 전체 조회
+    @GetMapping("/dateRange/{page}")
+    public List<PostPageDto> findPostsByDateRange(@PathVariable int page, @RequestBody PostFindByDateRangeRequestDto requestDto) {
+        int pageSize = 10;
+        Pageable pageable;
+        switch (requestDto.getOrder()) {
+            case "like":
+                pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "likeCount"));
+                break;
+            case "update":
+                pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "updatedAt"));
+                break;
+            default: throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+      return postService.findPostByDateRange(pageable, requestDto);
+    }
 
 	// 게시물 전체 조회
 	@GetMapping("/page/{page}")

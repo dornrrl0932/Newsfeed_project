@@ -9,6 +9,10 @@ import org.example.newsfeed_project.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
 import org.springframework.web.server.ResponseStatusException;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
@@ -27,11 +31,18 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
 	Page<Post> findByUpdatedAtBetween(LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
 
-	Optional<Post> findPostByPostId(Long id);
+	Optional<Post> findPostByPostId(Long postId);
 
-	default Post findPostByPostIdOrElseThrow(Long id) {
-		return findPostByPostId(id)
+	default Post findPostByPostIdOrElseThrow(Long postId) {
+		return findPostByPostId(postId)
 			.orElseThrow(() -> new ResponseStatusException(
 				ResponseCode.POST_NOT_FOUND.getStatus(), ResponseCode.POST_NOT_FOUND.getMessage()));
 	}
+
+	@Query("SELECT p FROM Post p " +
+			"JOIN Follow f ON p.user.userId = f.following.userId " +
+			"WHERE f.follower.userId = :userId ")
+	Page<Post> findPostsBySessionUser(@Param("userId") Long userId, Pageable pageable);
+
+
 }

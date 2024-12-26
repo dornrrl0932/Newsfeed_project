@@ -40,6 +40,7 @@ public class ProfileController {
 			ApiResponse.success(200, "프로필 조회 성공", profileService.getProfile(userId, pageable)));
 	}
 
+	// 프로필 업데이트
 	@PutMapping("/{user_id}")
 	public ResponseEntity<ApiResponse<ProfileUpdateResponseDto>> updateProfile(
 		@PathVariable(name = "user_id") Long userId,
@@ -51,5 +52,6 @@ public class ProfileController {
 		return ResponseEntity.ok(
 			ApiResponse.success(200, "자기소개 수정 완료", profileService.updateProfile(userId, requestDtd)));
 	}
+
 
 }

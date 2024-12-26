@@ -52,19 +52,24 @@ public class UserService {
 	//회원 탈퇴
 	public void CancelUser(Long userId, CancelRequestDto cancelRequestDto) {
 
-		//userId로 회원 검색, 일치하는 회원이 없는 경우 NOT_FOUND 반환
+		// User 조회
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new ResponseStatusException(ResponseCode.USER_NOT_FOUND.getStatus(),
 				ResponseCode.USER_NOT_FOUND.getMessage()));
 
-		//비밀번호 확인 : 입력한 비밀번호와 확인 비밀번호가 일치하는지 확인
-		if (!cancelRequestDto.getPassword().equals(cancelRequestDto.getRenterPassword())) {
+		// 이미 탈퇴한 회원인지 확인
+		if (!user.getStatus()) {
+			throw new UserDeletedException(ResponseCode.USER_ALREADY_DELETE);
+		}
+
+		// 기존 비밀번호와 입력한 비밀번호가 일치하는지 확인
+		if (!passwordEncoder.matches(cancelRequestDto.getRenterPassword(), user.getPassword())) {
 			throw new PasswordAuthenticationException(ResponseCode.PASSWORD_MISMATCH);
 		}
 
-		//탈퇴처리된 회원 예외처리 -> status가 false인 경우 에러 반환
-		if (!user.getStatus()) {
-			throw new UserDeletedException(ResponseCode.USER_ALREADY_DELETE);
+		//비밀번호 확인 : 입력한 비밀번호와 확인 비밀번호가 일치하는지 확인
+		if (!cancelRequestDto.getPassword().equals(cancelRequestDto.getRenterPassword())) {
+			throw new PasswordAuthenticationException(ResponseCode.PASSWORD_MISMATCH);
 		}
 
 		//탈퇴처리 -> 회원 상태 false로 변경

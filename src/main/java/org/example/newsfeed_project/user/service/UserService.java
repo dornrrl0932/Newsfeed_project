@@ -11,7 +11,6 @@ import org.example.newsfeed_project.user.dto.LoginRequestDto;
 import org.example.newsfeed_project.user.dto.SignUpRequestDto;
 import org.example.newsfeed_project.user.dto.UpdateUserInfoRequestDto;
 import org.example.newsfeed_project.user.encoder.PasswordEncoder;
-import org.example.newsfeed_project.entity.User;
 import org.example.newsfeed_project.user.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -92,7 +91,7 @@ public class UserService {
 
 		//비밀번호 null 값 확인 및 유효성 검증 후 수정
 		Optional.ofNullable(dto.getPassword()).ifPresent(password -> {
-			if (isVaildPassword(dto, password, findUser)) {
+			if (isValidPassword(dto, password, findUser)) {
 				findUser.setPassword(passwordEncoder.encode(password));
 			} else {
 				throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
@@ -107,7 +106,7 @@ public class UserService {
 	}
 
 	//수정하려는 비빌번호의 유효성을 검증하는 메서드
-	private boolean isVaildPassword(UpdateUserInfoRequestDto dto, String password, User findUser) {
+	private boolean isValidPassword(UpdateUserInfoRequestDto dto, String password, User findUser) {
 
 		boolean isPasswordSame = passwordEncoder.matches(password, findUser.getPassword());//암호화된 기존 비밀번호와 비교
 		boolean isPasswordsMatch = password.equals(dto.getRenterPassword()); //입력한 비밀번호와 재입력 비밀번호가 같은지 비교

@@ -85,6 +85,7 @@ public class UserService {
 		return user;
 	}
 
+	//회원 정보 수정
 	public void updateUserInfo(Long id, UpdateUserInfoRequestDto dto) {
 
 		User findUser = userRepository.findUserByUserIdOrElseThrow(id);

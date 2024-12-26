@@ -6,12 +6,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Entity
 @Table(name = "user")
+@NoArgsConstructor
 public class User {
 
 	@Id
@@ -35,15 +38,16 @@ public class User {
 	// 소프트 삭제(기본값 ture)
 	@Setter
 	private Boolean status = true;
-	
-	public User() {
 
-	}
-
-	public User(String email, String password, String userName) {
+	public User(String email, String password, String userName, String introduction) {
 		this.email = email;
 		this.password = password;
 		this.userName = userName;
+		this.introduction = introduction;
+	}
+
+	public User(String email, String password, String userName) {
+		this(email, password, userName, null);
 	}
 
 	public void updateIntroduction(String introduction) {

@@ -2,7 +2,6 @@ package org.example.newsfeed_project.comment.service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
-
 import org.example.newsfeed_project.comment.dto.CommentDto;
 import org.example.newsfeed_project.comment.dto.CommentRequestDto;
 import jakarta.transaction.Transactional;
@@ -17,10 +16,7 @@ import org.example.newsfeed_project.user.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
 import lombok.RequiredArgsConstructor;
-
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -41,7 +37,7 @@ public class CommentService {
 		Post findPost = optionalPost.get();
 		User findUser = optionalUser.get();
 
-		Comment comment = new Comment(findPost, findUser, requestDto.getComments(), 0L, LocalDateTime.now());
+		Comment comment = new Comment(findPost, findUser, requestDto.getComments(), 0L);
 		comment = commentRepository.save(comment);
 		return new CommentDto(comment.getComments(), comment.getLike_count(), comment.getUser().getUserName(),
 			comment.getUpdatedAt());

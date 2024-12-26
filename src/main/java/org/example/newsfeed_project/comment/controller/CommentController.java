@@ -1,11 +1,12 @@
 package org.example.newsfeed_project.comment.controller;
 
+import org.example.newsfeed_project.common.session.SessionConst;
 import org.example.newsfeed_project.comment.dto.CommentDto;
 import org.example.newsfeed_project.comment.dto.CommentRequestDto;
 import org.example.newsfeed_project.comment.service.CommentService;
 import org.example.newsfeed_project.entity.Comment;
 import org.example.newsfeed_project.post.dto.LikeNumResponseDto;
-import org.example.newsfeed_project.user.session.SessionConst;
+
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

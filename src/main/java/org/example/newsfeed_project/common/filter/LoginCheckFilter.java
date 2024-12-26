@@ -1,8 +1,8 @@
-package org.example.newsfeed_project.commen.filter;
+package org.example.newsfeed_project.common.filter;
 
 import java.io.IOException;
 
-import org.example.newsfeed_project.commen.session.SessionConst;
+import org.example.newsfeed_project.common.session.SessionConst;
 import org.springframework.util.PatternMatchUtils;
 
 import jakarta.servlet.Filter;

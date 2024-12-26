@@ -1,6 +1,6 @@
 package org.example.newsfeed_project.post.controller;
 
-import org.example.newsfeed_project.commen.session.SessionConst;
+import org.example.newsfeed_project.common.session.SessionConst;
 import org.example.newsfeed_project.entity.Post;
 import org.example.newsfeed_project.post.service.PostService;
 import org.springframework.http.HttpStatus;

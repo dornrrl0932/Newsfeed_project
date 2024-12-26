@@ -7,6 +7,12 @@ import org.example.newsfeed_project.entity.PostLike;
 import org.example.newsfeed_project.entity.User;
 import org.example.newsfeed_project.post.dto.PostFindByDateRangeRequestDto;
 import org.example.newsfeed_project.post.dto.PostFindByPageRequestDto;
+import lombok.extern.slf4j.Slf4j;
+import org.example.newsfeed_project.commen.exception.ValidateException;
+import org.example.newsfeed_project.post.dto.CreatedPostRequestDto;
+import org.example.newsfeed_project.post.dto.CreatedPostResponseDto;
+import org.example.newsfeed_project.post.dto.UpdatedPostRequestDto;
+import org.example.newsfeed_project.post.dto.UpdatedPostResponseDto;
 import org.example.newsfeed_project.entity.Post;
 import org.example.newsfeed_project.post.repository.PostLikeRepository;
 import org.example.newsfeed_project.post.dto.PostPageDto;
@@ -22,12 +28,25 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PostService {
     public final PostRepository postRepository;
     public final PostLikeRepository postLikeRepository;
     public final UserRepository userRepository;
+
+    //created
+    public CreatedPostResponseDto createdPost (Long userId, CreatedPostRequestDto createdRequest) {
+        User user = userRepository.findUserByUserIdOrElseThrow(userId);
+        Post post = new Post(user, createdRequest.getTitle(), createdRequest.getContents());
+        Post savePost = postRepository.save(post);
+        return new CreatedPostResponseDto(
+                user.getUserName(),
+                savePost.getTitle(),
+                savePost.getContents(),
+                savePost.getUpdatedAt());
+    }
 
     public List<PostPageDto> findPostByDateRange(int requestPage, int pageSize, PostFindByDateRangeRequestDto requestDto) {
 
@@ -63,11 +82,11 @@ public class PostService {
         return optionalPost.get();
     }
 
-	//좋아요 상태 토글
-	@Transactional
-	public Post toggleLikeStatus(Long postId, Long userId) {
-		Post findPost = findPostByPostId(postId);
-		User findUser = userRepository.findUserByUserIdOrElseThrow(userId); //게시물에 좋아요를 누르려는 회원 객체
+    //좋아요 상태 토글
+    @Transactional
+    public Post toggleLikeStatus(Long postId, Long userId) {
+        Post findPost = findPostByPostId(postId);
+        User findUser = userRepository.findUserByUserIdOrElseThrow(userId); //게시물에 좋아요를 누르려는 회원 id
 
         //좋아요를 누르려는 사람=게시를 작성자 본인인 경우
         if (findPost.getUser().getUserId().equals(userId)) {
@@ -99,5 +118,26 @@ public class PostService {
 
         return postRepository.save(findPost);
     }
-
+    //update
+    @Transactional
+    public UpdatedPostResponseDto updatePost(Long userId, Long postId, UpdatedPostRequestDto updatePostRequest) {
+        User user = userRepository.findUserByUserIdOrElseThrow(userId);
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 존재하지 않습니다."));
+        if(userId != post.getUser().getUserId()) {
+            throw new ValidateException("게시글 작성자가 아닙니다.", HttpStatus.UNAUTHORIZED);
+        }
+        post.updatedPost(updatePostRequest.getTitle(), updatePostRequest.getContents());
+        return new UpdatedPostResponseDto(post.getTitle(), post.getContents(), post.getUpdatedAt());
+    }
+    @Transactional
+    public void deletePost(Long userId, Long postId) {
+        User user = userRepository.findUserByUserIdOrElseThrow(userId);
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시물이 존재하지 않습니다."));
+        if(userId != post.getUser().getUserId()) {
+           throw new ValidateException("게시글 작성자가 아닙니다", HttpStatus.UNAUTHORIZED);
+    }
+        postRepository.deleteById(postId);
+    }
 }

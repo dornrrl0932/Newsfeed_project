@@ -52,4 +52,15 @@ public class Post {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
+
+    public Post(User user, String title, String contents) {
+        this.user = user;
+        this.title = title;
+        this.contents = contents;
+    }
+
+    public void updatedPost(String title, String contents) {
+        this.title = title;
+        this.contents = contents;
+    }
 }

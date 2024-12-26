@@ -13,20 +13,20 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class PostPageDto {
-	private String userName;
-	private String title;
-	private String contents;
-	private LocalDateTime updateAt;
+    private String userName;
+    private String title;
+    private String contents;
+    private LocalDateTime updateAt;
 
-	// Page<Post> -> List<PostPageDto> 로 변환 (엔티티 -> Dto)
-	public static List<PostPageDto> convertFrom(Page<Post> postPage) {
-		return postPage.getContent().stream()
-			.map(post -> new PostPageDto(
-				post.getUser().getUserName(),
-				post.getTitle(),
-				post.getContents(),
-				post.getUpdatedAt()
-			))
-			.collect(Collectors.toList());
-	}
+    // Page<Post> -> List<PostPageDto> 로 변환 (엔티티 -> Dto)
+    public static List<PostPageDto> convertFrom(Page<Post> postPage) {
+        return postPage.getContent().stream()
+                .map(post -> new PostPageDto(
+                        post.getUser().getUserName(),
+                        post.getTitle(),
+                        post.getContents(),
+                        post.getUpdatedAt()
+                ))
+                .collect(Collectors.toList());
+    }
 }

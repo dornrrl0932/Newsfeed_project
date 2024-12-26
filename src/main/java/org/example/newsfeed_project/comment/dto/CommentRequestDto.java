@@ -7,6 +7,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class CommentRequestDto {
-	@Size(max = 250, message = "댓글은 250자 이내로 입력 가능합니다.")
+
+	@Size(max = 250, message = "댓글은 250자 이내로 작성해야 합니다.")
 	private String comments;
 }

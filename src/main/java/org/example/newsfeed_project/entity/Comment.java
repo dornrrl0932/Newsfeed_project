@@ -2,6 +2,8 @@ package org.example.newsfeed_project.entity;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -17,12 +19,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Entity
 @Table(name = "comment")
 @EntityListeners(AuditingEntityListener.class)
+@NoArgsConstructor
 public class Comment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,10 +34,12 @@ public class Comment {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "post_id")
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Post post;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private User user;
 
 	@Setter
@@ -41,20 +47,18 @@ public class Comment {
 	private String comments;
 
 	// 기본값 0
-	private Long like_count = 0L;
+	@Setter
+	private Long likeCount = 0L;
 
 	@CreatedDate
 	@LastModifiedDate
 	private LocalDateTime updatedAt;
 
-	public Comment(Post post, User user, String comments, Long like_count){
+	public Comment(Post post, User user, String comments, Long likeCount){
 		this.post = post;
 		this.user = user;
 		this.comments = comments;
-		this.like_count = like_count;
+		this.likeCount = likeCount;
 	}
 
-	public Comment() {
-
-	}
 }

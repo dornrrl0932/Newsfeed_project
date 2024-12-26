@@ -1,5 +1,7 @@
 package org.example.newsfeed_project.entity;
 
+import org.hibernate.annotations.SQLRestriction;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,6 +17,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "user")
 @NoArgsConstructor
+@SQLRestriction("status = true")
 public class User {
 
 	@Id

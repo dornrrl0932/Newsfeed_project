@@ -3,6 +3,8 @@ package org.example.newsfeed_project.user.controller;
 import org.example.newsfeed_project.common.exception.InvalidUrlException;
 import org.example.newsfeed_project.common.exception.ResponseCode;
 import org.example.newsfeed_project.common.session.SessionConst;
+import org.example.newsfeed_project.dto.ApiResponse;
+import org.example.newsfeed_project.dto.MessageDto;
 import org.example.newsfeed_project.entity.User;
 import org.example.newsfeed_project.user.dto.CancelRequestDto;
 import org.example.newsfeed_project.user.dto.LoginRequestDto;
@@ -33,49 +35,49 @@ public class UserController {
 
 	//회원가입
 	@PostMapping("/signup")
-	public ResponseEntity<String> signupUser(@Valid @RequestBody SignUpRequestDto signUpRequestDto) {
+	public ResponseEntity<ApiResponse<MessageDto>> signupUser(@Valid @RequestBody SignUpRequestDto signUpRequestDto) {
 
 		userService.signupUser(signUpRequestDto);
 
 		//회원가입 완료 시 CREATED 상태코드와 메세지 반환
-		return ResponseEntity.status(ResponseCode.SUCCESS_SIGNUP.getStatus())
-			.body(ResponseCode.SUCCESS_SIGNUP.getMessage());
+		return ResponseEntity.ok(
+			ApiResponse.success(201, "회원가입 성공", MessageDto.convertFrom("회원가입 되었습니다.")));
 	}
 
 	//잘못 된 경로 예외처리
 	@RequestMapping("*")
 	public void handleInvalidUrl() {
 		//InvalidUrlException를 통해 예외처리
-		throw new InvalidUrlException(ResponseCode.URL_NOT_FOUND.getMessage());
+		throw new InvalidUrlException(ResponseCode.URL_NOT_FOUND);
 	}
 
 	//회원탈퇴
 	@DeleteMapping("/{userId}")
-	public ResponseEntity<String> CancelUser(@PathVariable Long userId,
+	public ResponseEntity<ApiResponse<MessageDto>> CancelUser(@PathVariable Long userId,
 		@RequestBody CancelRequestDto cancelRequestDto) {
 
 		userService.CancelUser(userId, cancelRequestDto);
 
 		//탈퇴 성공 시 OK 상태코드와 메세지 반환
-		return ResponseEntity.status(ResponseCode.SUCCESS_DELETE_USER.getStatus())
-			.body(ResponseCode.SUCCESS_DELETE_USER.getMessage());
+		return ResponseEntity.ok(
+			ApiResponse.success(200, "회원탈퇴 성공", MessageDto.convertFrom("정상적으로 탈퇴 되었습니다. 감사합니다.")));
 	}
 
 	//회원 정보 수정
 	@PatchMapping("/{userId}")
-	public ResponseEntity<String> updateUserInfo(
+	public ResponseEntity<ApiResponse<MessageDto>> updateUserInfo(
 		@PathVariable Long userId,
 		@Validated @RequestBody UpdateUserInfoRequestDto dto) {
 
 		userService.updateUserInfo(userId, dto);
 
-		return ResponseEntity.status(ResponseCode.SUCCESS_UPDATE.getStatus())
-			.body(ResponseCode.SUCCESS_UPDATE.getMessage());
+		return ResponseEntity.ok(
+			ApiResponse.success(200, "회원 정보 수정 성공", MessageDto.convertFrom("회원 정보가 수정 되었습니다.")));
 	}
 
 	//로그인
 	@PostMapping("/login")
-	public ResponseEntity<String> login(@Validated @RequestBody LoginRequestDto loginRequestDto,
+	public ResponseEntity<ApiResponse<MessageDto>> login(@Validated @RequestBody LoginRequestDto loginRequestDto,
 		HttpServletRequest request) {
 
 		User loginUser = userService.login(loginRequestDto);
@@ -86,13 +88,13 @@ public class UserController {
 		session.setAttribute(SessionConst.LOGIN_USER_ID, loginUser.getUserId());
 		session.setAttribute(SessionConst.USER_STATUS, loginUser.getStatus());
 
-		return ResponseEntity.status(ResponseCode.SUCCESS_LOGIN.getStatus())
-			.body(ResponseCode.SUCCESS_LOGIN.getMessage());
+		return ResponseEntity.ok(
+			ApiResponse.success(200, "로그인 성공", MessageDto.convertFrom("로그인 되었습니다.")));
 	}
 
 	//로그아웃
 	@PostMapping("/logout")
-	public ResponseEntity<String> logout(HttpServletRequest request) {
+	public ResponseEntity<ApiResponse<MessageDto>> logout(HttpServletRequest request) {
 
 		//세션 조회
 		HttpSession session = request.getSession(false);
@@ -101,7 +103,7 @@ public class UserController {
 			session.invalidate(); //남은 세션 모두 삭제
 		}
 
-		return ResponseEntity.status(ResponseCode.SUCCESS_LOGOUT.getStatus())
-			.body(ResponseCode.SUCCESS_LOGOUT.getMessage());
+		return ResponseEntity.ok(
+			ApiResponse.success(200, "로그아웃 성공", MessageDto.convertFrom("로그아웃 되었습니다.")));
 	}
 }

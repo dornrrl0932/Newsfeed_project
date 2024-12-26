@@ -6,6 +6,7 @@ import org.example.newsfeed_project.common.exception.EmailAlreadyExistsException
 import org.example.newsfeed_project.common.exception.PasswordAuthenticationException;
 import org.example.newsfeed_project.common.exception.ResponseCode;
 import org.example.newsfeed_project.common.exception.UserDeletedException;
+import org.example.newsfeed_project.common.exception.ValidateException;
 import org.example.newsfeed_project.entity.User;
 import org.example.newsfeed_project.user.dto.CancelRequestDto;
 import org.example.newsfeed_project.user.dto.LoginRequestDto;
@@ -30,13 +31,12 @@ public class UserService {
 
 		//비밀번호 확인 : 입력한 비밀번호와 확인 비밀번호가 일치하는지 확인
 		if (!signUpRequestDto.getPassword().equals(signUpRequestDto.getRenterPassword())) {
-			throw new PasswordAuthenticationException(ResponseCode.PASSWORD_MISMATCH.getStatus(),
-				ResponseCode.PASSWORD_MISMATCH.getMessage());
+			throw new PasswordAuthenticationException(ResponseCode.PASSWORD_MISMATCH);
 		}
 
 		//이메일 중복 확인
 		if (userRepository.findUserByEmail(signUpRequestDto.getEmail()).isPresent()) {
-			throw new EmailAlreadyExistsException(ResponseCode.EMAIL_ALREADY_EXISTS.getMessage());
+			throw new EmailAlreadyExistsException(ResponseCode.EMAIL_ALREADY_EXISTS);
 		}
 
 		//비밀번호 암호화
@@ -59,13 +59,12 @@ public class UserService {
 
 		//비밀번호 확인 : 입력한 비밀번호와 확인 비밀번호가 일치하는지 확인
 		if (!cancelRequestDto.getPassword().equals(cancelRequestDto.getRenterPassword())) {
-			throw new PasswordAuthenticationException(ResponseCode.PASSWORD_MISMATCH.getStatus(),
-				ResponseCode.PASSWORD_MISMATCH.getMessage());
+			throw new PasswordAuthenticationException(ResponseCode.PASSWORD_MISMATCH);
 		}
 
 		//탈퇴처리된 회원 예외처리 -> status가 false인 경우 에러 반환
 		if (!user.getStatus()) {
-			throw new UserDeletedException(ResponseCode.USER_ALREADY_DELETE.getMessage());
+			throw new UserDeletedException(ResponseCode.USER_ALREADY_DELETE);
 		}
 
 		//탈퇴처리 -> 회원 상태 false로 변경
@@ -98,8 +97,7 @@ public class UserService {
 			if (isValidPassword(dto, password, findUser)) {
 				findUser.setPassword(passwordEncoder.encode(password));
 			} else {
-				throw new ResponseStatusException(ResponseCode.PASSWORD_SAME_AS_BEFORE.getStatus(),
-					ResponseCode.PASSWORD_SAME_AS_BEFORE.getMessage());
+				throw new ValidateException(ResponseCode.PASSWORD_SAME_AS_BEFORE);
 			}
 		});
 

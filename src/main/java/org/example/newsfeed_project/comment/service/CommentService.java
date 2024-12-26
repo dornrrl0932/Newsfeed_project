@@ -40,8 +40,7 @@ public class CommentService {
 		User findUser = userRepository.findUserByUserIdOrElseThrow(userId);
 
 		Comment comment = new Comment(findPost, findUser, requestDto.getComments(), 0L);
-		comment = commentRepository.save(comment);
-		return CommentDto.convertDto(comment);
+		return CommentDto.convertDto(commentRepository.save(comment));
 	}
 
 	// 댓글 조회
@@ -61,7 +60,8 @@ public class CommentService {
 	// 댓글 수정
 	public CommentDto modifyComment(Long loginUserId, Long postId, Long commetId, CommentRequestDto requestDto) {
 		// 게시물이 존재하는지 확인
-		Post post = postRepository.findPostByPostIdOrElseThrow(postId);
+		postRepository.findPostByPostIdOrElseThrow(postId);
+
 		// 해당 게시물에 댓글이 존재하는지 확인
 		Comment comment = commentRepository.findByCommentIdAndPostIdOrElseThrwo(commetId, postId);
 
@@ -92,8 +92,9 @@ public class CommentService {
 
 	// 댓글 좋아요 상태 토글
 	@Transactional
-	public Comment toggleCommentLikeSatus(Long commentId, Long userId) {
-		Comment findComment = commentRepository.findByCommentIdOrElseThrow(commentId);
+	public Comment toggleCommentLikeSatus(Long postId, Long commentId, Long userId) {
+
+		Comment findComment = commentRepository.findByCommentIdAndPostIdOrElseThrwo(commentId, postId);
 		User findUser = userRepository.findUserByUserIdOrElseThrow(userId); //게시물에 좋아요를 누르려는 회원 객체
 
 		// 좋아요를 누르려는 사람=댓글 작성자 본인인 경우

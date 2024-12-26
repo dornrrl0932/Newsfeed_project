@@ -72,7 +72,7 @@ public class CommentController {
 
 	// 댓글 삭제
 	@DeleteMapping("/{comment_id}")
-	public ResponseEntity<ApiResponse> deleteComment(HttpServletRequest request,
+	public ResponseEntity<ApiResponse<Void>> deleteComment(HttpServletRequest request,
 		@PathVariable(name = "post_id") Long postId, @PathVariable(name = "comment_id") Long commentId) {
 
 		HttpSession session = request.getSession();
@@ -86,11 +86,12 @@ public class CommentController {
 	// 댓글 좋아요 상태 토글
 	@PutMapping("/{comment_id}/{user_id}/like")
 	public ResponseEntity<ApiResponse<LikeNumResponseDto>> toggleCommentLikeStatus(
+		@PathVariable(name = "post_id") Long postId,
 		@PathVariable(name = "comment_id") Long commentId,
 		@PathVariable(name = "user_id") Long userId
 	) {
 
-		Comment comment = commentService.toggleCommentLikeSatus(commentId, userId);
+		Comment comment = commentService.toggleCommentLikeSatus(postId, commentId, userId);
 
 		return ResponseEntity.ok(
 			ApiResponse.success(200, "좋아요가 반영됐습니다.", new LikeNumResponseDto(comment.getLikeCount())));

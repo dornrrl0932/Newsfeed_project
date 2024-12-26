@@ -4,12 +4,12 @@ import java.util.List;
 
 import org.example.newsfeed_project.common.exception.ResponseCode;
 import org.example.newsfeed_project.common.exception.ValidateException;
+import org.example.newsfeed_project.dto.MessageDto;
 import org.example.newsfeed_project.entity.Follow;
 import org.example.newsfeed_project.entity.User;
 import org.example.newsfeed_project.follow.dto.FollowUserInfoDto;
 import org.example.newsfeed_project.follow.dto.FollowersDto;
 import org.example.newsfeed_project.follow.dto.FollowingsDto;
-import org.example.newsfeed_project.follow.dto.MessageDto;
 import org.example.newsfeed_project.follow.repository.FollowRepository;
 import org.example.newsfeed_project.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -57,14 +57,12 @@ public class FollowService {
 	private boolean verifyFollowRequst(User followingUser, User loginUser) {
 		// 본인이 본인 팔로우 하는지 확인 (userId 일치한지 확인)
 		if (loginUser.getUserId().equals(followingUser.getUserId())) {
-			throw new ValidateException(ResponseCode.CANNOT_SELF_FOLLOW.getMessage(),
-				ResponseCode.CANNOT_SELF_FOLLOW.getStatus());
+			throw new ValidateException(ResponseCode.CANNOT_SELF_FOLLOW);
 		}
 
 		// 이미 팔로우 중인지 확인
 		if (followRepository.existsByFollowerAndFollowing(loginUser, followingUser)) {
-			throw new ValidateException(ResponseCode.USER_ALREADY_FOLLOW.getMessage(),
-				ResponseCode.USER_ALREADY_FOLLOW.getStatus());
+			throw new ValidateException(ResponseCode.USER_ALREADY_FOLLOW);
 		}
 		return followRepository.existsByFollowerAndFollowing(followingUser, loginUser);
 	}
@@ -88,8 +86,7 @@ public class FollowService {
 	public Follow findByFollowRelation(User loginUser, User followingUser) {
 		// 팔로우 되어 있는지 확인
 		return followRepository.findByFollowerAndFollowing(loginUser, followingUser)
-			.orElseThrow(() -> new ValidateException(ResponseCode.NOT_FOLLOW_RELATION.getMessage(),
-				ResponseCode.NOT_FOLLOW_RELATION.getStatus()));
+			.orElseThrow(() -> new ValidateException(ResponseCode.NOT_FOLLOW_RELATION));
 	}
 
 	// user_id의 팔로워 목록 조회

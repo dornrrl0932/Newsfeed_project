@@ -12,7 +12,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
@@ -41,7 +40,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
 	default Comment findByCommentIdOrElseThrow(Long commentId) {
 		return findById(commentId)
-			.orElseThrow(() -> new ResponseStatusException(ResponseCode.COMMENT_NOT_FOUND.getStatus(),
-				ResponseCode.COMMENT_NOT_FOUND.getMessage()));
+			.orElseThrow(() -> new ValidateException(ResponseCode.COMMENT_NOT_FOUND));
 	}
 }

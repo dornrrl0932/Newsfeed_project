@@ -1,16 +1,16 @@
 package org.example.newsfeed_project.common.exception;
 
-import org.springframework.http.HttpStatus;
-
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@Getter
 @AllArgsConstructor
 public class PasswordAuthenticationException extends RuntimeException {
 
-	private HttpStatus status;
+	private int status;
 
-	public PasswordAuthenticationException(HttpStatus status, String message) {
-		super(message);
-		this.status = status;
+	public PasswordAuthenticationException(ResponseCode responseCode) {
+		super(responseCode.getMessage());
+		this.status = responseCode.getStatus().value();
 	}
 }

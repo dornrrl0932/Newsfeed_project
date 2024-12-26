@@ -2,17 +2,23 @@ package org.example.newsfeed_project.post.dto;
 
 import java.time.LocalDateTime;
 
+import org.example.newsfeed_project.entity.Post;
+
 public class PostFindDetailByIdResponseDto {
 
-    private final String title;
-    private final String content;
-    private final String userName;
-    private final LocalDateTime updatedAt;
+	private final String title;
+	private final String contents;
+	private final String userName;
+	private final LocalDateTime updatedAt;
 
-    public PostFindDetailByIdResponseDto(String title, String content, String userName, LocalDateTime updatedAt) {
-        this.title = title;
-        this.userName = userName;
-        this.content = content;
-        this.updatedAt = updatedAt;
-    }
+	private PostFindDetailByIdResponseDto(Post post) {
+		this.title = post.getTitle();
+		this.userName = post.getUser().getUserName();
+		this.contents = post.getContents();
+		this.updatedAt = post.getUpdatedAt();
+	}
+
+	public static PostFindDetailByIdResponseDto ConvertFromPostFineDetailDto(Post post) {
+		return new PostFindDetailByIdResponseDto(post);
+	}
 }

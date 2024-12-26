@@ -1,6 +1,5 @@
 package org.example.newsfeed_project.post.service;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.example.newsfeed_project.common.exception.ResponseCode;
@@ -12,6 +11,8 @@ import org.example.newsfeed_project.post.dto.CreatedPostRequestDto;
 import org.example.newsfeed_project.post.dto.CreatedPostResponseDto;
 import org.example.newsfeed_project.post.dto.PostFindByDateRangeRequestDto;
 import org.example.newsfeed_project.post.dto.PostFindByPageRequestDto;
+import org.example.newsfeed_project.post.dto.PostFindDetailByIdResponseDto;
+import org.example.newsfeed_project.post.dto.PostListDto;
 import org.example.newsfeed_project.post.dto.PostPageDto;
 import org.example.newsfeed_project.post.dto.UpdatedPostRequestDto;
 import org.example.newsfeed_project.post.dto.UpdatedPostResponseDto;
@@ -49,21 +50,21 @@ public class PostService {
 			savePost.getUpdatedAt());
 	}
 
-	public List<PostPageDto> findPostByDateRange(int requestPage, int pageSize,
+	// 기간 별 조회
+	public PostListDto findPostByDateRange(Pageable pageable,
 		PostFindByDateRangeRequestDto requestDto) {
-
-		Pageable pageable = PageRequest.of(requestPage, pageSize, Sort.by(Sort.Direction.DESC, "updatedAt"));
 
 		Page<Post> postPage = postRepository.findByUpdatedAtBetween(requestDto.startDate, requestDto.endDate, pageable);
 
-		return PostPageDto.convertFrom(postPage);
+		return PostListDto.convertFrom(PostPageDto.convertFrom(postPage));
 	}
 
-	public List<PostPageDto> findPostByPage(int requestPage, int pageSize, PostFindByPageRequestDto requestDto) {
+	// 조건 별 조회
+	public PostListDto findPostByPage(int requestPage, int pageSize, PostFindByPageRequestDto requestDto) {
 		Pageable pageable;
 		switch (requestDto.getOrder()) {
 			case "like":
-				pageable = PageRequest.of(requestPage, pageSize, Sort.by(Sort.Direction.DESC, "like_count"));
+				pageable = PageRequest.of(requestPage, pageSize, Sort.by(Sort.Direction.DESC, "likeCount"));
 				break;
 			case "update":
 				pageable = PageRequest.of(requestPage, pageSize, Sort.by(Sort.Direction.DESC, "updatedAt"));
@@ -73,13 +74,13 @@ public class PostService {
 		}
 		Page<Post> postPage = postRepository.findAll(pageable);
 
-		return PostPageDto.convertFrom(postPage);
+		return PostListDto.convertFrom(PostPageDto.convertFrom(postPage));
 	}
 
 	//게시물 id로 게시물 조회
-	public Post findPostByPostId(Long postId) {
+	public PostFindDetailByIdResponseDto findPostByPostId(Long postId) {
 		Post findPost = postRepository.findPostByPostIdOrElseThrow(postId);
-		return findPost;
+		return PostFindDetailByIdResponseDto.ConvertFromPostFineDetailDto(findPost);
 	}
 
 	//좋아요 상태 토글
@@ -90,8 +91,7 @@ public class PostService {
 
 		//좋아요를 누르려는 사람=게시를 작성자 본인인 경우
 		if (findPost.getUser().getUserId().equals(userId)) {
-			throw new ResponseStatusException(ResponseCode.CANNOT_LIKE_SELF_POST.getStatus(),
-				ResponseCode.CANNOT_LIKE_SELF_POST.getMessage());
+			throw new ValidateException(ResponseCode.CANNOT_LIKE_SELF_POST);
 		}
 
 		//좋아요 이력 조회
@@ -120,24 +120,25 @@ public class PostService {
 		return postRepository.save(findPost);
 	}
 
-	//update
+	// update
 	@Transactional
 	public UpdatedPostResponseDto updatePost(Long userId, Long postId, UpdatedPostRequestDto updatePostRequest) {
 		User user = userRepository.findUserByUserIdOrElseThrow(userId);
 		Post post = postRepository.findPostByPostIdOrElseThrow(postId);
 		if (userId != post.getUser().getUserId()) {
-			throw new ValidateException(ResponseCode.ID_MISMATCH.getMessage(), ResponseCode.ID_MISMATCH.getStatus());
+			throw new ValidateException(ResponseCode.ID_MISMATCH);
 		}
 		post.updatedPost(updatePostRequest.getTitle(), updatePostRequest.getContents());
 		return new UpdatedPostResponseDto(post.getTitle(), post.getContents(), post.getUpdatedAt());
 	}
 
+	// 게시글 삭제
 	@Transactional
 	public void deletePost(Long userId, Long postId) {
 		User user = userRepository.findUserByUserIdOrElseThrow(userId);
 		Post post = postRepository.findPostByPostIdOrElseThrow(postId);
 		if (userId != post.getUser().getUserId()) {
-			throw new ValidateException(ResponseCode.ID_MISMATCH.getMessage(), ResponseCode.ID_MISMATCH.getStatus());
+			throw new ValidateException(ResponseCode.ID_MISMATCH);
 		}
 		postRepository.deleteById(postId);
 	}

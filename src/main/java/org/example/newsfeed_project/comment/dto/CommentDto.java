@@ -16,7 +16,7 @@ public class CommentDto {
 	private LocalDateTime updatedAt;
 
 	public static CommentDto convertDto(Comment comment) {
-		return new CommentDto(comment.getComments(), comment.getLike_count(), comment.getUser().getUserName(),
+		return new CommentDto(comment.getComments(), comment.getLikeCount(), comment.getUser().getUserName(),
 			comment.getUpdatedAt());
 	}
 }

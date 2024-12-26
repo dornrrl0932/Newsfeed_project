@@ -9,7 +9,7 @@ import org.example.newsfeed_project.entity.Post;
 import org.example.newsfeed_project.entity.User;
 import org.example.newsfeed_project.exception.ValidateException;
 import org.example.newsfeed_project.post.repository.PostRepository;
-import org.example.newsfeed_project.user.repository.CommetLikeRepository;
+import org.example.newsfeed_project.comment.repository.CommetLikeRepository;
 import org.example.newsfeed_project.user.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

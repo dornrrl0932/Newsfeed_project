@@ -1,6 +1,7 @@
 package org.example.newsfeed_project.comment.service;
 
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.example.newsfeed_project.comment.repository.CommentRepository;
 import org.example.newsfeed_project.entity.Comment;
 import org.example.newsfeed_project.entity.Post;
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CommentService {
@@ -33,8 +35,9 @@ public class CommentService {
 	@Transactional
 	public void deleteComment(Long userId, Long postId, Long commentId) {
 		User user = userRepository.findUserByUserIdOrElseThrow(userId);
-		Post post = postRepository.findPostByPostId(postId)
-				.orElseThrow(() -> new IllegalArgumentException("해당 게시물이 존재하지 않습니다."));
+		log.info("::: 게시물 조회 서비스가 동작하였습니다.");
+		Post post = postRepository.findPostByPostIdOrElseThrow(postId);
+		log.info("::: 댓글 조회 서비스가 동작하였습니다.");
 		Comment comment = commentRepository.findById(commentId)
 				.orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다."));
 		if(userId != comment.getUser().getUserId()) {

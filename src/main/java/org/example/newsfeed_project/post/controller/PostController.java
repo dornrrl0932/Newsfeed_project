@@ -32,7 +32,7 @@ public class PostController {
     }
     //게시물 수정
     @PatchMapping("/{post_id}")
-    public ResponseEntity<UpdatedPostResponseDto> updatedPost(HttpServletRequest request, @PathVariable("post_id") Long postId,
+    public ResponseEntity<UpdatedPostResponseDto> updatedPost(HttpServletRequest request, @PathVariable(name = "post_id") Long postId,
                                                               @RequestBody UpdatedPostRequestDto updatedPostRequest) {
         HttpSession session = request.getSession();
         Long userId = (Long) session.getAttribute(SessionConst.LOGIN_USER_ID);
@@ -41,7 +41,7 @@ public class PostController {
     }
     //게시물 삭제
     @DeleteMapping("/{post_id}")
-    public ResponseEntity<String> deletedPost(HttpServletRequest request, @PathVariable Long postId) {
+    public ResponseEntity<String> deletedPost(HttpServletRequest request, @PathVariable(name = "post_id") Long postId) {
         HttpSession session = request.getSession();
         Long userId = (Long) session.getAttribute(SessionConst.LOGIN_USER_ID);
         postService.deletePost(userId, postId);

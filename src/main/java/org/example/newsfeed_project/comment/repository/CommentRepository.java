@@ -7,7 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 	@Query("SELECT c " +
@@ -24,4 +26,9 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 		"WHERE c.commentId = :commentId"
 	)
 	int updateComment(@Param("commentId") Long commentId, @Param("comments") String comments);
+
+	default Comment findByCommentIdOrElseThrow(Long commentId){
+		return findById(commentId)
+			.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "댓글을 찾을 수 없습니다."));
+	}
 }

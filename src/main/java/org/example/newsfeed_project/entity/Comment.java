@@ -17,6 +17,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Entity
@@ -25,7 +26,7 @@ import lombok.Getter;
 public class Comment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long Id;
+	private Long commentId;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "post_id")
@@ -35,13 +36,26 @@ public class Comment {
 	@JoinColumn(name = "user_id")
 	private User user;
 
+	@Setter
 	@Column(length = 250)
 	private String comments;
 
-	private Long like_count;
+	// 기본값 0
+	private Long like_count = 0L;
 
 	@CreatedDate
 	@LastModifiedDate
 	private LocalDateTime updatedAt;
 
+	public Comment(Post post, User user, String comments, Long like_count, LocalDateTime updatedAt){
+		this.post = post;
+		this.user = user;
+		this.comments = comments;
+		this.like_count = like_count;
+		this.updatedAt = updatedAt;
+	}
+
+	public Comment() {
+
+	}
 }

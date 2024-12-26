@@ -46,4 +46,7 @@ public class User {
 		this.userName = userName;
 	}
 
+	public void updateIntroduction(String introduction) {
+		this.introduction = introduction;
+	}
 }

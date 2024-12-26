@@ -22,7 +22,7 @@ public class SignUpRequestDto {
 	private final String renterPassword;
 
 	@NotBlank(message = "유저 이름은 필수 입력값입니다.")
-	@Size(max = 10, message = "유저 이름은 최대 5자로 설정 가능합니다.")
+	@Size(max = 10, message = "유저 이름은 최대 10자로 설정 가능합니다.")
 	private final String userName;
 
 }

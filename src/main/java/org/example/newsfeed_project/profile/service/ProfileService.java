@@ -1,6 +1,7 @@
 package org.example.newsfeed_project.profile.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.example.newsfeed_project.entity.User;
 import org.example.newsfeed_project.exception.ValidateException;
@@ -8,11 +9,15 @@ import org.example.newsfeed_project.follow.repository.FollowRepository;
 import org.example.newsfeed_project.post.dto.PostPageDto;
 import org.example.newsfeed_project.post.repository.PostRepository;
 import org.example.newsfeed_project.profile.dto.ProfileDto;
+import org.example.newsfeed_project.profile.dto.ProfileUpdateRequestDto;
+import org.example.newsfeed_project.profile.dto.ProfileUpdateResponseDto;
 import org.example.newsfeed_project.user.repository.UserRepository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -23,9 +28,9 @@ public class ProfileService {
 	private final FollowRepository followRepository;
 
 	// 프로필 조회
-	public ProfileDto getProfile(Long user_id, Pageable pageable) {
+	public ProfileDto getProfile(Long userId, Pageable pageable) {
 		// 해당 유저 조회
-		User user = userRepository.findById(user_id)
+		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new ValidateException("존재하지 않은 회원입니다.", HttpStatus.NOT_FOUND));
 
 		// 게시물 페이지로 갖고오고 List<PostPageDto>로 변환
@@ -38,5 +43,17 @@ public class ProfileService {
 		Long followerNum = followRepository.countByFollowing(user);
 
 		return ProfileDto.convertFrom(user, followingNum, followerNum, posts);
+	}
+
+	@Transactional
+	public ProfileUpdateResponseDto updateProfile(Long id, ProfileUpdateRequestDto requestDto) {
+		Optional<User> optionalUser = userRepository.findById(id);
+		if (optionalUser.isEmpty()) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+		}
+		User findUser = optionalUser.get();
+
+		findUser.updateIntroduction(requestDto.getIntroduction());
+		return new ProfileUpdateResponseDto(findUser.getIntroduction());
 	}
 }

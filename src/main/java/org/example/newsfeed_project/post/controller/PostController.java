@@ -1,8 +1,9 @@
 package org.example.newsfeed_project.post.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.example.newsfeed_project.post.dto.PostFindByPageRequestDto;
+import org.example.newsfeed_project.post.dto.PostFindByPageResponseDto;
+import org.example.newsfeed_project.post.dto.PostFindDetailByIdResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.example.newsfeed_project.post.dto.CreatedPostRequestDto;
 import org.example.newsfeed_project.post.dto.CreatedPostResponseDto;
@@ -12,11 +13,12 @@ import org.example.newsfeed_project.post.service.PostService;
 import org.example.newsfeed_project.user.session.SessionConst;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @Slf4j
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/posts")
+@RequiredArgsConstructor
 public class PostController {
 
     private final PostService postService;
@@ -30,6 +32,18 @@ public class PostController {
         CreatedPostResponseDto createdPostResponse = postService.createdPost(userId, createdPostRequest);
         return ResponseEntity.ok(createdPostResponse);
     }
+
+    @GetMapping("/page/{page}")
+    public List<PostFindByPageResponseDto> findPostByPage(@PathVariable Long page, @RequestBody PostFindByPageRequestDto requestDto) {
+        Long pageSize = 10L;
+        return postService.findPostByPage(page, pageSize, requestDto).get(page);
+    }
+
+    @GetMapping("/{post_id}")
+    public PostFindDetailByIdResponseDto findPostById(@PathVariable Long post_id){
+        return findPostById(post_id);
+    }
+
     //게시물 수정
     @PatchMapping("/{post_id}")
     public ResponseEntity<UpdatedPostResponseDto> updatedPost(HttpServletRequest request, @PathVariable(name = "post_id") Long postId,
@@ -48,8 +62,3 @@ public class PostController {
         return ResponseEntity.ok("게시글이 삭제 되었습니다.");
     }
 }
-
-
-
-
-

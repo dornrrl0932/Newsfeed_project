@@ -25,12 +25,12 @@ public class FollowService {
 
 	// 팔로우하기
 	@Transactional(rollbackFor = Exception.class)
-	public MessageDto follow(Long user_id, Long loginUserId) {
+	public MessageDto follow(Long userId, Long loginUserId) {
 		// 팔로우 한 유저 조회, 없을 시 404 Not found 반환
 		User loginUser = userRepository.findById(loginUserId)
 			.orElseThrow(() -> new ValidateException("존재하지 않은 회원입니다.", HttpStatus.NOT_FOUND));
 		// 팔로우 당한 유저 조회, 없을 시 404 Not found 반환
-		User followingUser = userRepository.findById(user_id)
+		User followingUser = userRepository.findById(userId)
 			.orElseThrow(() -> new ValidateException("존재하지 않은 회원입니다.", HttpStatus.NOT_FOUND));
 
 		// 본인이 본인 팔로우 하는지 확인 (userId 일치한지 확인)
@@ -66,12 +66,12 @@ public class FollowService {
 	}
 
 	// 언팔로우(팔로우 취소)
-	public MessageDto unFollow(Long user_id, Long loginUserId) {
+	public MessageDto unFollow(Long userId, Long loginUserId) {
 		// 팔로우 한 유저 조회, 없을 시 404 Not found 반환
 		User loginUser = userRepository.findById(loginUserId)
 			.orElseThrow(() -> new ValidateException("존재하지 않은 회원입니다.", HttpStatus.NOT_FOUND));
 		// 팔로우 당한 유저 조회, 없을 시 404 Not found 반환
-		User followingUser = userRepository.findById(user_id)
+		User followingUser = userRepository.findById(userId)
 			.orElseThrow(() -> new ValidateException("존재하지 않은 회원입니다.", HttpStatus.NOT_FOUND));
 
 		// 팔로우 되어 있는지 확인
@@ -91,9 +91,9 @@ public class FollowService {
 	}
 
 	// user_id의 팔로워 목록 조회
-	public FollowersDto getFollowers(Long user_id) {
+	public FollowersDto getFollowers(Long userId) {
 		// 유저 조회
-		User user = userRepository.findById(user_id)
+		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new ValidateException("존재하지 않은 회원입니다.", HttpStatus.NOT_FOUND));
 
 		// 유저의 팔로워 목록 -> 팔로잉Id가 유저인 것들 select
@@ -103,9 +103,9 @@ public class FollowService {
 	}
 
 	// user_id의 팔로잉 목록 조회
-	public FollowingsDto getFollowings(Long user_id) {
+	public FollowingsDto getFollowings(Long userId) {
 		// 유저 조회
-		User user = userRepository.findById(user_id)
+		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new ValidateException("존재하지 않은 회원입니다.", HttpStatus.NOT_FOUND));
 
 		// 유저의 팔로워 목록 -> 팔로잉Id가 유저인 것들 select

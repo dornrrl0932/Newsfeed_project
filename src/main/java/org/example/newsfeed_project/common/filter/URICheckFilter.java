@@ -1,4 +1,4 @@
-package org.example.newsfeed_project.commen.filter;
+package org.example.newsfeed_project.common.filter;
 
 import java.io.IOException;
 import java.util.ArrayList;

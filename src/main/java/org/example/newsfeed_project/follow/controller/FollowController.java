@@ -4,7 +4,7 @@ import org.example.newsfeed_project.follow.dto.FollowersDto;
 import org.example.newsfeed_project.follow.dto.FollowingsDto;
 import org.example.newsfeed_project.follow.dto.MessageDto;
 import org.example.newsfeed_project.follow.service.FollowService;
-import org.example.newsfeed_project.user.session.SessionConst;
+import org.example.newsfeed_project.commen.session.SessionConst;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;

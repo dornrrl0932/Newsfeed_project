@@ -5,7 +5,7 @@ import org.example.newsfeed_project.comment.dto.CommentRequestDto;
 import org.example.newsfeed_project.comment.service.CommentService;
 import org.example.newsfeed_project.entity.Comment;
 import org.example.newsfeed_project.post.dto.LikeNumResponseDto;
-import org.example.newsfeed_project.user.session.SessionConst;
+import org.example.newsfeed_project.commen.session.SessionConst;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.http.HttpStatus;

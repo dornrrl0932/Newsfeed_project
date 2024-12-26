@@ -1,4 +1,4 @@
-package org.example.newsfeed_project.exception;
+package org.example.newsfeed_project.commen.exception;
 
 import org.example.newsfeed_project.follow.dto.MessageDto;
 import org.springframework.http.HttpStatus;

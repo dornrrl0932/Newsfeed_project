@@ -7,7 +7,7 @@ import org.example.newsfeed_project.entity.Comment;
 import org.example.newsfeed_project.entity.CommentLike;
 import org.example.newsfeed_project.entity.Post;
 import org.example.newsfeed_project.entity.User;
-import org.example.newsfeed_project.exception.ValidateException;
+import org.example.newsfeed_project.commen.exception.ValidateException;
 import org.example.newsfeed_project.post.repository.PostRepository;
 import org.example.newsfeed_project.comment.repository.CommetLikeRepository;
 import org.example.newsfeed_project.user.repository.UserRepository;

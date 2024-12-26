@@ -17,12 +17,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Entity
 @Table(name = "comment")
 @EntityListeners(AuditingEntityListener.class)
+@NoArgsConstructor
 public class Comment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,20 +43,18 @@ public class Comment {
 	private String comments;
 
 	// 기본값 0
-	private Long like_count = 0L;
+	@Setter
+	private Long likeCount = 0L;
 
 	@CreatedDate
 	@LastModifiedDate
 	private LocalDateTime updatedAt;
 
-	public Comment(Post post, User user, String comments, Long like_count){
+	public Comment(Post post, User user, String comments, Long likeCount){
 		this.post = post;
 		this.user = user;
 		this.comments = comments;
-		this.like_count = like_count;
+		this.likeCount = likeCount;
 	}
 
-	public Comment() {
-
-	}
 }

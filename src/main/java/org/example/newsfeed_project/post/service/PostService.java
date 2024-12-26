@@ -63,12 +63,11 @@ public class PostService {
         return optionalPost.get();
     }
 
-
-    //좋아요 상태 토글
-    @Transactional
-    public Post toggleLikeStatus(Long postId, Long userId) {
-        Post findPost = findPostByPostId(postId);
-        User findUser = userRepository.findUserByUserIdOrElseThrow(userId); //게시물에 좋아요를 누르려는 회원 id
+	//좋아요 상태 토글
+	@Transactional
+	public Post toggleLikeStatus(Long postId, Long userId) {
+		Post findPost = findPostByPostId(postId);
+		User findUser = userRepository.findUserByUserIdOrElseThrow(userId); //게시물에 좋아요를 누르려는 회원 객체
 
         //좋아요를 누르려는 사람=게시를 작성자 본인인 경우
         if (findPost.getUser().getUserId().equals(userId)) {
@@ -100,6 +99,5 @@ public class PostService {
 
         return postRepository.save(findPost);
     }
-
 
 }

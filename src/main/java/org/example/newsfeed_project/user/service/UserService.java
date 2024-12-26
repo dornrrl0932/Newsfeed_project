@@ -11,6 +11,7 @@ import org.example.newsfeed_project.user.dto.LoginRequestDto;
 import org.example.newsfeed_project.user.dto.SignUpRequestDto;
 import org.example.newsfeed_project.user.dto.UpdateUserInfoRequestDto;
 import org.example.newsfeed_project.user.encoder.PasswordEncoder;
+import org.example.newsfeed_project.entity.User;
 import org.example.newsfeed_project.user.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -84,6 +85,7 @@ public class UserService {
 		return user;
 	}
 
+	//회원 정보 수정
 	public void updateUserInfo(Long id, UpdateUserInfoRequestDto dto) {
 
 		User findUser = userRepository.findUserByUserIdOrElseThrow(id);

@@ -1,6 +1,7 @@
 package org.example.newsfeed_project.comment.service;
 
 import java.util.Optional;
+
 import org.example.newsfeed_project.comment.dto.CommentDto;
 import org.example.newsfeed_project.comment.dto.CommentRequestDto;
 import jakarta.transaction.Transactional;
@@ -12,6 +13,9 @@ import org.example.newsfeed_project.entity.Post;
 import org.example.newsfeed_project.entity.User;
 import org.example.newsfeed_project.post.repository.PostRepository;
 import org.example.newsfeed_project.user.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.example.newsfeed_project.comment.repository.CommetLikeRepository;
 import org.springframework.stereotype.Service;
@@ -20,6 +24,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 
 @Slf4j
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+
 @Service
 @RequiredArgsConstructor
 public class CommentService {
@@ -45,7 +52,25 @@ public class CommentService {
 			comment.getUpdatedAt());
 	}
 
-    // 댓글 조회
+	// 댓글 조회
+	public Page<CommentDto> findcomment(Long postId, int pageNum) {
+
+		//postId로 해당 포스트 조회
+		Post findPost = postRepository.findById(postId)
+			.orElseThrow(() -> new ValidateException("Post가 존재하지 않습니다.", HttpStatus.NOT_FOUND));
+
+		//페이징, 정렬조건
+		PageRequest pageRequest = PageRequest.of(pageNum - 1, 10, Sort.by(Sort.Direction.DESC, "like_count"));
+
+		return commentRepository.findByPost_PostId(postId, pageRequest)
+			//조회 된 엔티티를 DTO로 변환
+			.map(comment ->
+				new CommentDto(comment.getComments(),
+					comment.getLikeCount(),
+					comment.getUser().getUserName(),
+					comment.getUpdatedAt()));
+	}
+	// 댓글 조회
 
 	// 댓글 수정
 	public CommentDto modifyComment(Long loginUserId, Long postId, Long commetId, CommentRequestDto requestDto) {
@@ -99,9 +124,9 @@ public class CommentService {
 		//좋아요를 누른 기록이 없는 경우, 새로운 PostLike 객체 생성 및 DB에 저장
 		if(optionalCommentLike.isEmpty()){
 			CommentLike newCommentLike = CommentLike.builder()
-													.comment(findComment)
-													.user(findUser)
-													.build();
+				.comment(findComment)
+				.user(findUser)
+				.build();
 			commetLikeRepository.save(newCommentLike);
 			findComment.setLikeCount(findComment.getLikeCount()+1);
 		} else {

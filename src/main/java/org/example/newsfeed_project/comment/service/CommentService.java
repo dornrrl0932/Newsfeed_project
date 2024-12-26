@@ -1,26 +1,25 @@
 package org.example.newsfeed_project.comment.service;
 
+import java.util.Optional;
 import org.example.newsfeed_project.comment.dto.CommentDto;
 import org.example.newsfeed_project.comment.dto.CommentRequestDto;
+import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.example.newsfeed_project.comment.repository.CommentRepository;
 import org.example.newsfeed_project.entity.Comment;
 import org.example.newsfeed_project.entity.CommentLike;
 import org.example.newsfeed_project.entity.Post;
 import org.example.newsfeed_project.entity.User;
-import org.example.newsfeed_project.exception.ValidateException;
 import org.example.newsfeed_project.post.repository.PostRepository;
-import org.example.newsfeed_project.comment.repository.CommetLikeRepository;
 import org.example.newsfeed_project.user.repository.UserRepository;
 import org.springframework.http.HttpStatus;
+import org.example.newsfeed_project.comment.repository.CommetLikeRepository;
 import org.springframework.stereotype.Service;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.server.ResponseStatusException;
 
-import jakarta.transaction.Transactional;
 
-import java.util.Optional;
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CommentService {
@@ -30,15 +29,15 @@ public class CommentService {
 	private final PostRepository postRepository;
 	private final CommetLikeRepository commetLikeRepository;
 
-    // 댓글 작성
-    public CommentDto saveComment(Long postId, Long userId, CommentRequestDto requestDto) {
-        Optional<Post> optionalPost = postRepository.findById(postId);
-        Optional<User> optionalUser = userRepository.findById(userId);
-        if (optionalPost.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 포스트입니다.");
-        }
-        Post findPost = optionalPost.get();
-        User findUser = optionalUser.get();
+	// 댓글 작성
+	public CommentDto saveComment(Long postId, Long userId, CommentRequestDto requestDto) {
+		Optional<Post> optionalPost = postRepository.findById(postId);
+		Optional<User> optionalUser = userRepository.findById(userId);
+		if (optionalPost.isEmpty()) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "존재하지 않는 포스트입니다.");
+		}
+		Post findPost = optionalPost.get();
+		User findUser = optionalUser.get();
 
 		Comment comment = new Comment(findPost, findUser, requestDto.getComments(), 0L);
 		comment = commentRepository.save(comment);
@@ -46,7 +45,7 @@ public class CommentService {
 			comment.getUpdatedAt());
 	}
 
-	// 댓글 조회
+    // 댓글 조회
 
 	// 댓글 수정
 	public CommentDto modifyComment(Long loginUserId, Long postId, Long commetId, CommentRequestDto requestDto) {
@@ -70,7 +69,19 @@ public class CommentService {
 	}
 
 	// 댓글 삭제
-
+    @Transactional
+    public void deleteComment(Long userId, Long postId, Long commentId) {
+        User user = userRepository.findUserByUserIdOrElseThrow(userId);
+        log.info("::: 게시물 조회 서비스가 동작하였습니다.");
+        Post post = postRepository.findPostByPostIdOrElseThrow(postId);
+        log.info("::: 댓글 조회 서비스가 동작하였습니다.");
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다."));
+        if(userId != comment.getUser().getUserId()) {
+            throw new ValidateException("댓글 작성자가 아닙니다.", HttpStatus.UNAUTHORIZED);
+        }
+        commentRepository.deleteById(commentId);
+    }
 	// 댓글 좋아요 상태 토글
 	@Transactional
 	public Comment toggleCommentLikeSatus(Long commentId, Long userId) {
@@ -104,7 +115,6 @@ public class CommentService {
 			}
 			commetLikeRepository.save(commentLike);
 		}
-
 		return commentRepository.save(findComment);
 	}
 }

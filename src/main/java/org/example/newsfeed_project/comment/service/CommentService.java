@@ -2,11 +2,11 @@ package org.example.newsfeed_project.comment.service;
 
 import java.util.Optional;
 
+import org.example.newsfeed_project.common.exception.ValidateException;
 import org.example.newsfeed_project.comment.dto.CommentDto;
 import org.example.newsfeed_project.comment.dto.CommentRequestDto;
 import org.example.newsfeed_project.comment.repository.CommentRepository;
 import org.example.newsfeed_project.comment.repository.CommetLikeRepository;
-import org.example.newsfeed_project.common.exception.ValidateException;
 import org.example.newsfeed_project.entity.Comment;
 import org.example.newsfeed_project.entity.CommentLike;
 import org.example.newsfeed_project.entity.Post;
@@ -119,9 +119,9 @@ public class CommentService {
 		//좋아요를 누른 기록이 없는 경우, 새로운 PostLike 객체 생성 및 DB에 저장
 		if (optionalCommentLike.isEmpty()) {
 			CommentLike newCommentLike = CommentLike.builder()
-				.comment(findComment)
-				.user(findUser)
-				.build();
+													.comment(findComment)
+													.user(findUser)
+													.build();
 			commetLikeRepository.save(newCommentLike);
 			findComment.setLikeCount(findComment.getLikeCount() + 1);
 		} else {

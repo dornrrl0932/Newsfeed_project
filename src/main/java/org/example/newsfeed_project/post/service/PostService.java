@@ -61,7 +61,7 @@ public class PostService {
         Pageable pageable;
         switch (requestDto.getOrder()) {
             case "like":
-                pageable = PageRequest.of(requestPage, pageSize, Sort.by(Sort.Direction.DESC, "like_count"));
+                pageable = PageRequest.of(requestPage, pageSize, Sort.by(Sort.Direction.DESC, "likeCount"));
                 break;
             case "update":
                 pageable = PageRequest.of(requestPage, pageSize, Sort.by(Sort.Direction.DESC, "updatedAt"));
@@ -69,6 +69,12 @@ public class PostService {
 			default: throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
         Page<Post> postPage = postRepository.findAll(pageable);
+
+        if (postPage.getTotalElements() == 0) {
+            System.out.println("No posts found between the specified dates.");
+        } else {
+            System.out.println(postPage.getTotalElements());}
+
 
         return PostPageDto.convertFrom(postPage);
     }

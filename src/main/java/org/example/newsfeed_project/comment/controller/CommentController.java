@@ -2,8 +2,12 @@ package org.example.newsfeed_project.comment.controller;
 
 import org.example.newsfeed_project.comment.dto.CommentDto;
 import org.example.newsfeed_project.comment.dto.CommentRequestDto;
+
 import jakarta.servlet.http.HttpServletRequest;
+
 import org.example.newsfeed_project.comment.service.CommentService;
+import org.example.newsfeed_project.entity.Comment;
+import org.example.newsfeed_project.post.dto.LikeNumResponseDto;
 import org.example.newsfeed_project.user.session.SessionConst;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -22,19 +26,19 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CommentController {
 
-    private final CommentService commentService;
+	private final CommentService commentService;
 
-    // 댓글 작성
-    @PostMapping("/")
-    public CommentDto saveComment(@PathVariable("post_id") Long postId,
-                                  @RequestBody CommentRequestDto requestDto,
-                                  HttpServletRequest request) {
+	// 댓글 작성
+	@PostMapping("/")
+	public CommentDto saveComment(@PathVariable("post_id") Long postId,
+		@RequestBody CommentRequestDto requestDto,
+		HttpServletRequest request) {
 
-        Long userId = (Long) request.getSession().getAttribute("loginUserId");
+		Long userId = (Long)request.getSession().getAttribute("loginUserId");
 		CommentDto commentDto = commentService.saveComment(postId, userId, requestDto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(commentDto).getBody();
-    }
-    // 댓글 조회
+	}
+	// 댓글 조회
 
 	// 댓글 수정
 	@PatchMapping("/{comment_id}")
@@ -50,6 +54,16 @@ public class CommentController {
 
 	// 댓글 삭제
 
-	// 댓글 좋아요 상태 변경
+	// 댓글 좋아요 상태 토글
+	@PutMapping("/{comment_id}/{user_id}/like")
+	public ResponseEntity<LikeNumResponseDto> toggleCommentLikeStatus(
+		@PathVariable(name = "comment_id") Long commentId,
+		@PathVariable(name = "user_id") Long userId
+	) {
+
+		Comment comment = commentService.toggleCommentLikeSatus(commentId, userId);
+
+		return new ResponseEntity<>(new LikeNumResponseDto(comment.getLikeCount()), HttpStatus.OK);
+	}
 
 }

@@ -4,29 +4,25 @@ import java.util.Optional;
 
 import org.example.newsfeed_project.comment.dto.CommentDto;
 import org.example.newsfeed_project.comment.dto.CommentRequestDto;
-import jakarta.transaction.Transactional;
-import lombok.extern.slf4j.Slf4j;
 import org.example.newsfeed_project.comment.repository.CommentRepository;
 import org.example.newsfeed_project.comment.repository.CommetLikeRepository;
 import org.example.newsfeed_project.entity.Comment;
 import org.example.newsfeed_project.entity.CommentLike;
 import org.example.newsfeed_project.entity.Post;
 import org.example.newsfeed_project.entity.User;
+import org.example.newsfeed_project.exception.ValidateException;
 import org.example.newsfeed_project.post.repository.PostRepository;
 import org.example.newsfeed_project.user.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
-import org.example.newsfeed_project.comment.repository.CommetLikeRepository;
 import org.springframework.stereotype.Service;
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.server.ResponseStatusException;
-
-
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -55,7 +51,7 @@ public class CommentService {
 	}
 
 	// 댓글 조회
-	public Page<CommentDto> findcomment(Long postId, int pageNum) {
+	public Page<CommentDto> findComment(Long postId, int pageNum) {
 
 		//postId로 해당 포스트 조회
 		Post findPost = postRepository.findById(postId)
@@ -95,19 +91,20 @@ public class CommentService {
 	}
 
 	// 댓글 삭제
-    @Transactional
-    public void deleteComment(Long userId, Long postId, Long commentId) {
-        User user = userRepository.findUserByUserIdOrElseThrow(userId);
-        log.info("::: 게시물 조회 서비스가 동작하였습니다.");
-        Post post = postRepository.findPostByPostIdOrElseThrow(postId);
-        log.info("::: 댓글 조회 서비스가 동작하였습니다.");
-        Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다."));
-        if(userId != comment.getUser().getUserId()) {
-            throw new ValidateException("댓글 작성자가 아닙니다.", HttpStatus.UNAUTHORIZED);
-        }
-        commentRepository.deleteById(commentId);
-    }
+	@Transactional
+	public void deleteComment(Long userId, Long postId, Long commentId) {
+		User user = userRepository.findUserByUserIdOrElseThrow(userId);
+		log.info("::: 게시물 조회 서비스가 동작하였습니다.");
+		Post post = postRepository.findPostByPostIdOrElseThrow(postId);
+		log.info("::: 댓글 조회 서비스가 동작하였습니다.");
+		Comment comment = commentRepository.findById(commentId)
+			.orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다."));
+		if (userId != comment.getUser().getUserId()) {
+			throw new ValidateException("댓글 작성자가 아닙니다.", HttpStatus.UNAUTHORIZED);
+		}
+		commentRepository.deleteById(commentId);
+	}
+
 	// 댓글 좋아요 상태 토글
 	@Transactional
 	public Comment toggleCommentLikeSatus(Long commentId, Long userId) {

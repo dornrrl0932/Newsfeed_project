@@ -2,6 +2,7 @@ package org.example.newsfeed_project.comment.service;
 
 import java.util.Optional;
 
+import org.example.newsfeed_project.common.exception.ValidateException;
 import org.example.newsfeed_project.comment.dto.CommentDto;
 import org.example.newsfeed_project.comment.dto.CommentRequestDto;
 import org.example.newsfeed_project.comment.repository.*;

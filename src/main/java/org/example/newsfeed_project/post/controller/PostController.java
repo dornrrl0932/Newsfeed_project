@@ -1,80 +1,141 @@
 package org.example.newsfeed_project.post.controller;
 
+import org.example.newsfeed_project.common.exception.ResponseCode;
+import org.example.newsfeed_project.common.exception.ValidateException;
 import org.example.newsfeed_project.common.session.SessionConst;
+import org.example.newsfeed_project.dto.ApiResponse;
 import org.example.newsfeed_project.entity.Post;
+import org.example.newsfeed_project.post.dto.CreatedPostRequestDto;
+import org.example.newsfeed_project.post.dto.CreatedPostResponseDto;
+import org.example.newsfeed_project.post.dto.LikeNumResponseDto;
+import org.example.newsfeed_project.post.dto.PostFindByDateRangeRequestDto;
+import org.example.newsfeed_project.post.dto.PostFindDetailByIdResponseDto;
+import org.example.newsfeed_project.post.dto.PostListDto;
+import org.example.newsfeed_project.post.dto.UpdatedPostRequestDto;
+import org.example.newsfeed_project.post.dto.UpdatedPostResponseDto;
 import org.example.newsfeed_project.post.service.PostService;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.newsfeed_project.post.dto.*;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/posts")
+@RequestMapping("/feed")
 @RequiredArgsConstructor
 public class PostController {
-    private final PostService postService;
+	private final PostService postService;
 
-    //게시물 생성
-    @PostMapping
-    public ResponseEntity<CreatedPostResponseDto> createdPost(HttpServletRequest request,
-                                                              @RequestBody CreatedPostRequestDto createdPostRequest) {
-        HttpSession session = request.getSession();
-        Long userId = (Long) session.getAttribute(SessionConst.LOGIN_USER_ID);
-        CreatedPostResponseDto createdPostResponse = postService.createdPost(userId, createdPostRequest);
-        return ResponseEntity.ok(createdPostResponse);
-    }
+	// 게시물 생성
+	@PostMapping
+	public ResponseEntity<ApiResponse<CreatedPostResponseDto>> createdPost(HttpServletRequest request,
+		@RequestBody CreatedPostRequestDto createdPostRequest) {
+		HttpSession session = request.getSession();
+		Long userId = (Long)session.getAttribute(SessionConst.LOGIN_USER_ID);
+		CreatedPostResponseDto createdPostResponse = postService.createdPost(userId, createdPostRequest);
+		return ResponseEntity.ok(ApiResponse.success(201, "게시물 작성 성공", createdPostResponse));
+	}
 
-    @GetMapping("/dateRange/{page}")
-    public List<PostPageDto> findPostsByDateRange(@RequestParam(defaultValue = "1") int page, @RequestBody PostFindByDateRangeRequestDto requestDto) {
-        int pageSize = 10;
-      return postService.findPostByDateRange(page, pageSize, requestDto);
-    }
+	// 기간별 조회
+	@GetMapping("/dateRange/{page}")
+	public ResponseEntity<ApiResponse<PostListDto>> findPostsByDateRange(@PathVariable int page,
+		@RequestBody PostFindByDateRangeRequestDto requestDto) {
+		int pageSize = 10;
 
-    @GetMapping("/page/{page}")
-    public List<PostPageDto> findPostByPage(@RequestParam(defaultValue = "1") int page, @RequestBody PostFindByPageRequestDto requestDto) {
-        int pageSize = 10;
-        return postService.findPostByPage(page, pageSize, requestDto);
-    }
+		Pageable pageable = PageRequest.of(page - 1, pageSize, Sort.by(Sort.Direction.DESC, "updatedAt"));
+
+		return ResponseEntity.ok(
+			ApiResponse.success(200, "게시물 기간 별 작성 성공", postService.findPostByDateRange(pageable, requestDto)));
+	}
+
+	// 팔로잉 피드 보기
+	@GetMapping("/follow/{page}")
+	public ResponseEntity<ApiResponse<PostListDto>> getPostsBySessionUser(@PathVariable int page,
+		HttpServletRequest request,
+		@RequestParam(defaultValue = "updateAt") String orderBy) {
+		HttpSession session = request.getSession();
+		Long userId = (Long)session.getAttribute(SessionConst.LOGIN_USER_ID);
+
+		if (!orderBy.equals("updateAt") && !orderBy.equals("likeCount")) {
+			throw new ValidateException(ResponseCode.ORDER_NOT_FOUND);
+		}
+
+		Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, orderBy));
+
+		return ResponseEntity.ok(
+			ApiResponse.success(200, "팔로워 피드 조회 성공", postService.getPostsByFriend(userId, pageable)));
+	}
+
+	// 게시물 전체 조회
+	@GetMapping("/page/{page}")
+	public ResponseEntity<ApiResponse<PostListDto>> findPostByPage(@PathVariable int page,
+		@RequestParam(defaultValue = "updateAt") String orderBy) {
+
+		if (!orderBy.equals("updateAt") && !orderBy.equals("likeCount")) {
+			throw new ValidateException(ResponseCode.ORDER_NOT_FOUND);
+		}
+
+		Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, orderBy));
+
+		return ResponseEntity.ok(
+			ApiResponse.success(200, "전체 게시글 조회 성공", postService.findPostByPage(pageable)));
+	}
 
 	//게시물 단건 조회
 	@GetMapping("/{post_id}")
-	public PostFindDetailByIdResponseDto findPostByPostId(@PathVariable Long post_id) {
-		Post findPost = postService.findPostByPostId(post_id);
-		return new PostFindDetailByIdResponseDto(findPost.getTitle(), findPost.getContents(),
-			findPost.getUser().getUserName(), findPost.getUpdatedAt());
+	public ResponseEntity<ApiResponse<PostFindDetailByIdResponseDto>> findPostByPostId(
+		@PathVariable(name = "post_id") Long postId) {
+
+		return ResponseEntity.ok(
+			ApiResponse.success(200, "게시물 단건 조회 성공", postService.findPostByPostId(postId)));
+	}
+
+	//게시물 수정
+	@PatchMapping("/{post_id}")
+	public ResponseEntity<ApiResponse<UpdatedPostResponseDto>> updatedPost(HttpServletRequest request,
+		@PathVariable(name = "post_id") Long postId,
+		@RequestBody UpdatedPostRequestDto updatedPostRequest) {
+		HttpSession session = request.getSession();
+		Long userId = (Long)session.getAttribute(SessionConst.LOGIN_USER_ID);
+		UpdatedPostResponseDto updatedPostResponse = postService.updatePost(userId, postId, updatedPostRequest);
+		return ResponseEntity.ok(
+			ApiResponse.success(200, "게시글 수정 성공", updatedPostResponse));
+	}
+
+	//게시물 삭제
+	@DeleteMapping("/{post_id}")
+	public ResponseEntity<ApiResponse<Void>> deletedPost(HttpServletRequest request,
+		@PathVariable(name = "post_id") Long postId) {
+		HttpSession session = request.getSession();
+		Long userId = (Long)session.getAttribute(SessionConst.LOGIN_USER_ID);
+		postService.deletePost(userId, postId);
+		return ResponseEntity.ok(
+			ApiResponse.success(200, "게시글 삭제 성공", null));
 	}
 
 	//게시글 좋아요 상태 토글
 	@PutMapping("/{post_id}/{user_id}/like")
-	public ResponseEntity<LikeNumResponseDto> toggleLikeStatus(@PathVariable Long post_id, @PathVariable Long user_id) {
+	public ResponseEntity<ApiResponse<LikeNumResponseDto>> toggleLikeStatus(@PathVariable(name = "post_id") Long postId,
+		@PathVariable(name = "user_id") Long userId) {
 
-		Post post = postService.toggleLikeStatus(post_id, user_id);
+		Post post = postService.toggleLikeStatus(postId, userId);
 
-		return new ResponseEntity<>(new LikeNumResponseDto(post.getLikeCount()), HttpStatus.OK);
+		return ResponseEntity.ok(
+			ApiResponse.success(200, "게시글 좋아요 상태 토글 실행 성공", new LikeNumResponseDto(post.getLikeCount())));
 	}
-
-    //게시물 수정
-    @PatchMapping("/{post_id}")
-    public ResponseEntity<UpdatedPostResponseDto> updatedPost(HttpServletRequest request, @PathVariable(name = "post_id") Long postId,
-                                                              @RequestBody UpdatedPostRequestDto updatedPostRequest) {
-        HttpSession session = request.getSession();
-        Long userId = (Long) session.getAttribute(SessionConst.LOGIN_USER_ID);
-        UpdatedPostResponseDto updatedPostResponse = postService.updatePost(userId, postId, updatedPostRequest);
-        return ResponseEntity.ok(updatedPostResponse);
-    }
-    //게시물 삭제
-    @DeleteMapping("/{post_id}")
-    public ResponseEntity<String> deletedPost(HttpServletRequest request, @PathVariable(name = "post_id") Long postId) {
-        HttpSession session = request.getSession();
-        Long userId = (Long) session.getAttribute(SessionConst.LOGIN_USER_ID);
-        postService.deletePost(userId, postId);
-        return ResponseEntity.ok("게시글이 삭제 되었습니다.");
-    }
 }

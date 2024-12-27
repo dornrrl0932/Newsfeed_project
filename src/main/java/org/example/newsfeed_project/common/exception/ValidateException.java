@@ -1,15 +1,20 @@
 package org.example.newsfeed_project.common.exception;
 
-import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
-@Getter
-public class ValidateException extends RuntimeException {
-    private String message;
-    private HttpStatus httpStatus;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-    public ValidateException(String message, HttpStatus httpStatus) {
-        this.message = message;
-        this.httpStatus = httpStatus;
-    }
+@Getter
+@RequiredArgsConstructor
+public class ValidateException extends RuntimeException {
+
+	private final HttpStatus httpStatus;
+	private final int statusValue;
+
+	public ValidateException(ResponseCode responseCode) {
+		super(responseCode.getMessage());
+		this.httpStatus = responseCode.getStatus();
+		this.statusValue = responseCode.getStatus().value();
+	}
 }

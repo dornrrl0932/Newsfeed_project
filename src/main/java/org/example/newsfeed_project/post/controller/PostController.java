@@ -28,7 +28,8 @@ public class PostController {
 
 	// 게시물 생성
 	@PostMapping
-	public ResponseEntity<ApiResponse<CreatedPostResponseDto>> createdPost(HttpServletRequest request,
+	public ResponseEntity<ApiResponse<CreatedPostResponseDto>> createdPost(
+		HttpServletRequest request,
 		@RequestBody CreatedPostRequestDto createdPostRequest) {
 		HttpSession session = request.getSession();
 		Long userId = (Long)session.getAttribute(SessionConst.LOGIN_USER_ID);

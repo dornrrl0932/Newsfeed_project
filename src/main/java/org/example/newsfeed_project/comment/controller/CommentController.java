@@ -42,7 +42,7 @@ public class CommentController {
 
 		Long userId = (Long)request.getSession().getAttribute("loginUserId");
 		CommentDto commentDto = commentService.saveComment(postId, userId, requestDto);
-		return ResponseEntity.ok(ApiResponse.success(201, "댓글이 등록됐습니다.", commentDto));
+		return ResponseEntity.ok(ApiResponse.success(201, "댓글 등록 성공", commentDto));
 	}
 
 	// 댓글 조회
@@ -54,7 +54,7 @@ public class CommentController {
 		PageRequest pageRequest = PageRequest.of(pageNum - 1, 10, Sort.by(Sort.Direction.DESC, "likeCount"));
 
 		return ResponseEntity.ok(
-			ApiResponse.success(200, "댓글을 조회했습니다.", commentService.findcomment(postId, pageRequest)));
+			ApiResponse.success(200, "댓글 조회 성공", commentService.findcomment(postId, pageRequest)));
 	}
 
 	// 댓글 수정
@@ -67,7 +67,7 @@ public class CommentController {
 		Long loginUserId = (Long)httpSession.getAttribute(SessionConst.LOGIN_USER_ID);
 
 		return ResponseEntity.ok(
-			ApiResponse.success(200, "댓글이 수정됐습니다.", commentService.modifyComment(loginUserId, postId, commentId, dto)));
+			ApiResponse.success(200, "댓글 수정 성공", commentService.modifyComment(loginUserId, postId, commentId, dto)));
 	}
 
 	// 댓글 삭제
@@ -80,7 +80,7 @@ public class CommentController {
 
 		commentService.deleteComment(userId, postId, commentId);
 
-		return ResponseEntity.ok(ApiResponse.success(200, "댓글이 삭제되었습니다.", null));
+		return ResponseEntity.ok(ApiResponse.success(200, "댓글 삭제 성공", null));
 	}
 
 	// 댓글 좋아요 상태 토글
@@ -94,7 +94,7 @@ public class CommentController {
 		Comment comment = commentService.toggleCommentLikeSatus(postId, commentId, userId);
 
 		return ResponseEntity.ok(
-			ApiResponse.success(200, "좋아요가 반영됐습니다.", new LikeNumResponseDto(comment.getLikeCount())));
+			ApiResponse.success(200, "댓글 좋아요 상태 토글 성공", new LikeNumResponseDto(comment.getLikeCount())));
 	}
 
 }

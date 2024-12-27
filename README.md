@@ -7,7 +7,20 @@
 - 기본적인 유저 관리, 뉴스피드 게시물 및 댓글 관리, 좋아요, 팔로우/팔로잉 기능을 구현하였습니다.<br>
 - **개발기간**: 24.12.20 ~ 24.12.27
 
-### 💛 Team
+### 🔷 주요 기능
+
+- 유저 관리, 게시글 관리, 팔로워 관리 기능
+
+### 🔷 부가 기능
+
+- 댓글, 좋아요, 기간별 게시물 조회 기능
+
+## ✒️App 이름
+
+### ShareDay
+- 매일의 일상을 서로 공유한다는 의미에서 ShareDay라고 지었습니다.
+
+## 💛 Team
 
 <table>
   <tbody>
@@ -20,19 +33,6 @@
     </tr>
   </tbody>
 </table>
-
-### ✒️App 이름
-
-- ```ShareDay```
-- 매일의 일상을 서로 공유한다는 의미에서 ShareDay라고 지었습니다.
-
-### 🔷 주요 기능
-
-- 유저 관리, 게시글 관리, 팔로워 관리 기능
-
-### 🔷 부가 기능
-
-- 댓글, 좋아요, 기간별 게시물 조회 기능
 
 ## 🔧사용 기술
 ### **Environment**
@@ -51,7 +51,7 @@
 --------------------
 
 ## 🔗와이어 프레임
-[와이어 프레임 링크](http://https://www.figma.com/design/xvyc7FswpeSnGZKmHOzCRM/ShareDay?node-id=0-1&p=f&t=otTpvk5OjYecNvOA-0)
+[와이어 프레임 링크](https://www.figma.com/design/xvyc7FswpeSnGZKmHOzCRM/ShareDay?node-id=0-1&p=f&t=9N5unNHzfX8X2y0Y-0)
 
 ---------------------
 ## 🗒️데이터 모델 개요

@@ -35,6 +35,11 @@
 <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=MySQL&logoColor=white">
 
 --------------------
+
+## 🔗와이어 프레임
+[와이어 프레임 링크](http://https://www.figma.com/design/xvyc7FswpeSnGZKmHOzCRM/ShareDay?node-id=0-1&p=f&t=otTpvk5OjYecNvOA-0)
+
+---------------------
 ## 🗒️데이터 모델 개요
 - `User`: 플랫폼 사용자를 나타냅니다.
 - `Feed`: 사용자가 작성한 게시물을 나타냅니다.

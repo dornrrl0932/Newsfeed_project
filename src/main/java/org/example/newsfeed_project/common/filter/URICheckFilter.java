@@ -37,7 +37,8 @@ public class URICheckFilter implements Filter {
 		ALLOWED_PATTERNS.add(Pattern.compile("^/feed/\\d+/comments/\\d+/\\d+/like$"));
 		ALLOWED_PATTERNS.add(Pattern.compile("^/feed/\\d+/like$"));
 		ALLOWED_PATTERNS.add(Pattern.compile("^/feed/\\d+/\\d+/like$"));
-		ALLOWED_PATTERNS.add(Pattern.compile("^/feed/pageFriend/\\d+$"));
+		ALLOWED_PATTERNS.add(Pattern.compile("^/feed/follow/\\d+$"));
+
 	}
 
 	@Override

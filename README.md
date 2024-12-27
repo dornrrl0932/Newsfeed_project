@@ -370,14 +370,15 @@ pageNum = Number
 
 ## 📍4. 게시글 관련 API
 ### PostController
-| 기능        | Method   | URL                     | Request |
-|-----------|----------|-------------------------|---------|
-| 게시물 생성    | `POST`   | /feed                   | Body    |
-| 게시물 수정    | `PATCH`  | /feed/{post_id}         | Body    |
-| 게시물 삭제    | `DELETE` | /feed/{post_id}         | -       |
-| 게시물 전체 조회 | `GET`    | /feed/page/{page}       | Head    |
-| 게시물 단건 조회 | `GET`    | /feed/{post_id}         | -       |
-| 친구 게시물 조회 | `GET`    | /feed/pageFriend/{page} | -       |
+| 기능         | Method   | URL                    | Request |
+|------------|----------|------------------------|---------|
+| 게시물 생성     | `POST`   | /feed                  | Body    |
+| 게시물 수정     | `PATCH`  | /feed/{post_id}        | Body    |
+| 게시물 삭제     | `DELETE` | /feed/{post_id}        | -       |
+| 게시물 전체 조회  | `GET`    | /feed/page/{page}      | Head    |
+| 게시물 기간별 조회 |`GET`    | /feed/dateRange/{page} | -       |
+| 게시물 단건 조회  | `GET`    | /feed/{post_id}        | -       |
+| 친구 게시물 조회  | `GET`    | /feed/follower/{page}  | Head      |
 
 ### HttpStatus
 
@@ -476,8 +477,8 @@ orderBy=updateAt, likeCount
 ```
 <br>
 
-## **4.5 게시물 기간 조회**
-### 🔹**GET**`/feed/page/{page}`
+## **4.5 게시물 기간별 조회**
+### 🔹**GET**`/feed/dateRange/{page}`
 
 ---
 

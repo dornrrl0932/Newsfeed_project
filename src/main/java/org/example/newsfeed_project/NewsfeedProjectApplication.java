@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @SpringBootApplication
 public class NewsfeedProjectApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(NewsfeedProjectApplication.class, args);
-    }
+	public static void main(String[] args) {
+		SpringApplication.run(NewsfeedProjectApplication.class, args);
+	}
 
 }

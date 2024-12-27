@@ -5,20 +5,13 @@ import java.util.Objects;
 import org.example.newsfeed_project.common.exception.ResponseCode;
 import org.example.newsfeed_project.common.exception.ValidateException;
 import org.example.newsfeed_project.dto.ApiResponse;
-import org.example.newsfeed_project.profile.dto.ProfileDto;
-import org.example.newsfeed_project.profile.dto.ProfileUpdateRequestDto;
-import org.example.newsfeed_project.profile.dto.ProfileUpdateResponseDto;
+import org.example.newsfeed_project.profile.dto.*;
 import org.example.newsfeed_project.profile.service.ProfileService;
+
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -52,6 +45,5 @@ public class ProfileController {
 		return ResponseEntity.ok(
 			ApiResponse.success(200, "자기소개 수정 완료", profileService.updateProfile(userId, requestDtd)));
 	}
-
 
 }

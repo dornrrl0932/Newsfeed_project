@@ -3,19 +3,19 @@ package org.example.newsfeed_project.comment.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.example.newsfeed_project.comment.dto.CommentDto;
-import org.example.newsfeed_project.comment.dto.CommentListDto;
-import org.example.newsfeed_project.comment.dto.CommentRequestDto;
-import org.example.newsfeed_project.comment.repository.CommentRepository;
-import org.example.newsfeed_project.comment.repository.CommetLikeRepository;
+import org.example.newsfeed_project.comment.dto.*;
+import org.example.newsfeed_project.comment.repository.*;
 import org.example.newsfeed_project.common.exception.ResponseCode;
 import org.example.newsfeed_project.common.exception.ValidateException;
+
 import org.example.newsfeed_project.entity.Comment;
 import org.example.newsfeed_project.entity.CommentLike;
 import org.example.newsfeed_project.entity.Post;
 import org.example.newsfeed_project.entity.User;
+
 import org.example.newsfeed_project.post.repository.PostRepository;
 import org.example.newsfeed_project.user.repository.UserRepository;
+
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;

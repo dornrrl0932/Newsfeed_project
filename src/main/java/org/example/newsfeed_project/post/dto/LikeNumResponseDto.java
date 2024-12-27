@@ -8,4 +8,5 @@ import lombok.Getter;
 public class LikeNumResponseDto {
 
 	private Long LikeNum;
+
 }

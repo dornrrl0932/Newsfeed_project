@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.example.newsfeed_project.entity.Follow;
 import org.example.newsfeed_project.entity.User;
 import org.example.newsfeed_project.follow.dto.FollowUserInfoDto;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

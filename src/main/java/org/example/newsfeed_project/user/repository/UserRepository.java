@@ -23,5 +23,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
 			.orElseThrow(() -> new ValidateException(ResponseCode.USER_NOT_FOUND));
 	}
 
-	// List<User> userId(Long userId); // 이거뭐지
 }

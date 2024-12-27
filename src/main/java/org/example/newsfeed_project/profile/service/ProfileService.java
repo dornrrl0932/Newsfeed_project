@@ -4,12 +4,12 @@ import java.util.List;
 
 import org.example.newsfeed_project.entity.User;
 import org.example.newsfeed_project.follow.repository.FollowRepository;
-import org.example.newsfeed_project.post.dto.PostPageDto;
 import org.example.newsfeed_project.post.repository.PostRepository;
-import org.example.newsfeed_project.profile.dto.ProfileDto;
-import org.example.newsfeed_project.profile.dto.ProfileUpdateRequestDto;
-import org.example.newsfeed_project.profile.dto.ProfileUpdateResponseDto;
 import org.example.newsfeed_project.user.repository.UserRepository;
+
+import org.example.newsfeed_project.post.dto.PostPageDto;
+import org.example.newsfeed_project.profile.dto.*;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 

@@ -7,11 +7,10 @@ import org.example.newsfeed_project.common.exception.ValidateException;
 import org.example.newsfeed_project.dto.MessageDto;
 import org.example.newsfeed_project.entity.Follow;
 import org.example.newsfeed_project.entity.User;
-import org.example.newsfeed_project.follow.dto.FollowUserInfoDto;
-import org.example.newsfeed_project.follow.dto.FollowersDto;
-import org.example.newsfeed_project.follow.dto.FollowingsDto;
+import org.example.newsfeed_project.follow.dto.*;
 import org.example.newsfeed_project.follow.repository.FollowRepository;
 import org.example.newsfeed_project.user.repository.UserRepository;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -5,9 +5,10 @@ import lombok.Getter;
 @Getter
 public class PostFindByPageRequestDto {
 
-    private final String order;
+	private final String order;
 
-    public PostFindByPageRequestDto(String order) {
-        this.order = order;
-    }
+	public PostFindByPageRequestDto(String order) {
+		this.order = order;
+	}
+
 }

@@ -4,9 +4,11 @@ import lombok.Getter;
 
 @Getter
 public class ProfileUpdateResponseDto {
-   private final String introduction;
-    public ProfileUpdateResponseDto(String introduction) {
-        this.introduction = introduction;
-    }
+
+	private final String introduction;
+
+	public ProfileUpdateResponseDto(String introduction) {
+		this.introduction = introduction;
+	}
 
 }

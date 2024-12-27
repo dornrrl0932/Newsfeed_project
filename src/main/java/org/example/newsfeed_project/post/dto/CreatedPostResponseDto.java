@@ -9,9 +9,10 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class CreatedPostResponseDto {
 
-    private final String userName;
-    private final String title;
-    private final String contents;
-    private final LocalDateTime updatedAt;
+	private final String userName;
+	private final String title;
+	private final String contents;
+	private final LocalDateTime updatedAt;
+
 }
 

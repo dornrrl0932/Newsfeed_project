@@ -8,17 +8,11 @@ import org.example.newsfeed_project.entity.Post;
 import org.example.newsfeed_project.entity.PostLike;
 import org.example.newsfeed_project.entity.User;
 import org.example.newsfeed_project.follow.repository.FollowRepository;
-import org.example.newsfeed_project.post.dto.CreatedPostRequestDto;
-import org.example.newsfeed_project.post.dto.CreatedPostResponseDto;
-import org.example.newsfeed_project.post.dto.PostFindByDateRangeRequestDto;
-import org.example.newsfeed_project.post.dto.PostFindDetailByIdResponseDto;
-import org.example.newsfeed_project.post.dto.PostListDto;
-import org.example.newsfeed_project.post.dto.PostPageDto;
-import org.example.newsfeed_project.post.dto.UpdatedPostRequestDto;
-import org.example.newsfeed_project.post.dto.UpdatedPostResponseDto;
-import org.example.newsfeed_project.post.repository.PostLikeRepository;
-import org.example.newsfeed_project.post.repository.PostRepository;
+import org.example.newsfeed_project.post.dto.*;
+
+import org.example.newsfeed_project.post.repository.*;
 import org.example.newsfeed_project.user.repository.UserRepository;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

@@ -6,6 +6,7 @@ import lombok.Getter;
 
 @Getter
 public class PostListDto {
+
 	private List<PostPageDto> posts;
 
 	private PostListDto(List<PostPageDto> posts) {
@@ -15,4 +16,5 @@ public class PostListDto {
 	public static PostListDto convertFrom(List<PostPageDto> posts) {
 		return new PostListDto(posts);
 	}
+
 }

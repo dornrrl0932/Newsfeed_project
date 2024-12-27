@@ -42,8 +42,8 @@ public class CommentLike {
 	private Boolean likeStatus = true; //true: 좋아요 누른 상태, false: 좋아요 누르지 않은 상태
 
 	@Builder
-	public CommentLike(Comment comment, User user){
-		this.comment=comment;
-		this.user=user;
+	public CommentLike(Comment comment, User user) {
+		this.comment = comment;
+		this.user = user;
 	}
 }

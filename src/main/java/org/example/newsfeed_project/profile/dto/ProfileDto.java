@@ -11,6 +11,7 @@ import lombok.Getter;
 @Builder
 @Getter
 public class ProfileDto {
+
 	private String userName;
 	private String introduction;
 	private Long followingNum;
@@ -27,4 +28,5 @@ public class ProfileDto {
 			.posts(posts)
 			.build();
 	}
+
 }

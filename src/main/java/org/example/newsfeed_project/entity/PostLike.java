@@ -42,8 +42,8 @@ public class PostLike {
 	private Boolean likeStatus = true; //true: 좋아요 누른 상태, false: 좋아요 누르지 않은 상태
 
 	@Builder
-	public PostLike(Post post, User user){
-		this.post=post;
-		this.user=user;
+	public PostLike(Post post, User user) {
+		this.post = post;
+		this.user = user;
 	}
 }

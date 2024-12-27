@@ -4,6 +4,8 @@ import lombok.Getter;
 
 @Getter
 public class UpdatedPostRequestDto {
-    private String title;
-    private String contents;
+
+	private String title;
+	private String contents;
+
 }

@@ -7,6 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class CancelRequestDto {
 
-    private final String password;
-    private final String renterPassword;
+	private final String password;
+	private final String renterPassword;
+
 }

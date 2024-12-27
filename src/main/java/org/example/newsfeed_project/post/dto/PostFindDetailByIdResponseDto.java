@@ -24,4 +24,5 @@ public class PostFindDetailByIdResponseDto {
 	public static PostFindDetailByIdResponseDto ConvertFromPostFineDetailDto(Post post) {
 		return new PostFindDetailByIdResponseDto(post);
 	}
+
 }

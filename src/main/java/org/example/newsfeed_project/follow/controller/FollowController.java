@@ -3,16 +3,10 @@ package org.example.newsfeed_project.follow.controller;
 import org.example.newsfeed_project.common.session.SessionConst;
 import org.example.newsfeed_project.dto.ApiResponse;
 import org.example.newsfeed_project.dto.MessageDto;
-import org.example.newsfeed_project.follow.dto.FollowersDto;
-import org.example.newsfeed_project.follow.dto.FollowingsDto;
+import org.example.newsfeed_project.follow.dto.*;
 import org.example.newsfeed_project.follow.service.FollowService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;

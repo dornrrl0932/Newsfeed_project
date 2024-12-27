@@ -375,7 +375,7 @@ pageNum = Number
 | 게시물 생성    | `POST`   | /feed                   | Body    |
 | 게시물 수정    | `PATCH`  | /feed/{post_id}         | Body    |
 | 게시물 삭제    | `DELETE` | /feed/{post_id}         | -       |
-| 게시물 전체 조회 | `GET`    | /feed/page/{page}       | -       |
+| 게시물 전체 조회 | `GET`    | /feed/page/{page}       | Head    |
 | 게시물 단건 조회 | `GET`    | /feed/{post_id}         | -       |
 | 친구 게시물 조회 | `GET`    | /feed/pageFriend/{page} | -       |
 
@@ -391,47 +391,93 @@ pageNum = Number
 
 <br>
 
+## **4.1 게시물 생성**
+### 🔹**POST** `/feed`
+- CreatedPostRequestDto
 
-## **4.1 팔로잉**
-### 🔹**POST** `/users/follow/{user_id}`
+| 필드명      | Type     | Description | 필수 여부 |
+|----------|----------|-------------|-------|
+| title    | `String` | -           | -     |
+| contents | `String` | -           | -     |
+
 ### 🔹ResponseBody
-
-### 2. 게시물 관리
-#### **2.1 게시물 생성**
-**POST** `/feed`
 ```json
 {
     "title": "String",
     "contents": "String"
 }
 ```
-- **응답**: `201 Created`
-
-#### **2.2 게시물 조회**
-**GET** `/feed/{post_id}`
-- **응답**:
+### 🔹ResponseBody
 ```json
 {
+  "userName": "String",
+  "title": "String",
+  "contents": "String",
+  "updatedAt": "DateTime"
+}
+```
+<br>
+
+## **4.2 게시물 수정**
+### 🔹**PATCH** `/feed/{post_id}`
+- UpdatedPostRequestDto
+
+| 필드명      | Type     | Description | 필수 여부 |
+|----------|----------|-------------|-------|
+| title    | `String` | -           | -     |
+| contents | `String` | -           | -     |
+
+### 🔹ResponseBody
+```json
+{
+    "title": "String",
+    "contents": "String"
+}
+```
+### 🔹ResponseBody
+```json
+{
+  "userName": "String",
+  "title": "String",
+  "contents": "String",
+  "updatedAt": "DateTime"
+}
+```
+<br>
+
+## **4.3 게시물 삭제**
+### 🔹**DELETE** `/feed/{post_id}`
+<br>
+
+## **4.4 게시물 전체 조회**
+### 🔹**GET**`/feed/page/{page}`
+
+- 팔로잉한 사람들 포스트 함께 조회
+- 정렬기준:
+  1. 수정일 기준 내림차순 (최신 피드가 제일 상단에 위치)
+  2. 좋아요 기준 내림차순 (최신 피드 중에서 좋아요가 제일 많은 피드가 상단에 위치)
+ 
+### 🔸RequestHeader
+```
+orderBy=updateAt, likeCount
+```
+### 🔹ResponseBody
+```json
+{
+  "post": [
+  {
     "title": "Stirng",
     "content": "String",
     "userName": "String",
-    "updated_at": "datetime"
+    "updated_at": "DateTime"
+  }
+]
 }
 ```
+<br>
 
-#### **2.3 게시물 수정**
-**PATCH** `/feed/{post_id}`
-```json
-{
-    "title": "String",
-    "contents": "String"
-}
-```
-- **응답**: `200 OK`
-
-#### **2.4 게시물 삭제**
-**DELETE** `/feed/{post_id}`
-- **응답**: `200 OK`
+## **4.5 게시물 기간 조회**
+### 🔹**GET**`/feed/page/{page}`
 
 ---
 

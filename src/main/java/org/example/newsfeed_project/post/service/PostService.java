@@ -5,18 +5,12 @@ import java.util.Optional;
 import org.example.newsfeed_project.common.exception.ResponseCode;
 import org.example.newsfeed_project.common.exception.ValidateException;
 import org.example.newsfeed_project.entity.Post;
-import org.example.newsfeed_project.entity.Follow;
 import org.example.newsfeed_project.entity.PostLike;
 import org.example.newsfeed_project.entity.User;
 import org.example.newsfeed_project.follow.repository.FollowRepository;
-import org.example.newsfeed_project.post.dto.PostFindByDateRangeRequestDto;
-import org.example.newsfeed_project.post.dto.PostFindByPageRequestDto;
-import lombok.extern.slf4j.Slf4j;
-import org.example.newsfeed_project.common.exception.ValidateException;
 import org.example.newsfeed_project.post.dto.CreatedPostRequestDto;
 import org.example.newsfeed_project.post.dto.CreatedPostResponseDto;
 import org.example.newsfeed_project.post.dto.PostFindByDateRangeRequestDto;
-import org.example.newsfeed_project.post.dto.PostFindByPageRequestDto;
 import org.example.newsfeed_project.post.dto.PostFindDetailByIdResponseDto;
 import org.example.newsfeed_project.post.dto.PostListDto;
 import org.example.newsfeed_project.post.dto.PostPageDto;
@@ -26,37 +20,39 @@ import org.example.newsfeed_project.post.repository.PostLikeRepository;
 import org.example.newsfeed_project.post.repository.PostRepository;
 import org.example.newsfeed_project.user.repository.UserRepository;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import java.util.*;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class PostService {
-    public final PostRepository postRepository;
-    public final PostLikeRepository postLikeRepository;
-    public final UserRepository userRepository;
-    public final FollowRepository followRepository;
-    //created
-    public CreatedPostResponseDto createdPost (Long userId, CreatedPostRequestDto createdRequest) {
-        User user = userRepository.findUserByUserIdOrElseThrow(userId);
-        Post post = new Post(user, createdRequest.getTitle(), createdRequest.getContents());
-        Post savePost = postRepository.save(post);
-        return new CreatedPostResponseDto(
-                user.getUserName(),
-                savePost.getTitle(),
-                savePost.getContents(),
-                savePost.getUpdatedAt());
-    }
+	public final PostRepository postRepository;
+	public final PostLikeRepository postLikeRepository;
+	public final UserRepository userRepository;
+	public final FollowRepository followRepository;
+
+	//created
+	public CreatedPostResponseDto createdPost(Long userId, CreatedPostRequestDto createdRequest) {
+		User user = userRepository.findUserByUserIdOrElseThrow(userId);
+		Post post = new Post(user, createdRequest.getTitle(), createdRequest.getContents());
+		Post savePost = postRepository.save(post);
+		return new CreatedPostResponseDto(
+			user.getUserName(),
+			savePost.getTitle(),
+			savePost.getContents(),
+			savePost.getUpdatedAt());
+	}
+
+	// 팔로워 피드 조회
+	public PostListDto getPostsByFriend(Long userId, Pageable pageable) {
+		Page<Post> postPage = postRepository.findPostsBySessionUser(userId, pageable);
+		return PostListDto.convertFrom(PostPageDto.convertFrom(postPage));
+	}
 
 	// 기간 별 조회
 	public PostListDto findPostByDateRange(Pageable pageable,
@@ -68,25 +64,15 @@ public class PostService {
 	}
 
 	// 조건 별 조회
-	public PostListDto findPostByPage(int requestPage, int pageSize, PostFindByPageRequestDto requestDto) {
-		Pageable pageable;
-		switch (requestDto.getOrder()) {
-			case "like":
-				pageable = PageRequest.of(requestPage, pageSize, Sort.by(Sort.Direction.DESC, "likeCount"));
-				break;
-			case "update":
-				pageable = PageRequest.of(requestPage, pageSize, Sort.by(Sort.Direction.DESC, "updatedAt"));
-				break;
-			default:
-				throw new ResponseStatusException(ResponseCode.ORDER_NOT_FOUND.getStatus());
-		}
+	public PostListDto findPostByPage(Pageable pageable) {
+
 		Page<Post> postPage = postRepository.findAll(pageable);
 
-        if (postPage.getTotalElements() == 0) {
-            System.out.println("No posts found between the specified dates.");
-        } else {
-            System.out.println(postPage.getTotalElements());
-		}
+		if (postPage.getTotalElements() == 0) {
+			System.out.println("No posts found between the specified dates.");
+		} else {
+			System.out.println(postPage.getTotalElements());
+		}  // - ?
 
 		return PostListDto.convertFrom(PostPageDto.convertFrom(postPage));
 	}
@@ -95,6 +81,29 @@ public class PostService {
 	public PostFindDetailByIdResponseDto findPostByPostId(Long postId) {
 		Post findPost = postRepository.findPostByPostIdOrElseThrow(postId);
 		return PostFindDetailByIdResponseDto.ConvertFromPostFineDetailDto(findPost);
+	}
+
+	// update
+	@Transactional
+	public UpdatedPostResponseDto updatePost(Long userId, Long postId, UpdatedPostRequestDto updatePostRequest) {
+		User user = userRepository.findUserByUserIdOrElseThrow(userId);
+		Post post = postRepository.findPostByPostIdOrElseThrow(postId);
+		if (userId != post.getUser().getUserId()) {
+			throw new ValidateException(ResponseCode.ID_MISMATCH);
+		}
+		post.updatedPost(updatePostRequest.getTitle(), updatePostRequest.getContents());
+		return new UpdatedPostResponseDto(post.getTitle(), post.getContents(), post.getUpdatedAt());
+	}
+
+	// 게시글 삭제
+	@Transactional
+	public void deletePost(Long userId, Long postId) {
+		User user = userRepository.findUserByUserIdOrElseThrow(userId);
+		Post post = postRepository.findPostByPostIdOrElseThrow(postId);
+		if (userId != post.getUser().getUserId()) {
+			throw new ValidateException(ResponseCode.ID_MISMATCH);
+		}
+		postRepository.deleteById(postId);
 	}
 
 	//좋아요 상태 토글
@@ -132,28 +141,5 @@ public class PostService {
 		}
 
 		return postRepository.save(findPost);
-	}
-
-	// update
-	@Transactional
-	public UpdatedPostResponseDto updatePost(Long userId, Long postId, UpdatedPostRequestDto updatePostRequest) {
-		User user = userRepository.findUserByUserIdOrElseThrow(userId);
-		Post post = postRepository.findPostByPostIdOrElseThrow(postId);
-		if (userId != post.getUser().getUserId()) {
-			throw new ValidateException(ResponseCode.ID_MISMATCH);
-		}
-		post.updatedPost(updatePostRequest.getTitle(), updatePostRequest.getContents());
-		return new UpdatedPostResponseDto(post.getTitle(), post.getContents(), post.getUpdatedAt());
-	}
-
-	// 게시글 삭제
-	@Transactional
-	public void deletePost(Long userId, Long postId) {
-		User user = userRepository.findUserByUserIdOrElseThrow(userId);
-		Post post = postRepository.findPostByPostIdOrElseThrow(postId);
-		if (userId != post.getUser().getUserId()) {
-			throw new ValidateException(ResponseCode.ID_MISMATCH);
-		}
-		postRepository.deleteById(postId);
 	}
 }

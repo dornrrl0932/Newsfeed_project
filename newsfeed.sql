@@ -23,6 +23,7 @@ CREATE TABLE post
     FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE CASCADE
 );
 
+
 -- Table: comment
 CREATE TABLE comment
 (

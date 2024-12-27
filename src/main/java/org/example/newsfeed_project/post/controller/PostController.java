@@ -53,11 +53,11 @@ public class PostController {
 	@GetMapping("/follow/{page}")
 	public ResponseEntity<ApiResponse<PostListDto>> getPostsBySessionUser(@PathVariable int page,
 		HttpServletRequest request,
-		@RequestParam(defaultValue = "updateAt") String orderBy) {
+		@RequestParam(defaultValue = "updatedAt") String orderBy) {
 		HttpSession session = request.getSession();
 		Long userId = (Long)session.getAttribute(SessionConst.LOGIN_USER_ID);
 
-		if (!orderBy.equals("updateAt") && !orderBy.equals("likeCount")) {
+		if (!orderBy.equals("updatedAt") && !orderBy.equals("likeCount")) {
 			throw new ValidateException(ResponseCode.ORDER_NOT_FOUND);
 		}
 
@@ -70,9 +70,9 @@ public class PostController {
 	// 게시물 전체 조회
 	@GetMapping("/page/{page}")
 	public ResponseEntity<ApiResponse<PostListDto>> findPostByPage(@PathVariable int page,
-		@RequestParam(defaultValue = "updateAt") String orderBy) {
+		@RequestParam(defaultValue = "updatedAt") String orderBy) {
 
-		if (!orderBy.equals("updateAt") && !orderBy.equals("likeCount")) {
+		if (!orderBy.equals("updatedAt") && !orderBy.equals("likeCount")) {
 			throw new ValidateException(ResponseCode.ORDER_NOT_FOUND);
 		}
 

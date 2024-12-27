@@ -32,7 +32,8 @@ public class CommentController {
 
 		Long userId = (Long)request.getSession().getAttribute("loginUserId");
 		CommentDto commentDto = commentService.saveComment(postId, userId, requestDto);
-		return ResponseEntity.ok(ApiResponse.success(201, "댓글 등록 성공", commentDto));
+		return ResponseEntity.ok(
+			ApiResponse.success(201, "댓글 등록 성공", commentDto));
 	}
 
 	// 댓글 조회

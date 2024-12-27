@@ -7,11 +7,6 @@
 - 기본적인 유저 관리, 뉴스피드 게시물 및 댓글 관리, 좋아요, 팔로우/팔로잉 기능을 구현하였습니다.<br>
 - **개발기간**: 24.12.20 ~ 24.12.27
 
-### ✒️App 이름
-
-- ```ShareDay```
-- 매일의 일상을 서로 공유한다는 의미에서 ShareDay라고 지었습니다.
-
 ### 🔷 주요 기능
 
 - 유저 관리, 게시글 관리, 팔로워 관리 기능
@@ -19,6 +14,25 @@
 ### 🔷 부가 기능
 
 - 댓글, 좋아요, 기간별 게시물 조회 기능
+
+## ✒️App 이름
+
+### ShareDay
+- 매일의 일상을 서로 공유한다는 의미에서 ShareDay라고 지었습니다.
+
+## 💛 Team
+
+<table>
+  <tbody>
+    <tr>
+      <td align="center"><a href="https://github.com/dornrrl093"><img src="https://github.com/user-attachments/assets/5fafe882-5664-491d-8243-430cd04142d7" width="100px;" alt=""/><br /><sub><b> 김세희(팀장) </b></sub></a><br /></td>
+      <td align="center"><a href="https://github.com/duol9"><img src="https://github.com/user-attachments/assets/6fa0fd39-2e0a-4307-a989-dceb860e9504" width="100px;" alt=""/><br /><sub><b> 이하영 </b></sub></a><br /></td>
+      <td align="center"><a href="https://github.com/sumin9926"><img src="https://github.com/user-attachments/assets/f6a99594-8c06-4e31-a45c-64872efaf55d" width="100px;" alt=""/><br /><sub><b> 임수민 </b></sub></a><br /></td>
+      <td align="center"><a href="https://github.com/asdd2557"><img src="https://github.com/user-attachments/assets/0a07dda1-7481-4116-8c15-69b87e95452e" width="100px;" alt=""/><br /><sub><b> 최순우 </b></sub></a><br /></td>
+      <td align="center"><a href="https://github.com/nuelbin/"><img src="https://github.com/user-attachments/assets/7bd21e17-e9d5-4048-a2a2-f8445e90d9c6" width="100px;" alt=""/><br /><sub><b> 오민수 </b></sub></a><br /></td>
+    </tr>
+  </tbody>
+</table>
 
 ## 🔧사용 기술
 ### **Environment**
@@ -37,7 +51,7 @@
 --------------------
 
 ## 🔗와이어 프레임
-[와이어 프레임 링크](http://https://www.figma.com/design/xvyc7FswpeSnGZKmHOzCRM/ShareDay?node-id=0-1&p=f&t=otTpvk5OjYecNvOA-0)
+[와이어 프레임 링크](https://www.figma.com/design/xvyc7FswpeSnGZKmHOzCRM/ShareDay?node-id=0-1&p=f&t=9N5unNHzfX8X2y0Y-0)
 
 ---------------------
 ## 🗒️데이터 모델 개요

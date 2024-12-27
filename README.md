@@ -376,9 +376,9 @@ pageNum = Number
 | 게시물 수정     | `PATCH`  | /feed/{post_id}        | Body    |
 | 게시물 삭제     | `DELETE` | /feed/{post_id}        | -       |
 | 게시물 전체 조회  | `GET`    | /feed/page/{page}      | Head    |
-| 게시물 기간별 조회 |`GET`    | /feed/dateRange/{page} | -       |
+| 게시물 기간별 조회 | `GET`    | /feed/dateRange/{page} | -       |
 | 게시물 단건 조회  | `GET`    | /feed/{post_id}        | -       |
-| 친구 게시물 조회  | `GET`    | /feed/follower/{page}  | Head      |
+| 친구 게시물 조회  | `GET`    | /feed/follower/{page}  | Head    |
 
 ### HttpStatus
 
@@ -401,7 +401,7 @@ pageNum = Number
 | title    | `String` | -           | -     |
 | contents | `String` | -           | -     |
 
-### 🔹ResponseBody
+### 🔹RequestBody
 ```json
 {
     "title": "String",
@@ -428,7 +428,7 @@ pageNum = Number
 | title    | `String` | -           | -     |
 | contents | `String` | -           | -     |
 
-### 🔹ResponseBody
+### 🔹RequestBody
 ```json
 {
     "title": "String",
@@ -479,6 +479,120 @@ orderBy=updateAt, likeCount
 
 ## **4.5 게시물 기간별 조회**
 ### 🔹**GET**`/feed/dateRange/{page}`
+- PostFindByDateRangeRequestDto
+
+| 필드명       | Type            | Description | 필수 여부 |
+|-----------|-----------------|-------------|-------|
+| startDate | `LocalDateTime` | -           | -     |
+| endDate   | `LocalDateTime` | -           | -     |
+| orderBy   | `String`        | -           | -     |
+
+### 🔹RequestBody
+```json
+{
+  "startDate":"DateTime",
+  "endDate":"DateTime",
+  "orderBy":"String"
+}
+```
+### 🔹ResponseBody
+```json
+{
+  "userName": "String",
+  "title": "String",
+  "contents": "String",
+  "updatedAt": "DateTime"
+}
+```
+<br>
+
+## **4.6 게시물 단건 조회**
+### 🔹**GET**`/feed/{post_id}`
+
+### 🔹ResponseBody
+```json
+{
+  "userName": "String",
+  "title": "String",
+  "contents": "String",
+  "updatedAt": "DateTime"
+}
+```
+<br>
+
+## **4.7 팔로우 피드 조회**
+### 🔹**GET**`/feed/follower/{page}`
+### 🔸RequestHeader
+```
+orderBy=updateAt, likeCount
+```
+### 🔹ResponseBody
+```json
+{
+  "post": [
+    {
+      "title": "Stirng",
+      "content": "String",
+      "userName": "String",
+      "updated_at": "DateTime"
+    }
+  ]
+}
+```
+<br>
+
+--------------------------------
+
+## 📍5. 댓글 관련 API
+### PostController
+| 기능         | Method   | URL                                   | Request |
+|------------|----------|---------------------------------------|---------|
+| 댓글 생성      | `POST`   | /feed/{post_id}/comments              | Body    |
+| 댓글 수정      | `PATCH`  | /feed/{post_id}/comments/{comment_id} | Body    |
+| 댓글 조회      | `GET`    |                                       |         |
+| 댓글 삭제     | `DELETE` | /feed/{post_id}                       | -       |
+
+### HttpStatus
+
+| 상태                  | 응답               |
+|---------------------|------------------|
+| 회원 생성 성공            | 201 Created      |
+| 게시물 수정, 조회 성공       | 200 OK           |
+| 게시물 삭제 성공           | 204 No Content   |
+| 미인증 회원, 비밀번호 불일치    | 401 Unauthorized |
+| URL 오류, 존재하지 않는 게시글 | 404 Not Found    |
+
+<br>
+
+## **4.1 게시물 생성**
+### 🔹**POST** `/feed`
+- CreatedPostRequestDto
+
+| 필드명      | Type     | Description | 필수 여부 |
+|----------|----------|-------------|-------|
+| title    | `String` | -           | -     |
+| contents | `String` | -           | -     |
+
+### 🔹RequestBody
+```json
+{
+    "title": "String",
+    "contents": "String"
+}
+```
+### 🔹ResponseBody
+```json
+{
+  "userName": "String",
+  "title": "String",
+  "contents": "String",
+  "updatedAt": "DateTime"
+}
+```
+<br>
+
+
+
 
 ---
 

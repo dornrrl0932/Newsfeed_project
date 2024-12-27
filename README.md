@@ -35,6 +35,14 @@
 <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=MySQL&logoColor=white">
 
 --------------------
+## 🗒️데이터 모델 개요
+- `User`: 플랫폼 사용자를 나타냅니다.
+- `Feed`: 사용자가 작성한 게시물을 나타냅니다.
+- `Comment`: 게시물에 대한 사용자의 댓글을 나타냅니다.
+- `PostLike`: 게시물에 대한 좋아요를 추적합니다.
+- `CommentLike`: 댓글에 대한 좋아요를 추적합니다.
+- `Follow`: 사용자 간의 팔로우 관계를 추적합니다.
+
 ## 📚 ERD
 
 ```mermaid
@@ -302,6 +310,8 @@ pageNum = Number
     "posts": "List<PostPage>"
 }
 ```
+<br>
+
 --------------------
 
 ## 📍3. 팔로우 관련 API
@@ -366,6 +376,8 @@ pageNum = Number
     }
 ]
 ```
+<br>
+
 ----------------------
 
 ## 📍4. 게시글 관련 API
@@ -384,7 +396,7 @@ pageNum = Number
 
 | 상태                  | 응답               |
 |---------------------|------------------|
-| 회원 생성 성공            | 201 Created      |
+| 게시물 생성 성공           | 201 Created      |
 | 게시물 수정, 조회 성공       | 200 OK           |
 | 게시물 삭제 성공           | 204 No Content   |
 | 미인증 회원, 비밀번호 불일치    | 401 Unauthorized |
@@ -544,138 +556,155 @@ orderBy=updateAt, likeCount
 --------------------------------
 
 ## 📍5. 댓글 관련 API
-### PostController
-| 기능         | Method   | URL                                   | Request |
-|------------|----------|---------------------------------------|---------|
-| 댓글 생성      | `POST`   | /feed/{post_id}/comments              | Body    |
-| 댓글 수정      | `PATCH`  | /feed/{post_id}/comments/{comment_id} | Body    |
-| 댓글 조회      | `GET`    |                                       |         |
-| 댓글 삭제     | `DELETE` | /feed/{post_id}                       | -       |
+### CommentController
+| 기능    | Method   | URL                                   | Request |
+|-------|----------|---------------------------------------|---------|
+| 댓글 생성 | `POST`   | /feed/{post_id}/comments              | Body    |
+| 댓글 수정 | `PATCH`  | /feed/{post_id}/comments/{comment_id} | Body    |
+| 댓글 조회 | `GET`    | /feed/{post_id}/comments              | Head    |
+| 댓글 삭제 | `DELETE` | /feed/{post_id}/comments/{comment_id} | -       |
 
 ### HttpStatus
 
-| 상태                  | 응답               |
-|---------------------|------------------|
-| 회원 생성 성공            | 201 Created      |
-| 게시물 수정, 조회 성공       | 200 OK           |
-| 게시물 삭제 성공           | 204 No Content   |
-| 미인증 회원, 비밀번호 불일치    | 401 Unauthorized |
-| URL 오류, 존재하지 않는 게시글 | 404 Not Found    |
+| 상태                     | 응답               |
+|------------------------|------------------|
+| 댓글 생성 성공               | 201 Created      |
+| 댓글 수정, 조회 성공           | 200 OK           |
+| 댓글 삭제 성공               | 204 No Content   |
+| 미인증 회원                 | 401 Unauthorized |
+| URL 오류, 존재하지 않는 댓글/게시글 | 404 Not Found    |
 
 <br>
 
-## **4.1 게시물 생성**
-### 🔹**POST** `/feed`
-- CreatedPostRequestDto
+## **5.1 댓글 생성**
+### 🔹**POST** `/feed/{post_id}/comments`
+- CommentRequestDto
 
-| 필드명      | Type     | Description | 필수 여부 |
-|----------|----------|-------------|-------|
-| title    | `String` | -           | -     |
-| contents | `String` | -           | -     |
+| 필드명      | Type     | Description    | 필수 여부 |
+|----------|----------|----------------|-------|
+| comments | `String` | 250자 이내, 공백 불가 | ✔️    |
 
 ### 🔹RequestBody
 ```json
 {
-    "title": "String",
-    "contents": "String"
+    "comments": "String"
 }
 ```
 ### 🔹ResponseBody
 ```json
 {
+  "comments": "String",
+  "likeCount": "Number",
   "userName": "String",
-  "title": "String",
-  "contents": "String",
   "updatedAt": "DateTime"
 }
 ```
 <br>
 
+## **5.2 댓글 수정**
+### 🔹**GET** `/feed/{post_id}/comments/{comment_id}`
+- CommentRequestDto
 
+| 필드명      | Type     | Description    | 필수 여부 |
+|----------|----------|----------------|-------|
+| comments | `String` | 250자 이내, 공백 불가 | ✔️    |
 
-
----
-
-### 3. 댓글 관리
-#### **3.1 댓글 추가**
-**POST** `/feed/{post_id}/comments`
+### 🔹RequestBody
 ```json
 {
-    "comments": "string"
+  "commnets": "String"
 }
 ```
-- **응답**: `201 Created`
-
-#### **3.2 게시물 댓글 조회**
-**GET** `/feed/{post_id}/comments`
-- **응답**:
-```json
-[
-    {
-        "commnets": "String",
-        "like": "Long",
-        "userName": "String",
-        "updateAt": "datetime"
-    }
-]
-```
-
-#### **3.2 게시물 댓글 수정**
-**GET** `/feed/{post_id}/comments/{comment_id}`
-```json
-[
-    {
-        "commnets": "String"
-    }
-]
-```
-- **응답**:
-```json
-[
-    {
-        "commnets": "String",
-        "like": "Long",
-        "userName": "String",
-        "updateAt": "datetime"
-    }
-]
-```
-
-#### **3.3 댓글 삭제**
-**DELETE** `/feed/{post_id}/comments/{comment_id}`
-- **응답**: `200 OK`
-
----
-
-### 4. 좋아요 관리
-#### **4.1 게시물 좋아요/취소**
-**POST** `/posts/{post_id}/likes`
+### 🔹ResponseBody
 ```json
 {
-    "user_id": "integer",
-    "like_status": "boolean"
+  "comments": "String",
+  "likeCount": "Number",
+  "userName": "String",
+  "updatedAt": "DateTime"
 }
 ```
-- **응답**: `200 OK`
+<br>
 
-#### **4.2 댓글 좋아요/취소**
-**POST** `/feed/{post_id}/comments/{commnet_id}/{user_id}/like`
-- **응답**:
+## **5.3 댓글 조회**
+### 🔹**GET** `/feed/{post_id}/comments`
+
+- 페이징 처리: 
+  - 댓글 10개씩 반환
+  - 댓글 없을 경우 빈 배열 반환
+- 정렬 조건:
+  - 좋아요 갯수 기준 내림차순 정렬
+  
+### 🔸RequestHeader
+```
+pageNum=Number
+```
+### 🔹ResponseBody
+```json
+[
+  {
+    "commnets": "String",
+    "likeCount": "Long",
+    "userName": "String",
+    "updateAt": "datetime"
+  },
+  {
+    "commnets": "String",
+    "likeCount": "Long",
+    "userName": "String",
+    "updateAt": "datetime"
+  }
+]
+```
+<br>
+
+### **5.4 댓글 삭제**
+### 🔹**DELETE** `/feed/{post_id}/comments/{comment_id}`
+- 댓글 작성자, 게시글 주인만 댓글 삭제 가능
+
+<br>
+
+---------------------------
+
+## 📍6. 좋아요 관련 API
+### PostController
+| 기능            | Method | URL                            | Request |
+|---------------|--------|--------------------------------|---------|
+| 게시글 좋아요 상태 토글 | `PUT`  | /feed/{post_id}/{user_id}/like | -       |
+### CommentController
+| 기능           | Method | URL                                                  | Request |
+|--------------|--------|------------------------------------------------------|---------|
+| 댓글 좋아요 상태 토글 | `PUT`  | /feed/{post_id}/comments/{comment_id}/{user_id}/like | -       |
+
+### HttpStatus
+
+| 상태                     | 응답               |
+|------------------------|------------------|
+| 좋아요 토글 성공              | 200 OK           |
+| 본인 글에 좋아요 누름           | 401 Unauthorized |
+| URL 오류, 존재하지 않는 댓글/게시글 | 404 Not Found    |
+
+- 댓글/게시물 작성자 본인 글에 좋아요 누르기 불가
+- 같은 댓글/게시물에는 사용자별로 1개의 좋아요만 가능
+
+<br>
+
+## **6.1 게시물 좋아요/취소**
+### 🔹**POST** `/feed/{post_id}/{user_id}/like`
+
+### 🔹ResponseBody
 ```json
 {
-    "LikeNum": "Long"
+  "likeNum": "Number"
 }
 ```
----
+<br>
 
-
-
----
-
-### 데이터 모델 개요
-- **User**: 플랫폼 사용자를 나타냅니다.
-- **Post**: 사용자가 작성한 게시물을 나타냅니다.
-- **Comment**: 게시물에 대한 사용자의 댓글을 나타냅니다.
-- **PostLike**: 게시물에 대한 좋아요를 추적합니다.
-- **CommentLike**: 댓글에 대한 좋아요를 추적합니다.
-- **Follow**: 사용자 간의 팔로우 관계를 추적합니다.
+### **6.2 댓글 좋아요/취소**
+### 🔹**POST** `/feed/{post_id}/comments/{commnet_id}/{user_id}/like`
+### 🔹ResponseBody
+```json
+{
+  "likeNum": "Number"
+}
+```

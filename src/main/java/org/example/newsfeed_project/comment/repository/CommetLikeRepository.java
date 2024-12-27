@@ -10,5 +10,5 @@ import org.springframework.data.repository.query.Param;
 public interface CommetLikeRepository extends JpaRepository<CommentLike, Long> {
 
 	@Query("select c from CommentLike c where c.comment.commentId=:commentId and c.user.userId=:userId")
-	Optional<CommentLike> findByCommentIdAndUserId(@Param("commentId") Long commentId, @Param("usrId") Long userId);
+	Optional<CommentLike> findByCommentIdAndUserId(@Param("commentId") Long commentId, @Param("userId") Long userId);
 }

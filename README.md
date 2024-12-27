@@ -13,9 +13,9 @@
   <tbody>
     <tr>
       <td align="center"><a href="https://github.com/dornrrl093"><img src="https://github.com/user-attachments/assets/5fafe882-5664-491d-8243-430cd04142d7" width="100px;" alt=""/><br /><sub><b> 김세희(팀장) </b></sub></a><br /></td>
-      <td align="center"><a href="https://github.com/duol9"><img src="https://github.com/user-attachments/assets/c7c5608c-133e-4542-b8e6-4bb60b87358d" width="100px;" alt=""/><br /><sub><b> 이하영 </b></sub></a><br /></td>
+      <td align="center"><a href="https://github.com/duol9"><img src="https://github.com/user-attachments/assets/6fa0fd39-2e0a-4307-a989-dceb860e9504" width="100px;" alt=""/><br /><sub><b> 이하영 </b></sub></a><br /></td>
       <td align="center"><a href="https://github.com/sumin9926"><img src="https://github.com/user-attachments/assets/f6a99594-8c06-4e31-a45c-64872efaf55d" width="100px;" alt=""/><br /><sub><b> 임수민 </b></sub></a><br /></td>
-      <td align="center"><a href="https://github.com/asdd2557"><img src="https://github.com/user-attachments/assets/1c71083a-5f62-4d4d-9918-fff066034855" width="100px;" alt=""/><br /><sub><b> 최순우 </b></sub></a><br /></td>
+      <td align="center"><a href="https://github.com/asdd2557"><img src="https://github.com/user-attachments/assets/0a07dda1-7481-4116-8c15-69b87e95452e" width="100px;" alt=""/><br /><sub><b> 최순우 </b></sub></a><br /></td>
       <td align="center"><a href="https://github.com/nuelbin/"><img src="https://github.com/user-attachments/assets/7bd21e17-e9d5-4048-a2a2-f8445e90d9c6" width="100px;" alt=""/><br /><sub><b> 오민수 </b></sub></a><br /></td>
     </tr>
   </tbody>

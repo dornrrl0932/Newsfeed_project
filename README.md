@@ -395,7 +395,7 @@ pageNum = Number
 | 게시물 전체 조회  | `GET`    | /feed/page/{page}      | Head    |
 | 게시물 기간별 조회 | `GET`    | /feed/dateRange/{page} | -       |
 | 게시물 단건 조회  | `GET`    | /feed/{post_id}        | -       |
-| 친구 게시물 조회  | `GET`    | /feed/follower/{page}  | Head    |
+| 친구 게시물 조회  | `GET`    | /feed/follow/{page}    | Head    |
 
 ### HttpStatus
 
@@ -538,7 +538,7 @@ orderBy=updateAt, likeCount
 <br>
 
 ## **4.7 팔로우 피드 조회**
-### 🔹**GET**`/feed/follower/{page}`
+### 🔹**GET**`/feed/follow/{page}`
 ### 🔸RequestHeader
 ```
 orderBy=updateAt, likeCount

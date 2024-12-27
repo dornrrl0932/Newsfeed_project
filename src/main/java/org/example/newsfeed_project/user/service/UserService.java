@@ -51,16 +51,19 @@ public class UserService {
 	//회원 탈퇴
 	public void CancelUser(Long userId, CancelRequestDto cancelRequestDto) {
 
-		// User 조회
-		User user = userRepository.findById(userId)
+		// 탈퇴 여부와 관계없이 회원 조회
+		User user = userRepository.findByIdWithoutStatus(userId)
 			.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "ID가 존재하지 않습니다. = " + userId));
 
-		// 이미 탈퇴한 회원인지 확인
+		// 탈퇴 여부 확인
 		if (!user.getStatus()) {
-			throw new UserDeletedException("이미 탈퇴 처리 된 회원입니다.");
+			throw new UserDeletedException("이미 탈퇴 처리된 회원입니다.");
 		}
 
 		// 기존 비밀번호와 입력한 비밀번호가 일치하는지 확인
+		if (!passwordEncoder.matches(cancelRequestDto.getPassword(), user.getPassword())) {
+			throw new PasswordAuthenticationException("비밀번호가 일치하지 않습니다.");
+		}
 		if (!passwordEncoder.matches(cancelRequestDto.getRenterPassword(), user.getPassword())) {
 			throw new PasswordAuthenticationException("비밀번호가 일치하지 않습니다.");
 		}

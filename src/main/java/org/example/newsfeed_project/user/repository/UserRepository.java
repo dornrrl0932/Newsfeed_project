@@ -1,16 +1,20 @@
 package org.example.newsfeed_project.user.repository;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.example.newsfeed_project.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
 	Optional<User> findUserByEmail(String email);
+
+	@Query("SELECT u FROM User u WHERE u.userId = :userId")
+	Optional<User> findByIdWithoutStatus(@Param("userId") Long userId);
 
 	default User findUserByEmailOrElseThrow(String email) {
 		return findUserByEmail(email)
@@ -25,6 +29,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
 			.orElseThrow(() -> new ResponseStatusException(
 				HttpStatus.NOT_FOUND, "Dose not exist userId: " + id));
 	}
-
-	List<User> userId(Long userId);
 }

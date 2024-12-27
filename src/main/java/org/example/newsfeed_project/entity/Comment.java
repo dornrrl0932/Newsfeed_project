@@ -39,7 +39,6 @@ public class Comment {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	private User user;
 
 	@Setter
@@ -54,7 +53,7 @@ public class Comment {
 	@LastModifiedDate
 	private LocalDateTime updatedAt;
 
-	public Comment(Post post, User user, String comments, Long likeCount){
+	public Comment(Post post, User user, String comments, Long likeCount) {
 		this.post = post;
 		this.user = user;
 		this.comments = comments;

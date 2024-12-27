@@ -12,6 +12,7 @@ public class ApiResponse<T> {
 	private String message; // 응답 메시지
 	private T data; // 실제 응답 데이터
 
+	// 성공
 	public static <T> ApiResponse<T> success(int status, String message, T data) {
 		return ApiResponse.<T>builder()
 			.status(status)
@@ -20,6 +21,7 @@ public class ApiResponse<T> {
 			.build();
 	}
 
+	// 에러
 	public static <T> ApiResponse<T> error(int status, String errorMessage) {
 		return ApiResponse.<T>builder()
 			.status(status)

@@ -7,6 +7,20 @@
 - 기본적인 유저 관리, 뉴스피드 게시물 및 댓글 관리, 좋아요, 팔로우/팔로잉 기능을 구현하였습니다.<br>
 - **개발기간**: 24.12.20 ~ 24.12.27
 
+### 💛 Team
+
+<table>
+  <tbody>
+    <tr>
+      <td align="center"><a href="https://github.com/dornrrl093"><img src="https://github.com/user-attachments/assets/5fafe882-5664-491d-8243-430cd04142d7" width="100px;" alt=""/><br /><sub><b> 김세희(팀장) </b></sub></a><br /></td>
+      <td align="center"><a href="https://github.com/duol9"><img src="https://github.com/user-attachments/assets/c7c5608c-133e-4542-b8e6-4bb60b87358d" width="100px;" alt=""/><br /><sub><b> 이하영 </b></sub></a><br /></td>
+      <td align="center"><a href="https://github.com/sumin9926"><img src="https://github.com/user-attachments/assets/f6a99594-8c06-4e31-a45c-64872efaf55d" width="100px;" alt=""/><br /><sub><b> 임수민 </b></sub></a><br /></td>
+      <td align="center"><a href="https://github.com/asdd2557"><img src="https://github.com/user-attachments/assets/1c71083a-5f62-4d4d-9918-fff066034855" width="100px;" alt=""/><br /><sub><b> 최순우 </b></sub></a><br /></td>
+      <td align="center"><a href="https://github.com/nuelbin/"><img src="https://github.com/user-attachments/assets/7bd21e17-e9d5-4048-a2a2-f8445e90d9c6" width="100px;" alt=""/><br /><sub><b> 오민수 </b></sub></a><br /></td>
+    </tr>
+  </tbody>
+</table>
+
 ### ✒️App 이름
 
 - ```ShareDay```

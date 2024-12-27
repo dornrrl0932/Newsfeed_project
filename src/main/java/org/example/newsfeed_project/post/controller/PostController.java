@@ -5,34 +5,21 @@ import org.example.newsfeed_project.common.exception.ValidateException;
 import org.example.newsfeed_project.common.session.SessionConst;
 import org.example.newsfeed_project.dto.ApiResponse;
 import org.example.newsfeed_project.entity.Post;
-import org.example.newsfeed_project.post.dto.CreatedPostRequestDto;
-import org.example.newsfeed_project.post.dto.CreatedPostResponseDto;
-import org.example.newsfeed_project.post.dto.LikeNumResponseDto;
-import org.example.newsfeed_project.post.dto.PostFindByDateRangeRequestDto;
-import org.example.newsfeed_project.post.dto.PostFindDetailByIdResponseDto;
-import org.example.newsfeed_project.post.dto.PostListDto;
-import org.example.newsfeed_project.post.dto.UpdatedPostRequestDto;
-import org.example.newsfeed_project.post.dto.UpdatedPostResponseDto;
 import org.example.newsfeed_project.post.service.PostService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.newsfeed_project.post.dto.*;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -44,7 +31,7 @@ public class PostController {
 	// 게시물 생성
 	@PostMapping
 	public ResponseEntity<ApiResponse<CreatedPostResponseDto>> createdPost(HttpServletRequest request,
-		@RequestBody CreatedPostRequestDto createdPostRequest) {
+																		   @RequestBody CreatedPostRequestDto createdPostRequest) {
 		HttpSession session = request.getSession();
 		Long userId = (Long)session.getAttribute(SessionConst.LOGIN_USER_ID);
 		CreatedPostResponseDto createdPostResponse = postService.createdPost(userId, createdPostRequest);

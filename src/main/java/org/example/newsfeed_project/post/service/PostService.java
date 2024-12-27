@@ -3,8 +3,10 @@ package org.example.newsfeed_project.post.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
+import org.example.newsfeed_project.entity.Follow;
 import org.example.newsfeed_project.entity.PostLike;
 import org.example.newsfeed_project.entity.User;
+import org.example.newsfeed_project.follow.repository.FollowRepository;
 import org.example.newsfeed_project.post.dto.PostFindByDateRangeRequestDto;
 import org.example.newsfeed_project.post.dto.PostFindByPageRequestDto;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -35,7 +38,7 @@ public class PostService {
     public final PostRepository postRepository;
     public final PostLikeRepository postLikeRepository;
     public final UserRepository userRepository;
-
+    public final FollowRepository followRepository;
     //created
     public CreatedPostResponseDto createdPost (Long userId, CreatedPostRequestDto createdRequest) {
         User user = userRepository.findUserByUserIdOrElseThrow(userId);
@@ -48,9 +51,16 @@ public class PostService {
                 savePost.getUpdatedAt());
     }
 
-    public List<PostPageDto> findPostByDateRange(int requestPage, int pageSize, PostFindByDateRangeRequestDto requestDto) {
+    public List<PostPageDto> getPostsByFriend(Long userId, Pageable pageable) {
 
-        Pageable pageable = PageRequest.of(requestPage, pageSize, Sort.by(Sort.Direction.DESC, "updatedAt"));
+        // Page<Post> 반환
+        Page<Post> postPage = postRepository.findPostsBySessionUser(userId, pageable);
+
+        // Page<Post> -> List<PostPageDto> 변환 후 반환
+        return PostPageDto.convertFrom(postPage);
+
+    }
+    public List<PostPageDto> findPostByDateRange(Pageable pageable, PostFindByDateRangeRequestDto requestDto) {
 
         Page<Post> postPage = postRepository.findByUpdatedAtBetween(requestDto.startDate, requestDto.endDate, pageable);
 

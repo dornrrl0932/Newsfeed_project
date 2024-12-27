@@ -2,10 +2,10 @@ package org.example.newsfeed_project.user.service;
 
 import java.util.Optional;
 
-import org.example.newsfeed_project.entity.User;
 import org.example.newsfeed_project.common.exception.EmailAlreadyExistsException;
 import org.example.newsfeed_project.common.exception.PasswordAuthenticationException;
 import org.example.newsfeed_project.common.exception.UserDeletedException;
+import org.example.newsfeed_project.entity.User;
 import org.example.newsfeed_project.user.dto.CancelRequestDto;
 import org.example.newsfeed_project.user.dto.LoginRequestDto;
 import org.example.newsfeed_project.user.dto.SignUpRequestDto;
@@ -51,18 +51,23 @@ public class UserService {
 	//회원 탈퇴
 	public void CancelUser(Long userId, CancelRequestDto cancelRequestDto) {
 
-		//userId로 회원 검색, 일치하는 회원이 없는 경우 NOT_FOUND 반환
+		// User 조회
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "ID가 존재하지 않습니다. = " + userId));
+
+		// 이미 탈퇴한 회원인지 확인
+		if (!user.getStatus()) {
+			throw new UserDeletedException("이미 탈퇴 처리 된 회원입니다.");
+		}
+
+		// 기존 비밀번호와 입력한 비밀번호가 일치하는지 확인
+		if (!passwordEncoder.matches(cancelRequestDto.getRenterPassword(), user.getPassword())) {
+			throw new PasswordAuthenticationException("비밀번호가 일치하지 않습니다.");
+		}
 
 		//비밀번호 확인 : 입력한 비밀번호와 확인 비밀번호가 일치하는지 확인
 		if (!cancelRequestDto.getPassword().equals(cancelRequestDto.getRenterPassword())) {
 			throw new PasswordAuthenticationException("비밀번호와 확인 비밀번호가 일치하지 않습니다.");
-		}
-
-		//탈퇴처리된 회원 예외처리 -> status가 false인 경우 에러 반환
-		if (!user.getStatus()) {
-			throw new UserDeletedException("이미 탈퇴 처리 된 회원입니다.");
 		}
 
 		//탈퇴처리 -> 회원 상태 false로 변경

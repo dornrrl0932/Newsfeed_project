@@ -32,7 +32,7 @@ public class UserController {
 	private final UserService userService;
 
 	//회원가입
-	@PostMapping("/signup")
+	@PostMapping("/signup")///
 	public ResponseEntity<String> signupUser(@Valid @RequestBody SignUpRequestDto signUpRequestDto) {
 
 		userService.signupUser(signUpRequestDto);
@@ -49,7 +49,7 @@ public class UserController {
 	}
 
 	//회원탈퇴
-	@DeleteMapping("/{userId}")
+	@DeleteMapping("/{userId}")//
 	public ResponseEntity<String> CancelUser(@PathVariable Long userId,
 		@RequestBody CancelRequestDto cancelRequestDto) {
 
@@ -71,7 +71,7 @@ public class UserController {
 	}
 
 	//로그인
-	@PostMapping("/login")
+	@PostMapping("/login")//
 	public ResponseEntity<String> login(@Validated @RequestBody LoginRequestDto loginRequestDto,
 		HttpServletRequest request) {
 
@@ -87,7 +87,7 @@ public class UserController {
 	}
 
 	//로그아웃
-	@PostMapping("/logout")
+	@PostMapping("/logout")//
 	public ResponseEntity<String> logout(HttpServletRequest request) {
 
 		//세션 조회

@@ -30,7 +30,7 @@ public class ProfileController {
 	private final ProfileService profileService;
 
 	// 프로필 조회
-	@GetMapping("/{user_id}")
+	@GetMapping("/{user_id}")//
 	public ResponseEntity<ProfileDto> getProfile(@PathVariable(name = "user_id") Long userId,
 		@RequestParam(defaultValue = "1") int pageNum) {
 		// 기본 1페이지(인덱스와 같은 개념이라 요청 들어온 페이지 숫자에 -1 처리), 게시글 10개 씩
@@ -38,7 +38,7 @@ public class ProfileController {
 		return ResponseEntity.ok(profileService.getProfile(userId, pageable));
 	}
 	//프로필 업데이트
-	@PutMapping("/{id}")
+	@PutMapping("/{id}")//
 	public ProfileUpdateResponseDto updateProfile(@PathVariable Long id,
 		@RequestBody ProfileUpdateRequestDto requestDtd, HttpServletRequest request) {
 		Long sessionId = (Long)request.getSession().getAttribute("loginUserId");
